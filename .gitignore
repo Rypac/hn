@@ -61,3 +61,5 @@ xcuserdata/
 !*.xcodeproj/xcshareddata/
 !*.xcworkspace/contents.xcworkspacedata
 /*.gcno
+Carthage/Checkouts/
+Carthage/Build/

@@ -7,7 +7,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
     var navigationController: UINavigationController?
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        navigationController = UINavigationController(rootViewController: UIViewController())
+        navigationController = UINavigationController(rootViewController: StoryListViewController())
         navigationController?.delegate = self
 
         window = UIWindow(frame: UIScreen.main.bounds)
