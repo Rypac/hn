@@ -10,8 +10,15 @@ class StoryListViewController: UIViewController, UITableViewDataSource, UITableV
         let tableView = UITableView(frame: UIScreen.main.bounds, style: .plain)
         tableView.dataSource = self
         tableView.delegate = self
+        tableView.refreshControl = self.refreshControl
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifiers.PostCell)
         return tableView
+    }()
+
+    lazy var refreshControl: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(fetchTopStories), for: .valueChanged)
+        return refreshControl
     }()
 
     var stories = [Story]()
@@ -23,12 +30,17 @@ class StoryListViewController: UIViewController, UITableViewDataSource, UITableV
     }
 
     func fetchTopStories() {
+        stories = []
+        tableView.reloadData()
         fetchIds(.topStories) { [weak self] ids in
             ids.prefix(upTo: 20).forEach {
                 fetch(.item($0)) { (story: Story) in
-                    self?.stories.append(story)
                     DispatchQueue.main.async {
-                        self?.tableView.reloadData()
+                        self?.stories.append(story)
+                        if let count = self?.stories.count, count % 20 == 0 {
+                            self?.tableView.reloadData()
+                            self?.refreshControl.endRefreshing()
+                        }
                     }
                 }
             }
