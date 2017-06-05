@@ -82,10 +82,14 @@ func fetch<T: ImmutableMappable>(_ endpoint: Endpoint, onCompletion: @escaping (
     }
 }
 
+func fetch<T>(_ endpoint: Endpoint, onCompletion: @escaping (T) -> Void) {
+    Alamofire.request(endpoint.url).validate().responseJSON { response in
+        (response.result.value as? T).map(onCompletion)
+    }
+}
+
 func fetch<T>(_ endpoint: Endpoint, onCompletion: @escaping ([T]) -> Void) {
     Alamofire.request(endpoint.url).validate().responseJSON { response in
-        if let json = response.result.value as? [T] {
-            onCompletion(json)
-        }
+        (response.result.value as? [T]).map(onCompletion)
     }
 }
