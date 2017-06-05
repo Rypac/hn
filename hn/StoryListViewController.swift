@@ -32,7 +32,7 @@ class StoryListViewController: UIViewController, UITableViewDataSource, UITableV
     func fetchTopStories() {
         stories = []
         tableView.reloadData()
-        fetchIds(.topStories) { [weak self] ids in
+        fetch(.topStories) { [weak self] ids in
             ids.prefix(upTo: 20).forEach {
                 fetch(.item($0)) { (story: Story) in
                     DispatchQueue.main.async {
