@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		487A4AFA86E57956B65CD43E /* TextureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A409391353EC71194FDD2 /* TextureViewController.swift */; };
 		812126711EC6F32600A4B61F /* StoryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126701EC6F32600A4B61F /* StoryListViewController.swift */; };
 		812126771EC7088D00A4B61F /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126761EC7088D00A4B61F /* Api.swift */; };
 		812126831EC8039000A4B61F /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812126781EC70EE700A4B61F /* Alamofire.framework */; };
@@ -17,6 +18,8 @@
 		812126881EC8039000A4B61F /* ObjectMapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 812126731EC7081800A4B61F /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815B42771EC6ED8C00487C99 /* AppDelegate.swift */; };
 		815B427F1EC6ED8C00487C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 815B427E1EC6ED8C00487C99 /* Assets.xcassets */; };
+		81DA7A921EEC067400118D04 /* AsyncDisplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */; };
+		81DA7A931EEC067400118D04 /* AsyncDisplayKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -27,6 +30,7 @@
 			dstSubfolderSpec = 10;
 			files = (
 				812126881EC8039000A4B61F /* ObjectMapper.framework in Embed Frameworks */,
+				81DA7A931EEC067400118D04 /* AsyncDisplayKit.framework in Embed Frameworks */,
 				812126841EC8039000A4B61F /* Alamofire.framework in Embed Frameworks */,
 				812126861EC8039000A4B61F /* AlamofireObjectMapper.framework in Embed Frameworks */,
 			);
@@ -36,6 +40,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		487A409391353EC71194FDD2 /* TextureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureViewController.swift; sourceTree = "<group>"; };
 		812126701EC6F32600A4B61F /* StoryListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryListViewController.swift; sourceTree = "<group>"; };
 		812126731EC7081800A4B61F /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = Carthage/Build/iOS/ObjectMapper.framework; sourceTree = "<group>"; };
 		812126761EC7088D00A4B61F /* Api.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
@@ -45,6 +50,7 @@
 		815B42771EC6ED8C00487C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		815B427E1EC6ED8C00487C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		815B42831EC6ED8C00487C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AsyncDisplayKit.framework; path = Carthage/Build/iOS/AsyncDisplayKit.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +61,7 @@
 				812126871EC8039000A4B61F /* ObjectMapper.framework in Frameworks */,
 				812126831EC8039000A4B61F /* Alamofire.framework in Frameworks */,
 				812126851EC8039000A4B61F /* AlamofireObjectMapper.framework in Frameworks */,
+				81DA7A921EEC067400118D04 /* AsyncDisplayKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -64,6 +71,7 @@
 		812126721EC7081800A4B61F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */,
 				812126781EC70EE700A4B61F /* Alamofire.framework */,
 				812126791EC70EE700A4B61F /* AlamofireObjectMapper.framework */,
 				812126731EC7081800A4B61F /* ObjectMapper.framework */,
@@ -96,6 +104,7 @@
 				815B42831EC6ED8C00487C99 /* Info.plist */,
 				812126701EC6F32600A4B61F /* StoryListViewController.swift */,
 				812126761EC7088D00A4B61F /* Api.swift */,
+				487A409391353EC71194FDD2 /* TextureViewController.swift */,
 			);
 			path = hn;
 			sourceTree = "<group>";
@@ -192,6 +201,7 @@
 				812126771EC7088D00A4B61F /* Api.swift in Sources */,
 				812126711EC6F32600A4B61F /* StoryListViewController.swift in Sources */,
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
+				487A4AFA86E57956B65CD43E /* TextureViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
