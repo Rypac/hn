@@ -3,30 +3,35 @@ import Alamofire
 import AlamofireObjectMapper
 import ObjectMapper
 
-struct Story: ImmutableMappable {
-    var id: Int
-    var author: String
-    var descendants: Int
-    var kids: [Int]
-    var score: Int
-    var title: String
-    var type: String
-    var url: String
+struct Story {
+    let id: Int
+    let title: String
+    let text: String?
+    let score: Int
+    let author: String
+    let type: String
+    let url: String?
+    let descendants: Int?
+    let kids: [Int]?
+}
 
+extension Story: ImmutableMappable {
     init(map: Map) throws {
         id = try map.value("id")
         title = try map.value("title")
+        text = try? map.value("text")
         score = try map.value("score")
         author = try map.value("by")
         type = try map.value("type")
-        url = try map.value("url")
-        descendants = (try? map.value("descendants")) ?? 0
-        kids = (try? map.value("kids")) ?? []
+        url = try? map.value("url")
+        descendants = try? map.value("descendants")
+        kids = try? map.value("kids")
     }
 
     mutating func mapping(map: Map) {
         id >>> map["id"]
         title >>> map["title"]
+        text >>> map["text"]
         score >>> map["score"]
         author >>> map["by"]
         type >>> map["type"]
@@ -48,7 +53,7 @@ enum Endpoint {
     case item(Int)
 
     var url: String {
-        return "\(self.baseUrl)/\(self.path)"
+        return "\(baseUrl)/\(path)"
     }
 
     var baseUrl: String {

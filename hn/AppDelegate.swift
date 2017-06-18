@@ -1,4 +1,7 @@
 import UIKit
+import ReSwift
+
+let store = Store<AppState>(reducer: appReducer, state: nil)
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDelegate {
@@ -6,8 +9,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
     var window: UIWindow?
     var navigationController: UINavigationController?
 
-    func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
-        navigationController = UINavigationController(rootViewController: TextureViewController())
+    func application(
+        _ application: UIApplication,
+        didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
+    ) -> Bool {
+        navigationController = UINavigationController(rootViewController: StoryListViewController())
         navigationController?.delegate = self
 
         window = UIWindow(frame: UIScreen.main.bounds)

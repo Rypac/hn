@@ -7,8 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		487A4AFA86E57956B65CD43E /* TextureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A409391353EC71194FDD2 /* TextureViewController.swift */; };
-		812126711EC6F32600A4B61F /* StoryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126701EC6F32600A4B61F /* StoryListViewController.swift */; };
+		487A42603799E2F9AC261E74 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A49183E506D24DF83F3F7 /* AppState.swift */; };
+		487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A478D038053F823807284 /* AppReducer.swift */; };
+		8118DBA91EF5004200934BA4 /* ReSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; };
+		8118DBAA1EF5004200934BA4 /* ReSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		8118DBAC1EF504F800934BA4 /* AppAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAB1EF504F800934BA4 /* AppAction.swift */; };
+		8118DBAE1EF50DF100934BA4 /* StoryListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAD1EF50DF100934BA4 /* StoryListViewController.swift */; };
+		8118DBB01EF5133600934BA4 /* StoryListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAF1EF5133600934BA4 /* StoryListView.swift */; };
 		812126771EC7088D00A4B61F /* Api.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126761EC7088D00A4B61F /* Api.swift */; };
 		812126831EC8039000A4B61F /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812126781EC70EE700A4B61F /* Alamofire.framework */; };
 		812126841EC8039000A4B61F /* Alamofire.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 812126781EC70EE700A4B61F /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -32,6 +37,7 @@
 				812126881EC8039000A4B61F /* ObjectMapper.framework in Embed Frameworks */,
 				81DA7A931EEC067400118D04 /* AsyncDisplayKit.framework in Embed Frameworks */,
 				812126841EC8039000A4B61F /* Alamofire.framework in Embed Frameworks */,
+				8118DBAA1EF5004200934BA4 /* ReSwift.framework in Embed Frameworks */,
 				812126861EC8039000A4B61F /* AlamofireObjectMapper.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -40,8 +46,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		487A409391353EC71194FDD2 /* TextureViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TextureViewController.swift; sourceTree = "<group>"; };
-		812126701EC6F32600A4B61F /* StoryListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryListViewController.swift; sourceTree = "<group>"; };
+		487A478D038053F823807284 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppReducer.swift; sourceTree = "<group>"; };
+		487A49183E506D24DF83F3F7 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		8118DBA81EF5004200934BA4 /* ReSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReSwift.framework; path = Carthage/Build/iOS/ReSwift.framework; sourceTree = "<group>"; };
+		8118DBAB1EF504F800934BA4 /* AppAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppAction.swift; sourceTree = "<group>"; };
+		8118DBAD1EF50DF100934BA4 /* StoryListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryListViewController.swift; sourceTree = "<group>"; };
+		8118DBAF1EF5133600934BA4 /* StoryListView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryListView.swift; sourceTree = "<group>"; };
 		812126731EC7081800A4B61F /* ObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ObjectMapper.framework; path = Carthage/Build/iOS/ObjectMapper.framework; sourceTree = "<group>"; };
 		812126761EC7088D00A4B61F /* Api.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Api.swift; sourceTree = "<group>"; };
 		812126781EC70EE700A4B61F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
@@ -61,6 +71,7 @@
 				812126871EC8039000A4B61F /* ObjectMapper.framework in Frameworks */,
 				812126831EC8039000A4B61F /* Alamofire.framework in Frameworks */,
 				812126851EC8039000A4B61F /* AlamofireObjectMapper.framework in Frameworks */,
+				8118DBA91EF5004200934BA4 /* ReSwift.framework in Frameworks */,
 				81DA7A921EEC067400118D04 /* AsyncDisplayKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -82,6 +93,7 @@
 		815B426B1EC6ED8C00487C99 = {
 			isa = PBXGroup;
 			children = (
+				8118DBA81EF5004200934BA4 /* ReSwift.framework */,
 				815B42761EC6ED8C00487C99 /* hn */,
 				815B42751EC6ED8C00487C99 /* Products */,
 				812126721EC7081800A4B61F /* Frameworks */,
@@ -102,9 +114,12 @@
 				815B42771EC6ED8C00487C99 /* AppDelegate.swift */,
 				815B427E1EC6ED8C00487C99 /* Assets.xcassets */,
 				815B42831EC6ED8C00487C99 /* Info.plist */,
-				812126701EC6F32600A4B61F /* StoryListViewController.swift */,
 				812126761EC7088D00A4B61F /* Api.swift */,
-				487A409391353EC71194FDD2 /* TextureViewController.swift */,
+				487A478D038053F823807284 /* AppReducer.swift */,
+				487A49183E506D24DF83F3F7 /* AppState.swift */,
+				8118DBAB1EF504F800934BA4 /* AppAction.swift */,
+				8118DBAD1EF50DF100934BA4 /* StoryListViewController.swift */,
+				8118DBAF1EF5133600934BA4 /* StoryListView.swift */,
 			);
 			path = hn;
 			sourceTree = "<group>";
@@ -198,10 +213,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8118DBAC1EF504F800934BA4 /* AppAction.swift in Sources */,
 				812126771EC7088D00A4B61F /* Api.swift in Sources */,
-				812126711EC6F32600A4B61F /* StoryListViewController.swift in Sources */,
+				8118DBAE1EF50DF100934BA4 /* StoryListViewController.swift in Sources */,
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
-				487A4AFA86E57956B65CD43E /* TextureViewController.swift in Sources */,
+				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,
+				487A42603799E2F9AC261E74 /* AppState.swift in Sources */,
+				8118DBB01EF5133600934BA4 /* StoryListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

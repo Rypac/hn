@@ -1,60 +1,101 @@
 import UIKit
+import AsyncDisplayKit
+import ReSwift
 
-class StoryListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
-
-    struct Identifiers {
-        static let PostCell = "PostCell"
+final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDataSource, ASTableDelegate, StoreSubscriber {
+    var tableNode: ASTableNode {
+        return node as! ASTableNode
     }
 
-    lazy var tableView: UITableView = {
-        let tableView = UITableView(frame: UIScreen.main.bounds, style: .plain)
-        tableView.dataSource = self
-        tableView.delegate = self
-        tableView.refreshControl = self.refreshControl
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: Identifiers.PostCell)
-        return tableView
-    }()
-
-    lazy var refreshControl: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(fetchTopStories), for: .valueChanged)
-        return refreshControl
-    }()
-
+    var fetchingMore = false
+    var hasMoreStories = true
     var stories = [Story]()
+    var fetchingContext: ASBatchContext?
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        view.addSubview(tableView)
-        fetchTopStories()
+    init() {
+        super.init(node: ASTableNode())
+        tableNode.delegate = self
+        tableNode.dataSource = self
     }
 
-    func fetchTopStories() {
-        stories = []
-        tableView.reloadData()
-        fetch(.topStories) { [weak self] (ids: [Int]) in
-            ids.prefix(upTo: 20).forEach {
-                fetch(.item($0)) { (story: Story) in
-                    DispatchQueue.main.async {
-                        self?.stories.append(story)
-                        if let count = self?.stories.count, count % 20 == 0 {
-                            self?.tableView.reloadData()
-                            self?.refreshControl.endRefreshing()
-                        }
-                    }
-                }
-            }
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        store.subscribe(self)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        store.unsubscribe(self)
+    }
+
+    func tableNode(_ tableNode: ASTableNode, nodeForRowAt indexPath: IndexPath) -> ASCellNode {
+        let rowCount = self.tableNode(tableNode, numberOfRowsInSection: 0)
+
+        if fetchingMore && indexPath.row == rowCount - 1 {
+            let node = LoadingCellNode()
+            node.style.height = ASDimensionMake(44.0)
+            return node;
+        }
+
+        let node = ASTextCellNode()
+        let story = stories[indexPath.row]
+        node.text = story.title
+        return node
+    }
+
+    func numberOfSections(in tableNode: ASTableNode) -> Int {
+        return 1
+    }
+
+    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
+        return fetchingMore ? stories.count + 1 : stories.count
+    }
+
+    func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
+        return hasMoreStories
+    }
+
+    func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
+        self.fetchingContext = context
+        if stories.isEmpty {
+            store.dispatch(fetchTopStories)
+        } else {
+            store.dispatch(fetchNextStoryBatch)
         }
     }
 
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return stories.count
-    }
+    func newState(state: AppState) {
+        let wasFetchingMore = fetchingMore
+        let oldStories = stories
+        fetchingMore = state.fetchingMore
+        stories = state.stories
+        hasMoreStories = state.ids.count == 0 || state.stories.count < state.ids.count
 
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let story = stories[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: Identifiers.PostCell, for: indexPath)
-        cell.textLabel?.text = story.title
-        return cell
+        tableNode.performBatchUpdates({
+            let rowCountChange = stories.count - oldStories.count
+            if rowCountChange > 0 {
+                let indexPaths = (oldStories.count..<stories.count).map { index in
+                    IndexPath(row: index, section: 0)
+                }
+                tableNode.insertRows(at: indexPaths, with: .none)
+            }
+
+            if fetchingMore != wasFetchingMore {
+                if fetchingMore {
+                    tableNode.insertRows(
+                        at: [IndexPath(row: state.stories.count, section: 0)],
+                        with: .none)
+                } else {
+                    tableNode.deleteRows(
+                        at: [IndexPath(row: oldStories.count, section: 0)],
+                        with: .none)
+                    fetchingContext?.completeBatchFetching(true)
+                }
+            }
+        }, completion: nil)
     }
 }

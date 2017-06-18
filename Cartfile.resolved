@@ -1,6 +1,7 @@
 git "https://chromium.googlesource.com/webm/libwebp" "v0.5.1"
-github "Alamofire/Alamofire" "4.4.0"
+github "Alamofire/Alamofire" "4.5.0"
 github "Hearst-DD/ObjectMapper" "2.2.7"
+github "ReSwift/ReSwift" "4.0.0"
 github "TextureGroup/Texture" "2.3.3"
 github "pinterest/PINCache" "3.0.1-beta.4"
 github "pinterest/PINOperation" "1.0.3"
