@@ -59,7 +59,7 @@ func fetchNextStoryBatch(_ type: StoryType) -> ((AppState, Store<AppState>) -> F
         }
 
         let start = state.stories.count
-        let end = start + min(16, state.ids.count - state.stories.count) - 1
+        let end = start + min(16, state.ids.count - state.stories.count)
         let ids = Array(state.ids[start..<end])
 
         var stories = [Story]()
