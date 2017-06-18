@@ -7,15 +7,18 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
         return node as! ASTableNode
     }
 
+    let storyType: StoryType
     var fetchingMore = false
     var hasMoreStories = true
     var stories = [Story]()
     var fetchingContext: ASBatchContext?
 
-    init() {
+    init(_ storyType: StoryType) {
+        self.storyType = storyType
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
+        tableNode.leadingScreensForBatching = 1.0
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -24,8 +27,10 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.title = "Top Stories"
-        store.subscribe(self)
+        navigationItem.title = storyType.description
+        store.subscribe(self) { subscription in
+            subscription.select { state in state.tabs[self.storyType]! }
+        }
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -66,10 +71,14 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         self.fetchingContext = context
-        store.dispatch(fetchNextBatch)
+        if stories.isEmpty {
+            store.dispatch(fetchInitialBatch(storyType))
+        } else {
+            store.dispatch(fetchNextStoryBatch(storyType))
+        }
     }
 
-    func newState(state: AppState) {
+    func newState(state: StoryList) {
         let wasFetchingMore = fetchingMore
         let oldStories = stories
         fetchingMore = state.fetchingMore

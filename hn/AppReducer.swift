@@ -3,21 +3,25 @@ import ReSwift
 
 func appReducer(action: Action, state: AppState?) -> AppState {
     var state = state ?? AppState()
-    guard let action = action as? AppAction else {
+    guard
+        let action = action as? FetchAction,
+        var storyList = state.tabs[action.storyType]
+    else {
         return state
     }
 
-    switch action {
-    case .fetchTopStories:
-        state.fetchingMore = true
+    switch action.action {
+    case .fetch:
+        storyList.fetchingMore = true
     case let .fetchedIds(ids):
-        state.ids = ids
-        state.fetchingMore = true
+        storyList.ids = ids
+        storyList.fetchingMore = true
     case .fetchStories(_):
-        state.fetchingMore = true
+        storyList.fetchingMore = true
     case let .fetchedStories(stories):
-        state.stories += stories
-        state.fetchingMore = false
+        storyList.stories += stories
+        storyList.fetchingMore = false
     }
+    state.tabs[action.storyType] = storyList
     return state
 }
