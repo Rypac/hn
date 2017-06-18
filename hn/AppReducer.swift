@@ -15,7 +15,7 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         storyList.fetchingMore = true
     case let .fetchedIds(ids):
         storyList.ids = ids
-        storyList.fetchingMore = true
+        storyList.fetchingMore = false
     case .fetchStories(_):
         storyList.fetchingMore = true
     case let .fetchedStories(stories):

@@ -27,12 +27,21 @@ extension StoryType {
     }
 }
 
-func fetchInitialBatch(_ type: StoryType) -> ((AppState, Store<AppState>) -> FetchAction?) {
+func fetchStories(_ type: StoryType) -> ((AppState, Store<AppState>) -> FetchAction?) {
+    return { state, store in
+        guard let storyList = state.tabs[type] else {
+            return .none
+        }
+        let action = storyList.ids.isEmpty ? fetchStoryList : fetchNextStoryBatch
+        return action(type)(state, store)
+    }
+}
+
+func fetchStoryList(_ type: StoryType) -> ((AppState, Store<AppState>) -> FetchAction?) {
     return { state, store in
         fetch(type.endpoint) { (ids: [Int]) in
             DispatchQueue.main.async {
                 store.dispatch(FetchAction(storyType: type, action: .fetchedIds(ids)))
-                store.dispatch(fetchNextStoryBatch(type))
             }
         }
         return FetchAction(storyType: type, action: .fetch)
@@ -50,7 +59,7 @@ func fetchNextStoryBatch(_ type: StoryType) -> ((AppState, Store<AppState>) -> F
         }
 
         let start = state.stories.count
-        let end = start + min(20, state.ids.count - state.stories.count) - 1
+        let end = start + min(16, state.ids.count - state.stories.count) - 1
         let ids = Array(state.ids[start..<end])
 
         var stories = [Story]()

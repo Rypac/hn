@@ -71,11 +71,7 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         self.fetchingContext = context
-        if stories.isEmpty {
-            store.dispatch(fetchInitialBatch(storyType))
-        } else {
-            store.dispatch(fetchNextStoryBatch(storyType))
-        }
+        store.dispatch(fetchStories(storyType))
     }
 
     func newState(state: StoryList) {
