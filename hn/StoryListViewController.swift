@@ -24,6 +24,7 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        navigationItem.title = "Top Stories"
         store.subscribe(self)
     }
 
@@ -32,19 +33,23 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
         store.unsubscribe(self)
     }
 
-    func tableNode(_ tableNode: ASTableNode, nodeForRowAt indexPath: IndexPath) -> ASCellNode {
+    func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         let rowCount = self.tableNode(tableNode, numberOfRowsInSection: 0)
 
         if fetchingMore && indexPath.row == rowCount - 1 {
-            let node = LoadingCellNode()
-            node.style.height = ASDimensionMake(44.0)
-            return node;
+            return {
+                let node = LoadingCellNode()
+                node.style.height = ASDimensionMake(44.0)
+                return node
+            }
         }
 
-        let node = ASTextCellNode()
         let story = stories[indexPath.row]
-        node.text = story.title
-        return node
+        return {
+            let node = ASTextCellNode()
+            node.text = story.title
+            return node
+        }
     }
 
     func numberOfSections(in tableNode: ASTableNode) -> Int {
@@ -61,11 +66,7 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         self.fetchingContext = context
-        if stories.isEmpty {
-            store.dispatch(fetchTopStories)
-        } else {
-            store.dispatch(fetchNextStoryBatch)
-        }
+        store.dispatch(fetchNextBatch)
     }
 
     func newState(state: AppState) {

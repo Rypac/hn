@@ -8,6 +8,11 @@ enum AppAction: Action {
     case fetchedStories(stories: [Story])
 }
 
+func fetchNextBatch(state: AppState, store: Store<AppState>) -> AppAction? {
+    let action = state.ids.isEmpty ? fetchTopStories : fetchNextStoryBatch
+    return action(state, store)
+}
+
 func fetchTopStories(state: AppState, store: Store<AppState>) -> AppAction? {
     fetch(.topStories) { (ids: [Int]) in
         DispatchQueue.main.async {
@@ -19,7 +24,7 @@ func fetchTopStories(state: AppState, store: Store<AppState>) -> AppAction? {
 }
 
 func fetchNextStoryBatch(state: AppState, store: Store<AppState>) -> AppAction? {
-    if !state.ids.isEmpty && state.ids.count == state.stories.count {
+    if state.ids.count == state.stories.count {
         return .none
     }
 
