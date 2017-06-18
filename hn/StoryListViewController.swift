@@ -103,5 +103,7 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
                 }
             }
         }, completion: nil)
+
+        UIApplication.shared.isNetworkActivityIndicatorVisible = fetchingMore
     }
 }

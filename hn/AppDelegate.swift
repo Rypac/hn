@@ -24,6 +24,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
     ) -> Bool {
         tabController = UITabBarController()
         tabController?.setViewControllers(visibleTabs(store.state.tabs), animated: false)
+        tabController?.selectedIndex = 2
 
         window = UIWindow(frame: UIScreen.main.bounds)
         window?.rootViewController = tabController

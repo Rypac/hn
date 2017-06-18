@@ -51,13 +51,13 @@ enum Endpoint {
     case updates
     case user(Int)
     case item(Int)
+}
 
-    var url: String {
-        return "\(baseUrl)/\(path)"
-    }
+extension Endpoint: URLConvertible {
+    static let baseUrl = "https://hacker-news.firebaseio.com/v0"
 
-    var baseUrl: String {
-        return "https://hacker-news.firebaseio.com/v0"
+    func asURL() throws -> URL {
+        return try "\(Endpoint.baseUrl)/\(path)".asURL()
     }
 
     var path: String {
@@ -75,26 +75,26 @@ enum Endpoint {
     }
 }
 
-func fetch<T: ImmutableMappable>(_ endpoint: Endpoint, onCompletion: @escaping (T) -> Void) {
-    Alamofire.request(endpoint.url).validate().responseObject { (response: DataResponse<T>) in
-        response.result.value.map(onCompletion)
+func fetch<T: ImmutableMappable>(_ endpoint: Endpoint, onCompletion: @escaping (Result<T>) -> Void) {
+    Alamofire.request(endpoint).validate().responseObject { (response: DataResponse<T>) in
+        onCompletion(response.result)
     }
 }
 
-func fetch<T: ImmutableMappable>(_ endpoint: Endpoint, onCompletion: @escaping ([T]) -> Void) {
-    Alamofire.request(endpoint.url).validate().responseArray { (response: DataResponse<[T]>) in
-        response.result.value.map(onCompletion)
+func fetch<T: ImmutableMappable>(_ endpoint: Endpoint, onCompletion: @escaping (Result<[T]>) -> Void) {
+    Alamofire.request(endpoint).validate().responseArray { (response: DataResponse<[T]>) in
+        onCompletion(response.result)
     }
 }
 
 func fetch<T>(_ endpoint: Endpoint, onCompletion: @escaping (T) -> Void) {
-    Alamofire.request(endpoint.url).validate().responseJSON { response in
+    Alamofire.request(endpoint).validate().responseJSON { response in
         (response.result.value as? T).map(onCompletion)
     }
 }
 
 func fetch<T>(_ endpoint: Endpoint, onCompletion: @escaping ([T]) -> Void) {
-    Alamofire.request(endpoint.url).validate().responseJSON { response in
+    Alamofire.request(endpoint).validate().responseJSON { response in
         (response.result.value as? [T]).map(onCompletion)
     }
 }

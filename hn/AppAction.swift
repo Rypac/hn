@@ -1,5 +1,6 @@
 import Foundation
 import ReSwift
+import Alamofire
 
 struct FetchAction: Action {
     let storyType: StoryType
@@ -50,11 +51,10 @@ func fetchStoryList(_ type: StoryType) -> ((AppState, Store<AppState>) -> FetchA
 
 func fetchNextStoryBatch(_ type: StoryType) -> ((AppState, Store<AppState>) -> FetchAction?) {
     return { state, store in
-        guard let state = state.tabs[type] else {
-            return .none
-        }
-
-        if state.ids.count == state.stories.count {
+        guard
+            let state = state.tabs[type],
+            state.ids.count > state.stories.count
+        else {
             return .none
         }
 
@@ -62,16 +62,20 @@ func fetchNextStoryBatch(_ type: StoryType) -> ((AppState, Store<AppState>) -> F
         let end = start + min(16, state.ids.count - state.stories.count)
         let ids = Array(state.ids[start..<end])
 
+        let requestGroup = DispatchGroup()
         var stories = [Story]()
         ids.forEach { id in
-            fetch(.item(id)) { (story: Story) in
-                stories.append(story)
-                if stories.count == ids.count {
-                    DispatchQueue.main.async {
-                        store.dispatch(FetchAction(storyType: type, action: .fetchedStories(stories)))
-                    }
+            requestGroup.enter()
+            fetch(.item(id)) { (story: Result<Story>) in
+                story.withValue {
+                    stories.append($0)
                 }
+                requestGroup.leave()
             }
+        }
+
+        requestGroup.notify(queue: .main) {
+            store.dispatch(FetchAction(storyType: type, action: .fetchedStories(stories)))
         }
 
         return FetchAction(storyType: type, action: .fetchStories(ids: ids))
