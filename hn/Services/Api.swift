@@ -41,6 +41,38 @@ extension Story: ImmutableMappable {
     }
 }
 
+struct Comment {
+    let id: Int
+    let text: String
+    let author: String
+    let parent: Int
+    let time: Int
+    let type: String
+    let kids: [Int]?
+}
+
+extension Comment: ImmutableMappable {
+    init(map: Map) throws {
+        id = try map.value("id")
+        text = try map.value("text")
+        author = try map.value("by")
+        parent = try map.value("parent")
+        type = try map.value("type")
+        time = try map.value("time")
+        kids = try? map.value("kids")
+    }
+
+    mutating func mapping(map: Map) {
+        id >>> map["id"]
+        text >>> map["text"]
+        author >>> map["by"]
+        parent >>> map["parent"]
+        type >>> map["type"]
+        time >>> map["time"]
+        kids >>> map["kids"]
+    }
+}
+
 enum Endpoint {
     case topStories
     case newStories

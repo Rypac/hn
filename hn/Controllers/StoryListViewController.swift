@@ -52,7 +52,7 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
         let story = stories[indexPath.row]
         return {
             let node = ASTextCellNode()
-            node.text = story.title
+            node.text = "\(story.title)\n\(story.score) points by \(story.author)"
             return node
         }
     }
@@ -79,7 +79,7 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
         store.dispatch(routeTo(story, from: self))
     }
 
-    func newState(state: (StoryList, Story?)) {
+    func newState(state: (StoryList, StoryDetails?)) {
         let (state, selectedStory) = state
         let wasFetchingMore = fetchingMore
         let oldStories = stories

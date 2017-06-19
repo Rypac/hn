@@ -38,7 +38,7 @@ final class SpinnerNode: ASDisplayNode {
         setViewBlock {
             UIActivityIndicatorView(activityIndicatorStyle: .gray)
         }
-        self.style.preferredSize = CGSize(width: 20.0, height: 20.0)
+        style.preferredSize = CGSize(width: 20.0, height: 20.0)
     }
 
     override func didLoad() {

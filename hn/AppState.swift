@@ -4,13 +4,23 @@ import ReSwift
 struct AppState: StateType {
     var tabs = [StoryType: StoryList]()
     var selectedTab: StoryList?
-    var selectedStory: Story?
+    var selectedStory: StoryDetails?
 }
 
 struct StoryList {
     var ids = [Int]()
     var stories = [Story]()
     var fetchingMore = false
+}
+
+struct StoryDetails {
+    var story: Story
+    var comments = [Comment]()
+    var fetchingMore = false
+
+    init(_ story: Story) {
+        self.story = story
+    }
 }
 
 enum StoryType {

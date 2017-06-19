@@ -25,9 +25,16 @@ func appReducer(action: Action, state: AppState?) -> AppState {
     case let storyListAction as StoryListAction:
         switch storyListAction {
         case let .view(story):
-            state.selectedStory = story
+            state.selectedStory = StoryDetails(story)
         case .dismiss(_):
             state.selectedStory = .none
+        }
+    case let commentAction as CommentFetchAction:
+        switch commentAction {
+        case .fetch(comments: _):
+            state.selectedStory?.fetchingMore = true
+        case let .fetched(comments: comments):
+            state.selectedStory?.comments += comments
         }
     default:
         break
