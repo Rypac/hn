@@ -29,7 +29,7 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
         parent?.title = storyType.description
         tableNode.leadingScreensForBatching = 1
         store.subscribe(self) { subscription in
-            subscription.select { state in state.tabs[self.storyType]! }
+            subscription.select { state in (state.tabs[self.storyType]!, state.selectedStory) }
         }
     }
 
@@ -79,7 +79,8 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
         store.dispatch(routeTo(story, from: self))
     }
 
-    func newState(state: StoryList) {
+    func newState(state: (StoryList, Story?)) {
+        let (state, selectedStory) = state
         let wasFetchingMore = fetchingMore
         let oldStories = stories
         fetchingMore = state.fetchingMore
@@ -108,5 +109,12 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
                 }
             }
         }, completion: nil)
+
+        if
+            case .none = selectedStory,
+            let selectedRow = tableNode.indexPathForSelectedRow
+        {
+            tableNode.deselectRow(at: selectedRow, animated: true)
+        }
     }
 }
