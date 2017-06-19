@@ -4,6 +4,7 @@ import ReSwift
 struct AppState: StateType {
     var tabs = [StoryType: StoryList]()
     var selectedTab: StoryList?
+    var selectedStory: Story?
 }
 
 struct StoryList {

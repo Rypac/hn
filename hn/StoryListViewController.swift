@@ -18,7 +18,6 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
-        tableNode.leadingScreensForBatching = 1.0
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -27,7 +26,8 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        navigationItem.title = storyType.description
+        parent?.title = storyType.description
+        tableNode.leadingScreensForBatching = 1
         store.subscribe(self) { subscription in
             subscription.select { state in state.tabs[self.storyType]! }
         }
@@ -74,6 +74,11 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
         store.dispatch(fetchStories(storyType))
     }
 
+    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+        let story = stories[indexPath.row]
+        store.dispatch(routeTo(story, from: self))
+    }
+
     func newState(state: StoryList) {
         let wasFetchingMore = fetchingMore
         let oldStories = stories
@@ -103,7 +108,5 @@ final class StoryListViewController: ASViewController<ASDisplayNode>, ASTableDat
                 }
             }
         }, completion: nil)
-
-        UIApplication.shared.isNetworkActivityIndicatorVisible = fetchingMore
     }
 }

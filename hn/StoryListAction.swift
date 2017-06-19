@@ -1,6 +1,7 @@
 import Foundation
 import ReSwift
 import Alamofire
+import UIKit
 
 struct FetchAction: Action {
     let storyType: StoryType
@@ -12,6 +13,11 @@ enum StoryFetchState {
     case fetchedIds([Int])
     case fetchStories(ids: [Int])
     case fetchedStories([Story])
+}
+
+enum StoryListAction: Action {
+    case view(Story)
+    case dismiss(Story)
 }
 
 extension StoryType {
@@ -28,7 +34,9 @@ extension StoryType {
     }
 }
 
-func fetchStories(_ type: StoryType) -> ((AppState, Store<AppState>) -> FetchAction?) {
+typealias ActionCreator<T: StateType> = (T, Store<T>) -> Action?
+
+func fetchStories(_ type: StoryType) -> ActionCreator<AppState> {
     return { state, store in
         guard let storyList = state.tabs[type] else {
             return .none
@@ -38,18 +46,19 @@ func fetchStories(_ type: StoryType) -> ((AppState, Store<AppState>) -> FetchAct
     }
 }
 
-func fetchStoryList(_ type: StoryType) -> ((AppState, Store<AppState>) -> FetchAction?) {
+func fetchStoryList(_ type: StoryType) -> ActionCreator<AppState> {
     return { state, store in
         fetch(type.endpoint) { (ids: [Int]) in
             DispatchQueue.main.async {
                 store.dispatch(FetchAction(storyType: type, action: .fetchedIds(ids)))
+                store.dispatch(fetchNextStoryBatch(type))
             }
         }
         return FetchAction(storyType: type, action: .fetch)
     }
 }
 
-func fetchNextStoryBatch(_ type: StoryType) -> ((AppState, Store<AppState>) -> FetchAction?) {
+func fetchNextStoryBatch(_ type: StoryType) -> ActionCreator<AppState> {
     return { state, store in
         guard
             let state = state.tabs[type],
@@ -79,5 +88,15 @@ func fetchNextStoryBatch(_ type: StoryType) -> ((AppState, Store<AppState>) -> F
         }
 
         return FetchAction(storyType: type, action: .fetchStories(ids: ids))
+    }
+}
+
+func routeTo(_ story: Story, from viewController: UIViewController?) -> ActionCreator<AppState> {
+    return { state, store in
+        if let navigationController = viewController?.navigationController {
+            navigationController.pushViewController(StoryDetailViewController(story), animated: true)
+            return StoryListAction.view(story)
+        }
+        return .none
     }
 }

@@ -1,4 +1,5 @@
 import UIKit
+import AlamofireNetworkActivityIndicator
 import ReSwift
 
 let store = Store<AppState>(
@@ -11,23 +12,25 @@ let store = Store<AppState>(
             .askHN: StoryList(),
             .showHN: StoryList()
         ],
-        selectedTab: .none))
+        selectedTab: .none,
+        selectedStory: .none))
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDelegate {
     var window: UIWindow?
-    var tabController: UITabBarController?
 
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
-    ) -> Bool {
-        tabController = UITabBarController()
-        tabController?.setViewControllers(visibleTabs(store.state.tabs), animated: false)
-        tabController?.selectedIndex = 2
+        ) -> Bool {
+        NetworkActivityIndicatorManager.shared.isEnabled = true
+
+        let tabController = UITabBarController()
+        tabController.setViewControllers(visibleTabs(store.state.tabs), animated: false)
+        tabController.selectedIndex = 2
 
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = tabController
+        window?.rootViewController = UINavigationController(rootViewController: tabController)
         window?.makeKeyAndVisible()
         return true
     }
@@ -36,8 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
 func visibleTabs(_ tabs: [StoryType: StoryList]) -> [UIViewController] {
     return tabs.enumerated().map { (index, tab) in
         let storyController = StoryListViewController(tab.key)
-        let navigationController = UINavigationController(rootViewController: storyController)
-        navigationController.tabBarItem = UITabBarItem(title: tab.key.description, image: .none, tag: index)
-        return navigationController
+        storyController.tabBarItem = UITabBarItem(title: tab.key.description, image: .none, tag: index)
+        return storyController
     }
 }
