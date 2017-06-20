@@ -3,29 +3,46 @@ import Alamofire
 import AlamofireObjectMapper
 import ObjectMapper
 
-struct Story {
+struct Item {
     let id: Int
-    let title: String
+    let title: String?
     let text: String?
-    let score: Int
-    let author: String
-    let type: String
+    let score: Int?
+    let by: String?
+    let time: Int?
+    let type: String?
     let url: String?
     let descendants: Int?
     let kids: [Int]?
+    let parts: [Int]?
+    let dead: Bool
+    let deleted: Bool
 }
 
-extension Story: ImmutableMappable {
+struct User {
+    let id: String
+    let karma: Int
+    let created: Int
+    let about: String?
+    let submitted: [Int]?
+    let delay: Int?
+}
+
+extension Item: ImmutableMappable {
     init(map: Map) throws {
         id = try map.value("id")
-        title = try map.value("title")
+        title = try? map.value("title")
         text = try? map.value("text")
-        score = try map.value("score")
-        author = try map.value("by")
-        type = try map.value("type")
+        score = try? map.value("score")
+        by = try? map.value("by")
+        time = try? map.value("time")
+        type = try? map.value("type")
         url = try? map.value("url")
         descendants = try? map.value("descendants")
         kids = try? map.value("kids")
+        parts = try? map.value("parts")
+        deleted = (try? map.value("deleted")) ?? false
+        dead = (try? map.value("dead")) ?? false
     }
 
     mutating func mapping(map: Map) {
@@ -33,43 +50,35 @@ extension Story: ImmutableMappable {
         title >>> map["title"]
         text >>> map["text"]
         score >>> map["score"]
-        author >>> map["by"]
+        by >>> map["by"]
+        time >>> map["time"]
         type >>> map["type"]
         url >>> map["url"]
         descendants >>> map["descendants"]
         kids >>> map["kids"]
+        parts >>> map["parts"]
+        dead >>> map["dead"]
+        deleted >>> map["deleted"]
     }
 }
 
-struct Comment {
-    let id: Int
-    let text: String
-    let author: String
-    let parent: Int
-    let time: Int
-    let type: String
-    let kids: [Int]?
-}
-
-extension Comment: ImmutableMappable {
+extension User: ImmutableMappable {
     init(map: Map) throws {
         id = try map.value("id")
-        text = try map.value("text")
-        author = try map.value("by")
-        parent = try map.value("parent")
-        type = try map.value("type")
-        time = try map.value("time")
-        kids = try? map.value("kids")
+        karma = try map.value("karma")
+        created = try map.value("created")
+        about = try? map.value("about")
+        submitted = try? map.value("submitted")
+        delay = try? map.value("delay")
     }
 
     mutating func mapping(map: Map) {
         id >>> map["id"]
-        text >>> map["text"]
-        author >>> map["by"]
-        parent >>> map["parent"]
-        type >>> map["type"]
-        time >>> map["time"]
-        kids >>> map["kids"]
+        karma >>> map["karma"]
+        created >>> map["created"]
+        about >>> map["about"]
+        submitted >>> map["submitted"]
+        delay >>> map["delay"]
     }
 }
 

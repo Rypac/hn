@@ -5,13 +5,13 @@ import UIKit
 
 enum CommentFetchAction: Action {
     case fetch(comments: [Int])
-    case fetched(comments: [Comment])
+    case fetched(comments: [Item])
 }
 
 func fetchNextCommentBatch(state: AppState, store: Store<AppState>) -> Action? {
     guard
-        let state = state.selectedStory,
-        let kids = state.story.kids,
+        let state = state.selectedItem,
+        let kids = state.item.kids,
         kids.count > state.comments.count
     else {
         return .none
@@ -22,10 +22,10 @@ func fetchNextCommentBatch(state: AppState, store: Store<AppState>) -> Action? {
     let ids = Array(kids[start..<end])
 
     let requestGroup = DispatchGroup()
-    var comments = [Comment]()
+    var comments = [Item]()
     ids.forEach { id in
         requestGroup.enter()
-        fetch(.item(id)) { (comment: Result<Comment>) in
+        fetch(.item(id)) { (comment: Result<Item>) in
             comment.withValue {
                 comments.append($0)
             }

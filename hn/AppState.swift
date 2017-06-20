@@ -2,28 +2,28 @@ import Foundation
 import ReSwift
 
 struct AppState: StateType {
-    var tabs = [StoryType: StoryList]()
-    var selectedTab: StoryList?
-    var selectedStory: StoryDetails?
+    var tabs = [ItemType: ItemList]()
+    var selectedTab: ItemList?
+    var selectedItem: ItemDetails?
 }
 
-struct StoryList {
+struct ItemList {
     var ids = [Int]()
-    var stories = [Story]()
+    var items = [Item]()
     var fetchingMore = false
 }
 
-struct StoryDetails {
-    var story: Story
-    var comments = [Comment]()
+struct ItemDetails {
+    var item: Item
+    var comments = [Item]()
     var fetchingMore = false
 
-    init(_ story: Story) {
-        self.story = story
+    init(_ item: Item) {
+        self.item = item
     }
 }
 
-enum StoryType {
+enum ItemType {
     case topStories
     case newStories
     case bestStories
@@ -33,7 +33,7 @@ enum StoryType {
     case updates
 }
 
-extension StoryType: CustomStringConvertible {
+extension ItemType: CustomStringConvertible {
     var description: String {
         switch self {
         case .topStories: return "Top Stories"

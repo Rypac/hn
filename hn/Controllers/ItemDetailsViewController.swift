@@ -2,19 +2,19 @@ import UIKit
 import AsyncDisplayKit
 import ReSwift
 
-final class StoryDetailViewController: ASViewController<ASDisplayNode>, StoreSubscriber {
+final class ItemDetailsViewController: ASViewController<ASDisplayNode>, StoreSubscriber {
     var tableNode: ASTableNode {
         return node as! ASTableNode
     }
 
-    var story: Story
-    var comments = [Comment]()
+    var item: Item
+    var comments = [Item]()
     var fetchingMore = false
-    var hasMoreStories = true
+    var hasMoreComments = true
     var fetchingContext: ASBatchContext?
 
-    init(_ story: Story) {
-        self.story = story
+    init(_ item: Item) {
+        self.item = item
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
@@ -26,9 +26,9 @@ final class StoryDetailViewController: ASViewController<ASDisplayNode>, StoreSub
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        title = story.title
+        title = item.title
         store.subscribe(self) { subscription in
-            subscription.select { state in state.selectedStory! }
+            subscription.select { state in state.selectedItem! }
         }
     }
 
@@ -40,14 +40,14 @@ final class StoryDetailViewController: ASViewController<ASDisplayNode>, StoreSub
     override func didMove(toParentViewController parent: UIViewController?) {
         super.didMove(toParentViewController: parent)
         if case .none = parent {
-            store.dispatch(StoryListAction.dismiss(story))
+            store.dispatch(ItemListAction.dismiss(item))
         }
     }
 
-    func newState(state: StoryDetails) {
+    func newState(state: ItemDetails) {
         let wasFetchingMore = fetchingMore
         let oldComments = comments
-        story = state.story
+        item = state.item
         comments = state.comments
         fetchingMore = state.fetchingMore
 
@@ -76,9 +76,9 @@ final class StoryDetailViewController: ASViewController<ASDisplayNode>, StoreSub
     }
 }
 
-extension StoryDetailViewController: ASTableDataSource, ASTableDelegate {
+extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
     func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
-        return hasMoreStories
+        return hasMoreComments
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
@@ -100,7 +100,12 @@ extension StoryDetailViewController: ASTableDataSource, ASTableDelegate {
         let comment = comments[indexPath.row]
         return {
             let node = ASTextCellNode()
-            node.text = "\(comment.author)\n\(comment.text)"
+            if
+                let author = comment.by,
+                let text = comment.text
+            {
+                node.text = "\(author)\n\(text)"
+            }
             return node
         }
     }

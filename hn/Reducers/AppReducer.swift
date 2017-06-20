@@ -5,36 +5,36 @@ func appReducer(action: Action, state: AppState?) -> AppState {
 
     switch action {
     case let action as FetchAction:
-        guard var storyList = state.tabs[action.storyType] else {
+        guard var itemList = state.tabs[action.itemType] else {
             return state
         }
         switch action.action {
         case .fetch:
-            storyList.fetchingMore = true
+            itemList.fetchingMore = true
         case let .fetchedIds(ids):
-            storyList.ids = ids
-            storyList.fetchingMore = false
-        case .fetchStories(_):
-            storyList.fetchingMore = true
-        case let .fetchedStories(stories):
-            storyList.stories += stories
-            storyList.fetchingMore = false
+            itemList.ids = ids
+            itemList.fetchingMore = false
+        case .fetchItems(_):
+            itemList.fetchingMore = true
+        case let .fetchedItems(items):
+            itemList.items += items
+            itemList.fetchingMore = false
         }
-        state.tabs[action.storyType] = storyList
-    case let action as StoryListAction:
+        state.tabs[action.itemType] = itemList
+    case let action as ItemListAction:
         switch action {
-        case let .view(story):
-            state.selectedStory = StoryDetails(story)
+        case let .view(item):
+            state.selectedItem = ItemDetails(item)
         case .dismiss(_):
-            state.selectedStory = .none
+            state.selectedItem = .none
         }
     case let action as CommentFetchAction:
         switch action {
         case .fetch(comments: _):
-            state.selectedStory?.fetchingMore = true
+            state.selectedItem?.fetchingMore = true
         case let .fetched(comments: comments):
-            state.selectedStory?.comments += comments
-            state.selectedStory?.fetchingMore = false
+            state.selectedItem?.comments += comments
+            state.selectedItem?.fetchingMore = false
         }
     default:
         break

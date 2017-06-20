@@ -6,14 +6,14 @@ let store = Store<AppState>(
     reducer: appReducer,
     state: AppState(
         tabs: [
-            .topStories: StoryList(),
-            .newStories: StoryList(),
-            .bestStories: StoryList(),
-            .askHN: StoryList(),
-            .showHN: StoryList()
+            .topStories: ItemList(),
+            .newStories: ItemList(),
+            .bestStories: ItemList(),
+            .askHN: ItemList(),
+            .showHN: ItemList()
         ],
         selectedTab: .none,
-        selectedStory: .none))
+        selectedItem: .none))
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDelegate {
@@ -36,10 +36,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
     }
 }
 
-func visibleTabs(_ tabs: [StoryType: StoryList]) -> [UIViewController] {
+func visibleTabs(_ tabs: [ItemType: ItemList]) -> [UIViewController] {
     return tabs.enumerated().map { (index, tab) in
-        let storyController = StoryListViewController(tab.key)
-        storyController.tabBarItem = UITabBarItem(title: tab.key.description, image: .none, tag: index)
-        return storyController
+        let controller = ItemListViewController(tab.key)
+        controller.tabBarItem = UITabBarItem(title: tab.key.description, image: .none, tag: index)
+        return controller
     }
 }
