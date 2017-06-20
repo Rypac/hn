@@ -51,13 +51,14 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, ASTableData
 
         let item = items[indexPath.row]
         return {
-            let node = ASTextCellNode()
+            let node = ItemCellNode()
             if
                 let title = item.title,
                 let score = item.score,
-                let author = item.by
+                let author = item.by,
+                let timestamp = item.time
             {
-                node.text = "\(title)\n\(score) points by \(author)"
+                node.update(title: title, author: author, score: score, time: timestamp)
             }
             return node
         }

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		487A42603799E2F9AC261E74 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A49183E506D24DF83F3F7 /* AppState.swift */; };
 		487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A478D038053F823807284 /* AppReducer.swift */; };
+		811683C21EF92F4600680511 /* ItemCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C11EF92F4600680511 /* ItemCell.swift */; };
 		811683C51EF9346300680511 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C41EF9346300680511 /* Date.swift */; };
 		8118DBA91EF5004200934BA4 /* ReSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; };
 		8118DBAA1EF5004200934BA4 /* ReSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -54,6 +55,7 @@
 /* Begin PBXFileReference section */
 		487A478D038053F823807284 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppReducer.swift; path = Reducers/AppReducer.swift; sourceTree = "<group>"; };
 		487A49183E506D24DF83F3F7 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		811683C11EF92F4600680511 /* ItemCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemCell.swift; path = Views/ItemCell.swift; sourceTree = "<group>"; };
 		811683C41EF9346300680511 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = Extensions/Date.swift; sourceTree = "<group>"; };
 		8118DBA81EF5004200934BA4 /* ReSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReSwift.framework; path = Carthage/Build/iOS/ReSwift.framework; sourceTree = "<group>"; };
 		8118DBAB1EF504F800934BA4 /* ItemListAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListAction.swift; path = Actions/ItemListAction.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 			isa = PBXGroup;
 			children = (
 				8118DBAF1EF5133600934BA4 /* LoadingCell.swift */,
+				811683C11EF92F4600680511 /* ItemCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -280,6 +283,7 @@
 				812126771EC7088D00A4B61F /* HackerNewsApi.swift in Sources */,
 				8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */,
 				81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */,
+				811683C21EF92F4600680511 /* ItemCell.swift in Sources */,
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
 				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,
 				81E2A5601EF7DC40004045FF /* ItemDetailsViewController.swift in Sources */,
