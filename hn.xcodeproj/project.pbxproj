@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		487A42603799E2F9AC261E74 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A49183E506D24DF83F3F7 /* AppState.swift */; };
 		487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A478D038053F823807284 /* AppReducer.swift */; };
+		811683C51EF9346300680511 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C41EF9346300680511 /* Date.swift */; };
 		8118DBA91EF5004200934BA4 /* ReSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; };
 		8118DBAA1EF5004200934BA4 /* ReSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAB1EF504F800934BA4 /* ItemListAction.swift */; };
@@ -53,6 +54,7 @@
 /* Begin PBXFileReference section */
 		487A478D038053F823807284 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppReducer.swift; path = Reducers/AppReducer.swift; sourceTree = "<group>"; };
 		487A49183E506D24DF83F3F7 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		811683C41EF9346300680511 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = Extensions/Date.swift; sourceTree = "<group>"; };
 		8118DBA81EF5004200934BA4 /* ReSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReSwift.framework; path = Carthage/Build/iOS/ReSwift.framework; sourceTree = "<group>"; };
 		8118DBAB1EF504F800934BA4 /* ItemListAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListAction.swift; path = Actions/ItemListAction.swift; sourceTree = "<group>"; };
 		8118DBAD1EF50DF100934BA4 /* ItemListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewController.swift; path = Controllers/ItemListViewController.swift; sourceTree = "<group>"; };
@@ -130,6 +132,14 @@
 			name = Actions;
 			sourceTree = "<group>";
 		};
+		811683C31EF9345400680511 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				811683C41EF9346300680511 /* Date.swift */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
 		812126721EC7081800A4B61F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -165,6 +175,7 @@
 			children = (
 				8100428E1EF89174001E2B42 /* Actions */,
 				8100428B1EF89164001E2B42 /* Controllers */,
+				811683C31EF9345400680511 /* Extensions */,
 				8100428D1EF8916F001E2B42 /* Reducers */,
 				8100428A1EF8915F001E2B42 /* Services */,
 				8100428C1EF8916B001E2B42 /* Views */,
@@ -272,6 +283,7 @@
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
 				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,
 				81E2A5601EF7DC40004045FF /* ItemDetailsViewController.swift in Sources */,
+				811683C51EF9346300680511 /* Date.swift in Sources */,
 				487A42603799E2F9AC261E74 /* AppState.swift in Sources */,
 				8118DBB01EF5133600934BA4 /* LoadingCell.swift in Sources */,
 			);
