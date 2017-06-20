@@ -10,11 +10,7 @@ final class LoadingCellNode: ASCellNode {
         addSubnode(text)
         text.attributedText = NSAttributedString(
             string: "Loading...",
-            attributes: [
-                NSFontAttributeName: UIFont.systemFont(ofSize: 12),
-                NSForegroundColorAttributeName: UIColor.lightGray,
-                NSKernAttributeName: -0.3
-            ])
+            attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
         addSubnode(spinner)
     }
 
@@ -29,10 +25,6 @@ final class LoadingCellNode: ASCellNode {
 }
 
 final class SpinnerNode: ASDisplayNode {
-    var activityIndicatorView: UIActivityIndicatorView {
-        return view as! UIActivityIndicatorView
-    }
-
     override init() {
         super.init()
         setViewBlock {
@@ -43,6 +35,8 @@ final class SpinnerNode: ASDisplayNode {
 
     override func didLoad() {
         super.didLoad()
-        activityIndicatorView.startAnimating()
+        if let activityIndicator = view as? UIActivityIndicatorView {
+            activityIndicator.startAnimating()
+        }
     }
 }

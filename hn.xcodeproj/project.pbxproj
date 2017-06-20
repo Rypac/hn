@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		487A42603799E2F9AC261E74 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A49183E506D24DF83F3F7 /* AppState.swift */; };
-		487A4A8E1A69D12DBF529664 /* StoryListReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A478D038053F823807284 /* StoryListReducer.swift */; };
+		487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A478D038053F823807284 /* AppReducer.swift */; };
 		8118DBA91EF5004200934BA4 /* ReSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; };
 		8118DBAA1EF5004200934BA4 /* ReSwift.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		8118DBAC1EF504F800934BA4 /* StoryListAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAB1EF504F800934BA4 /* StoryListAction.swift */; };
@@ -51,7 +51,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		487A478D038053F823807284 /* StoryListReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoryListReducer.swift; path = Reducers/StoryListReducer.swift; sourceTree = "<group>"; };
+		487A478D038053F823807284 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppReducer.swift; path = Reducers/AppReducer.swift; sourceTree = "<group>"; };
 		487A49183E506D24DF83F3F7 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		8118DBA81EF5004200934BA4 /* ReSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReSwift.framework; path = Carthage/Build/iOS/ReSwift.framework; sourceTree = "<group>"; };
 		8118DBAB1EF504F800934BA4 /* StoryListAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StoryListAction.swift; path = Actions/StoryListAction.swift; sourceTree = "<group>"; };
@@ -116,7 +116,7 @@
 		8100428D1EF8916F001E2B42 /* Reducers */ = {
 			isa = PBXGroup;
 			children = (
-				487A478D038053F823807284 /* StoryListReducer.swift */,
+				487A478D038053F823807284 /* AppReducer.swift */,
 			);
 			name = Reducers;
 			sourceTree = "<group>";
@@ -270,7 +270,7 @@
 				8118DBAE1EF50DF100934BA4 /* StoryListViewController.swift in Sources */,
 				81E2A5621EF7F263004045FF /* StoryDetailAction.swift in Sources */,
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
-				487A4A8E1A69D12DBF529664 /* StoryListReducer.swift in Sources */,
+				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,
 				81E2A5601EF7DC40004045FF /* StoryDetailViewController.swift in Sources */,
 				487A42603799E2F9AC261E74 /* AppState.swift in Sources */,
 				8118DBB01EF5133600934BA4 /* LoadingCell.swift in Sources */,
