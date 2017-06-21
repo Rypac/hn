@@ -99,12 +99,13 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
 
         let comment = comments[indexPath.row]
         return {
-            let node = ASTextCellNode()
+            let node = CommentCellNode()
             if
                 let author = comment.by,
-                let text = comment.text
+                let text = comment.text,
+                let time = comment.time
             {
-                node.text = "\(author)\n\(text)"
+                node.update(comment: text, author: author, timestamp: time)
             }
             return node
         }

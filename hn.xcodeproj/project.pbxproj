@@ -23,6 +23,7 @@
 		812126861EC8039000A4B61F /* AlamofireObjectMapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 812126791EC70EE700A4B61F /* AlamofireObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		812126871EC8039000A4B61F /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812126731EC7081800A4B61F /* ObjectMapper.framework */; };
 		812126881EC8039000A4B61F /* ObjectMapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 812126731EC7081800A4B61F /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		814DF7E01EFB3A9300C0A886 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DF7DF1EFB3A9300C0A886 /* CommentCell.swift */; };
 		815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815B42771EC6ED8C00487C99 /* AppDelegate.swift */; };
 		815B427F1EC6ED8C00487C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 815B427E1EC6ED8C00487C99 /* Assets.xcassets */; };
 		81DA7A921EEC067400118D04 /* AsyncDisplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */; };
@@ -65,6 +66,7 @@
 		812126761EC7088D00A4B61F /* HackerNewsApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HackerNewsApi.swift; path = Services/HackerNewsApi.swift; sourceTree = "<group>"; };
 		812126781EC70EE700A4B61F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		812126791EC70EE700A4B61F /* AlamofireObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireObjectMapper.framework; path = Carthage/Build/iOS/AlamofireObjectMapper.framework; sourceTree = "<group>"; };
+		814DF7DF1EFB3A9300C0A886 /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentCell.swift; path = Views/CommentCell.swift; sourceTree = "<group>"; };
 		815B42741EC6ED8C00487C99 /* hn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		815B42771EC6ED8C00487C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		815B427E1EC6ED8C00487C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -114,6 +116,7 @@
 			children = (
 				8118DBAF1EF5133600934BA4 /* LoadingCell.swift */,
 				811683C11EF92F4600680511 /* ItemCell.swift */,
+				814DF7DF1EFB3A9300C0A886 /* CommentCell.swift */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -290,6 +293,7 @@
 				811683C51EF9346300680511 /* Date.swift in Sources */,
 				487A42603799E2F9AC261E74 /* AppState.swift in Sources */,
 				8118DBB01EF5133600934BA4 /* LoadingCell.swift in Sources */,
+				814DF7E01EFB3A9300C0A886 /* CommentCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
