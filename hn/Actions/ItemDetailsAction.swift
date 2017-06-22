@@ -11,31 +11,36 @@ enum CommentFetchAction: Action {
 func fetchNextCommentBatch(state: AppState, store: Store<AppState>) -> Action? {
     guard
         let state = state.selectedItem,
-        let kids = state.item.kids,
-        kids.count > state.comments.count
+        let kids = state.item.descendants,
+        kids > state.comments.count
     else {
         return .none
     }
 
-    let start = state.comments.count
-    let end = start + min(16, kids.count - state.comments.count)
-    let ids = Array(kids[start..<end])
-
-    let requestGroup = DispatchGroup()
-    var comments = [Item]()
-    ids.forEach { id in
-        requestGroup.enter()
-        fetch(.item(id)) { (comment: Result<Item>) in
-            comment.withValue {
-                comments.append($0)
-            }
-            requestGroup.leave()
-        }
-    }
-
-    requestGroup.notify(queue: .main) {
+    fetchSiblings(forItem: state.item.id) { items in
+        let comments = Array(items.suffix(from: 1))
         store.dispatch(CommentFetchAction.fetched(comments: comments))
     }
 
-    return CommentFetchAction.fetch(comments: ids)
+    return CommentFetchAction.fetch(comments: [])
+}
+
+private func fetchSiblings(forItem id: Int, onCompletion: @escaping ([Item]) -> Void) {
+    fetch(.item(id)) { (item: Result<Item>) in
+        var kids = [Item]()
+        let requestGroup = DispatchGroup()
+        item.withValue { value in
+            kids.append(value)
+            value.kids?.forEach { kid in
+                requestGroup.enter()
+                fetchSiblings(forItem: kid) { items in
+                    kids += items
+                    requestGroup.leave()
+                }
+            }
+        }
+        requestGroup.notify(queue: .main) {
+            onCompletion(kids)
+        }
+    }
 }
