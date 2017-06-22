@@ -25,7 +25,7 @@ func fetchNextCommentBatch(state: AppState, store: Store<AppState>) -> Action? {
 }
 
 private func fetchSiblings(forItem item: Item, onCompletion: @escaping ([Item]) -> Void) {
-    forAll(item.kids ?? [], performAsync: fetchSiblings, after: onCompletion)
+    (item.kids ?? []).forAllAsync(fetchSiblings, after: onCompletion)
 }
 
 private func fetchSiblings(forItem id: Int, onCompletion: @escaping ([Item]) -> Void) {
@@ -35,23 +35,8 @@ private func fetchSiblings(forItem id: Int, onCompletion: @escaping ([Item]) -> 
             return
         }
 
-        forAll(item.kids ?? [], performAsync: fetchSiblings) { items in
+        (item.kids ?? []).forAllAsync(fetchSiblings) { items in
             onCompletion([item] + items)
         }
-    }
-}
-
-private func forAll<T, U>(_ sequence: [T], performAsync: (T, @escaping ([U]) -> Void) -> Void, after: @escaping ([U]) -> Void) {
-    var values = [U]()
-    let requestGroup = DispatchGroup()
-    sequence.forEach { value in
-        requestGroup.enter()
-        performAsync(value) { asyncValue in
-            values += asyncValue
-            requestGroup.leave()
-        }
-    }
-    requestGroup.notify(queue: .main) {
-        after(values)
     }
 }
