@@ -12,12 +12,13 @@ final class CommentCellNode: ASCellNode {
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        return ASStackLayoutSpec(
-            direction: .vertical,
-            spacing: 6,
-            justifyContent: .center,
-            alignItems: .start,
-            children: [details, text])
+        let cellStack = ASStackLayoutSpec.vertical()
+        cellStack.spacing = 4
+        cellStack.style.flexShrink = 1.0
+        cellStack.style.flexGrow = 1.0
+        cellStack.children = [details, text]
+
+        return ASInsetLayoutSpec(insets: UIEdgeInsets(horizontal: 8, vertical: 4), child: cellStack)
     }
 
     func update(comment: String, author: String, timestamp: Int) {

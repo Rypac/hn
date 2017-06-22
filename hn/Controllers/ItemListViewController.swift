@@ -56,9 +56,10 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, ASTableData
                 let title = item.title,
                 let score = item.score,
                 let author = item.by,
+                let comments = item.descendants,
                 let timestamp = item.time
             {
-                node.update(title: title, author: author, score: score, time: timestamp)
+                node.update(title: title, author: author, comments: comments, score: score, time: timestamp)
             }
             return node
         }

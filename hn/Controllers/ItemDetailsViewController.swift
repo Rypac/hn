@@ -26,7 +26,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode>, StoreSub
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        title = item.title
+        title = "\(item.descendants ?? 0) comments"
         store.subscribe(self) { subscription in
             subscription.select { state in state.selectedItem! }
         }
