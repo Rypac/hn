@@ -71,21 +71,13 @@ func fetchNextItemBatch(_ type: ItemType) -> ActionCreator<AppState> {
         let end = start + min(16, state.ids.count - state.items.count)
         let ids = Array(state.ids[start..<end])
 
-        let requestGroup = DispatchGroup()
-        var items = [Item]()
-        ids.forEach { id in
-            requestGroup.enter()
+        ids.forAll(async: { id, onCompletion in
             fetch(.item(id)) { (item: Result<Item>) in
-                item.withValue {
-                    items.append($0)
-                }
-                requestGroup.leave()
+                onCompletion(item.value)
             }
-        }
-
-        requestGroup.notify(queue: .main) {
+        }, after: { items in
             store.dispatch(FetchAction(itemType: type, action: .fetchedItems(items)))
-        }
+        })
 
         return FetchAction(itemType: type, action: .fetchItems(ids: ids))
     }
