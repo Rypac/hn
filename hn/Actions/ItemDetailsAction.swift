@@ -17,30 +17,41 @@ func fetchNextCommentBatch(state: AppState, store: Store<AppState>) -> Action? {
         return .none
     }
 
-    fetchSiblings(forItem: state.item.id) { items in
-        let comments = Array(items.suffix(from: 1))
-        store.dispatch(CommentFetchAction.fetched(comments: comments))
+    fetchSiblings(forItem: state.item) { items in
+        store.dispatch(CommentFetchAction.fetched(comments: items))
     }
 
-    return CommentFetchAction.fetch(comments: [])
+    return CommentFetchAction.fetch(comments: [state.item.id])
+}
+
+private func fetchSiblings(forItem item: Item, onCompletion: @escaping ([Item]) -> Void) {
+    forAll(item.kids ?? [], performAsync: fetchSiblings, after: onCompletion)
 }
 
 private func fetchSiblings(forItem id: Int, onCompletion: @escaping ([Item]) -> Void) {
     fetch(.item(id)) { (item: Result<Item>) in
-        var kids = [Item]()
-        let requestGroup = DispatchGroup()
-        item.withValue { value in
-            kids.append(value)
-            value.kids?.forEach { kid in
-                requestGroup.enter()
-                fetchSiblings(forItem: kid) { items in
-                    kids += items
-                    requestGroup.leave()
-                }
-            }
+        guard case let .success(item) = item else {
+            onCompletion([])
+            return
         }
-        requestGroup.notify(queue: .main) {
-            onCompletion(kids)
+
+        forAll(item.kids ?? [], performAsync: fetchSiblings) { items in
+            onCompletion([item] + items)
         }
+    }
+}
+
+private func forAll<T, U>(_ sequence: [T], performAsync: (T, @escaping ([U]) -> Void) -> Void, after: @escaping ([U]) -> Void) {
+    var values = [U]()
+    let requestGroup = DispatchGroup()
+    sequence.forEach { value in
+        requestGroup.enter()
+        performAsync(value) { asyncValue in
+            values += asyncValue
+            requestGroup.leave()
+        }
+    }
+    requestGroup.notify(queue: .main) {
+        after(values)
     }
 }
