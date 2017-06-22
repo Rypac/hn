@@ -1,7 +1,7 @@
 import Foundation
 
 extension Sequence {
-    func forAll<U>(async perform: (Self.Iterator.Element, @escaping (U?) -> Void) -> Void, after: @escaping ([U]) -> Void) {
+    func flatMap<U>(async perform: (Self.Iterator.Element, @escaping (U?) -> Void) -> Void, withResult: @escaping ([U]) -> Void) {
         var values = [U]()
         let requestGroup = DispatchGroup()
         forEach { value in
@@ -12,11 +12,11 @@ extension Sequence {
             }
         }
         requestGroup.notify(queue: .main) {
-            after(values)
+            withResult(values)
         }
     }
 
-    func forAll<U>(async perform: (Self.Iterator.Element, @escaping ([U]) -> Void) -> Void, after: @escaping ([U]) -> Void) {
+    func flatMap<U>(async perform: (Self.Iterator.Element, @escaping ([U]) -> Void) -> Void, withResult: @escaping ([U]) -> Void) {
         var values = [U]()
         let requestGroup = DispatchGroup()
         forEach { value in
@@ -27,7 +27,7 @@ extension Sequence {
             }
         }
         requestGroup.notify(queue: .main) {
-            after(values)
+            withResult(values)
         }
     }
 }

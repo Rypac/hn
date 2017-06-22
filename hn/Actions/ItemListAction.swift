@@ -71,11 +71,11 @@ func fetchNextItemBatch(_ type: ItemType) -> ActionCreator<AppState> {
         let end = start + min(16, state.ids.count - state.items.count)
         let ids = Array(state.ids[start..<end])
 
-        ids.forAll(async: { id, onCompletion in
+        ids.flatMap(async: { id, onCompletion in
             fetch(.item(id)) { (item: Result<Item>) in
                 onCompletion(item.value)
             }
-        }, after: { items in
+        }, withResult: { items in
             store.dispatch(FetchAction(itemType: type, action: .fetchedItems(items)))
         })
 
