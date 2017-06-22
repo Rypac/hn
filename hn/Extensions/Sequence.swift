@@ -1,12 +1,12 @@
 import Foundation
 
 extension Sequence {
-    func forAllAsync<U>(_ performAsync: (Self.Iterator.Element, @escaping ([U]) -> Void) -> Void, after: @escaping ([U]) -> Void) {
+    func forAll<U>(async perform: (Self.Iterator.Element, @escaping ([U]) -> Void) -> Void, after: @escaping ([U]) -> Void) {
         var values = [U]()
         let requestGroup = DispatchGroup()
-        self.forEach { value in
+        forEach { value in
             requestGroup.enter()
-            performAsync(value) { asyncValue in
+            perform(value) { asyncValue in
                 values += asyncValue
                 requestGroup.leave()
             }

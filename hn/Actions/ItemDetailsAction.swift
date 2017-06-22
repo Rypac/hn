@@ -25,7 +25,7 @@ func fetchNextCommentBatch(state: AppState, store: Store<AppState>) -> Action? {
 }
 
 private func fetchSiblings(forItem item: Item, onCompletion: @escaping ([Item]) -> Void) {
-    (item.kids ?? []).forAllAsync(fetchSiblings, after: onCompletion)
+    (item.kids ?? []).forAll(async: fetchSiblings, after: onCompletion)
 }
 
 private func fetchSiblings(forItem id: Int, onCompletion: @escaping ([Item]) -> Void) {
@@ -35,7 +35,7 @@ private func fetchSiblings(forItem id: Int, onCompletion: @escaping ([Item]) -> 
             return
         }
 
-        (item.kids ?? []).forAllAsync(fetchSiblings) { items in
+        (item.kids ?? []).forAll(async: fetchSiblings) { items in
             onCompletion([item] + items)
         }
     }
