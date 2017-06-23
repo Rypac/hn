@@ -24,6 +24,11 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode>, StoreSub
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableNode.allowsSelection = false
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         title = "\(item.descendants ?? 0) comments"
@@ -99,15 +104,7 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
 
         let comment = comments[indexPath.row]
         return {
-            let node = CommentCellNode()
-            if
-                let author = comment.by,
-                let text = comment.text,
-                let time = comment.time
-            {
-                node.update(comment: text, author: author, timestamp: time)
-            }
-            return node
+            return CommentCellNode(comment)
         }
     }
 

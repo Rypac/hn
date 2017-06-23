@@ -24,10 +24,14 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, ASTableData
         fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        tableNode.leadingScreensForBatching = 1
+    }
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         parent?.title = itemType.description
-        tableNode.leadingScreensForBatching = 1
         store.subscribe(self) { subscription in
             subscription.select { state in (state.tabs[self.itemType]!, state.selectedItem) }
         }
@@ -51,17 +55,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, ASTableData
 
         let item = items[indexPath.row]
         return {
-            let node = ItemCellNode()
-            if
-                let title = item.title,
-                let score = item.score,
-                let author = item.by,
-                let comments = item.descendants,
-                let timestamp = item.time
-            {
-                node.update(title: title, author: author, comments: comments, score: score, time: timestamp)
-            }
-            return node
+            return ItemCellNode(item)
         }
     }
 

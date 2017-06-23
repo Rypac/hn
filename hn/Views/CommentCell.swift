@@ -20,8 +20,19 @@ final class CommentCellNode: ASCellNode {
 
         return ASInsetLayoutSpec(insets: UIEdgeInsets(horizontal: 8, vertical: 4), child: cellStack)
     }
+}
 
-    func update(comment: String, author: String, timestamp: Int) {
+extension CommentCellNode {
+    convenience init(_ item: Item) {
+        self.init()
+        guard
+            let comment = item.text,
+            let author = item.by,
+            let timestamp = item.time
+        else {
+            return
+        }
+
         let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
         let timeSincePosting = date.relative(to: Date())
         text.attributedText = NSAttributedString(

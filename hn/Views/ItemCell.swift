@@ -29,9 +29,21 @@ final class ItemCellNode: ASCellNode {
 
         return ASInsetLayoutSpec(insets: UIEdgeInsets(horizontal: 8, vertical: 4), child: cellStack)
     }
+}
 
-    func update(title: String, author: String, comments: Int, score: Int, time: Int) {
-        let date = Date(timeIntervalSince1970: TimeInterval(time))
+extension ItemCellNode {
+    convenience init(_ item: Item) {
+        self.init()
+        guard
+            let title = item.title,
+            let score = item.score,
+            let author = item.by,
+            let timestamp = item.time
+        else {
+            return
+        }
+
+        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
         let timeSincePosting = date.relative(to: Date())
         text.attributedText = NSAttributedString(
             string: title,
@@ -39,8 +51,10 @@ final class ItemCellNode: ASCellNode {
         details.attributedText = NSAttributedString(
             string: "\(score) points by \(author) \(timeSincePosting)",
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
-        self.comments.attributedText = NSAttributedString(
-            string: "\(comments)",
-            attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
+        if let descendants = item.descendants {
+            comments.attributedText = NSAttributedString(
+                string: "\(descendants)",
+                attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
+        }
     }
 }
