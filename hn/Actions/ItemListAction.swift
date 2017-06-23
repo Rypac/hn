@@ -2,6 +2,7 @@ import Foundation
 import ReSwift
 import Alamofire
 import UIKit
+import SafariServices
 
 struct FetchAction: Action {
     let itemType: ItemType
@@ -17,7 +18,9 @@ enum ItemFetchState {
 
 enum ItemListAction: Action {
     case view(Item)
+    case viewOriginal(Item)
     case dismiss(Item)
+    case dismissOriginal
 }
 
 extension ItemType {
@@ -88,6 +91,22 @@ func routeTo(_ item: Item, from viewController: UIViewController?) -> ActionCrea
         if let navigationController = viewController?.navigationController {
             navigationController.pushViewController(ItemDetailsViewController(item), animated: true)
             return ItemListAction.view(item)
+        }
+        return .none
+    }
+}
+
+func routeTo(original item: Item, from viewController: UIViewController?) -> ActionCreator<AppState> {
+    return { state, store in
+        if
+            let controller = viewController,
+            let urlString = item.url,
+            let url = URL(string: urlString)
+        {
+            let safari = SFSafariViewController(url: url)
+            safari.delegate = controller as? SFSafariViewControllerDelegate
+            controller.present(safari, animated: true, completion: nil)
+            return ItemListAction.viewOriginal(item)
         }
         return .none
     }

@@ -1,8 +1,15 @@
 import UIKit
 import AsyncDisplayKit
 import ReSwift
+import SafariServices
 
-final class ItemListViewController: ASViewController<ASDisplayNode>, ASTableDataSource, ASTableDelegate, StoreSubscriber {
+final class ItemListViewController:
+    ASViewController<ASDisplayNode>,
+    ASTableDataSource,
+    ASTableDelegate,
+    UIGestureRecognizerDelegate,
+    StoreSubscriber
+{
     var tableNode: ASTableNode {
         return node as! ASTableNode
     }
@@ -27,6 +34,13 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, ASTableData
     override func viewDidLoad() {
         super.viewDidLoad()
         tableNode.leadingScreensForBatching = 1
+
+        let longPressGesture = UILongPressGestureRecognizer(
+            target: self,
+            action: #selector(didLongPressOnStory(gesture:)))
+        longPressGesture.minimumPressDuration = 1
+        longPressGesture.delegate = self
+        tableNode.view.addGestureRecognizer(longPressGesture)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -81,6 +95,17 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, ASTableData
         store.dispatch(routeTo(story, from: self))
     }
 
+    func didLongPressOnStory(gesture: UILongPressGestureRecognizer) {
+        if
+            gesture.state == UIGestureRecognizerState.began,
+            let index = tableNode.indexPathForRow(at: gesture.location(in: tableNode.view))
+        {
+            let story = items[index.row]
+            tableNode.selectRow(at: index, animated: false, scrollPosition: .none)
+            store.dispatch(routeTo(original: story, from: self))
+        }
+    }
+
     func newState(state: (ItemList, ItemDetails?)) {
         let (state, selectedItem) = state
         let wasFetchingMore = fetchingMore
@@ -118,5 +143,11 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, ASTableData
         {
             tableNode.deselectRow(at: selectedRow, animated: true)
         }
+    }
+}
+
+extension ItemListViewController: SFSafariViewControllerDelegate {
+    func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
+        store.dispatch(ItemListAction.dismissOriginal)
     }
 }

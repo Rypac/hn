@@ -25,7 +25,11 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         switch action {
         case let .view(item):
             state.selectedItem = ItemDetails(item)
+        case let .viewOriginal(item):
+            state.selectedItem = ItemDetails(item)
         case .dismiss(_):
+            state.selectedItem = .none
+        case .dismissOriginal:
             state.selectedItem = .none
         }
     case let action as CommentFetchAction:
