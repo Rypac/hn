@@ -18,7 +18,9 @@ func fetchNextCommentBatch(state: AppState, store: Store<AppState>) -> Action? {
     }
 
     fetchSiblings(forItem: state.item) { items in
-        store.dispatch(CommentFetchAction.fetched(comments: items))
+        DispatchQueue.main.async {
+            store.dispatch(CommentFetchAction.fetched(comments: items))
+        }
     }
 
     return CommentFetchAction.fetch(comments: [state.item.id])
