@@ -75,7 +75,7 @@ func fetchNextItemBatch(_ type: ItemType) -> ActionCreator<AppState> {
         let ids = Array(state.ids[start..<end])
 
         ids.flatMap(async: { id, onCompletion in
-            fetch(.item(id)) { (item: Result<Item>) in
+            fetch(Endpoint.item(id)) { (item: Result<Item>) in
                 onCompletion(item.value)
             }
         }, withResult: { items in

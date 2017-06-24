@@ -27,7 +27,7 @@ private func fetchSiblings(forItem item: Item, onCompletion: @escaping ([Item]) 
 }
 
 private func fetchSiblings(forItem id: Int, onCompletion: @escaping ([Item]) -> Void) {
-    fetch(.item(id)) { (item: Result<Item>) in
+    fetch(Endpoint.item(id)) { (item: Result<Item>) in
         guard case let .success(item) = item else {
             onCompletion([])
             return

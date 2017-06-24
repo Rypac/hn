@@ -1,7 +1,5 @@
 import Foundation
 import Alamofire
-import AlamofireObjectMapper
-import ObjectMapper
 
 struct Item {
     let id: Int
@@ -28,57 +26,42 @@ struct User {
     let delay: Int?
 }
 
-extension Item: ImmutableMappable {
-    init(map: Map) throws {
-        id = try map.value("id")
-        title = try? map.value("title")
-        text = try? map.value("text")
-        score = try? map.value("score")
-        by = try? map.value("by")
-        time = try? map.value("time")
-        type = try? map.value("type")
-        url = try? map.value("url")
-        descendants = try? map.value("descendants")
-        kids = try? map.value("kids")
-        parts = try? map.value("parts")
-        deleted = (try? map.value("deleted")) ?? false
-        dead = (try? map.value("dead")) ?? false
-    }
-
-    mutating func mapping(map: Map) {
-        id >>> map["id"]
-        title >>> map["title"]
-        text >>> map["text"]
-        score >>> map["score"]
-        by >>> map["by"]
-        time >>> map["time"]
-        type >>> map["type"]
-        url >>> map["url"]
-        descendants >>> map["descendants"]
-        kids >>> map["kids"]
-        parts >>> map["parts"]
-        dead >>> map["dead"]
-        deleted >>> map["deleted"]
+extension Item: JsonDecodable {
+    init?(json: [String: Any]) {
+        guard let id = json["id"] as? Int else {
+            return nil
+        }
+        self.id = id
+        title = json["title"] as? String
+        text = json["text"] as? String
+        score = json["score"] as? Int
+        by = json["by"] as? String
+        time = json["time"] as? Int
+        type = json["type"] as? String
+        url = json["url"] as? String
+        descendants = json["descendants"] as? Int
+        kids = json["kids"] as? [Int]
+        parts = json["parts"] as? [Int]
+        deleted = json["deleted"] as? Bool ?? false
+        dead = json["dead"] as? Bool ?? false
     }
 }
 
-extension User: ImmutableMappable {
-    init(map: Map) throws {
-        id = try map.value("id")
-        karma = try map.value("karma")
-        created = try map.value("created")
-        about = try? map.value("about")
-        submitted = try? map.value("submitted")
-        delay = try? map.value("delay")
-    }
-
-    mutating func mapping(map: Map) {
-        id >>> map["id"]
-        karma >>> map["karma"]
-        created >>> map["created"]
-        about >>> map["about"]
-        submitted >>> map["submitted"]
-        delay >>> map["delay"]
+extension User: JsonDecodable {
+    init?(json: [String: Any]) {
+        guard
+            let id = json["id"] as? String,
+            let karma = json["karma"] as? Int,
+            let created = json["created"] as? Int
+        else {
+            return nil
+        }
+        self.id = id
+        self.karma = karma
+        self.created = created
+        about = json["about"] as? String
+        submitted = json["submitted"] as? [Int]
+        delay = json["delay"] as? Int
     }
 }
 
@@ -113,29 +96,5 @@ extension Endpoint: URLConvertible {
         case .item(let id): return "/item/\(id).json"
         case .user(let id): return "/user/\(id).json"
         }
-    }
-}
-
-func fetch<T: ImmutableMappable>(_ endpoint: Endpoint, onCompletion: @escaping (Result<T>) -> Void) {
-    Alamofire.request(endpoint).validate().responseObject { (response: DataResponse<T>) in
-        onCompletion(response.result)
-    }
-}
-
-func fetch<T: ImmutableMappable>(_ endpoint: Endpoint, onCompletion: @escaping (Result<[T]>) -> Void) {
-    Alamofire.request(endpoint).validate().responseArray { (response: DataResponse<[T]>) in
-        onCompletion(response.result)
-    }
-}
-
-func fetch<T>(_ endpoint: Endpoint, onCompletion: @escaping (T) -> Void) {
-    Alamofire.request(endpoint).validate().responseJSON { response in
-        (response.result.value as? T).map(onCompletion)
-    }
-}
-
-func fetch<T>(_ endpoint: Endpoint, onCompletion: @escaping ([T]) -> Void) {
-    Alamofire.request(endpoint).validate().responseJSON { response in
-        (response.result.value as? [T]).map(onCompletion)
     }
 }
