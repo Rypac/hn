@@ -25,21 +25,16 @@ final class CommentCellNode: ASCellNode {
 extension CommentCellNode {
     convenience init(_ item: Item) {
         self.init()
-        guard
-            let comment = item.text,
-            let author = item.by,
-            let timestamp = item.time
-        else {
-            return
-        }
+        let comment = item.text ?? ""
+        let author = item.deleted ? .some("deleted") : item.by
+        let time = item.time.map { Date(timeIntervalSince1970: TimeInterval($0)).relative(to: Date()) }
+        let info = [author, time].flatMap { $0 }.joined(separator: " ")
 
-        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
-        let timeSincePosting = date.relative(to: Date())
         text.attributedText = NSAttributedString(
             string: comment,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
         details.attributedText = NSAttributedString(
-            string: "\(author) \(timeSincePosting)",
+            string: info,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
     }
 }

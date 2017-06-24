@@ -65,8 +65,7 @@ extension ItemDetailsViewController: StoreSubscriber {
         let offset = newState.headerOffset
 
         state = newState
-
-        title = "\(newState.item.descendants ?? 0) comments"
+        title = "\(newState.totalComments) comments"
 
         tableNode.performBatchUpdates({
             let indexPath = { IndexPath(row: $0, section: 0) }
