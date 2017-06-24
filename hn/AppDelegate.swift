@@ -28,9 +28,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
         let tabController = UITabBarController()
         tabController.setViewControllers(visibleTabs(store.state.tabs), animated: false)
         tabController.selectedIndex = 2
+        tabController.tabBar.isTranslucent = false
+
+        let navigationController = UINavigationController(rootViewController: tabController)
+        navigationController.navigationBar.isTranslucent = false
 
         window = UIWindow(frame: UIScreen.main.bounds)
-        window?.rootViewController = UINavigationController(rootViewController: tabController)
+        window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         return true
     }

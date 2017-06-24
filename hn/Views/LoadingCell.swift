@@ -17,7 +17,7 @@ final class LoadingCellNode: ASCellNode {
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         return ASStackLayoutSpec(
             direction: .horizontal,
-            spacing: 16,
+            spacing: 8,
             justifyContent: .center,
             alignItems: .center,
             children: [text, spinner])

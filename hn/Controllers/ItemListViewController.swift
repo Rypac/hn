@@ -3,21 +3,19 @@ import AsyncDisplayKit
 import ReSwift
 import SafariServices
 
-final class ItemListViewController:
-    ASViewController<ASDisplayNode>,
-    ASTableDataSource,
-    ASTableDelegate,
-    UIGestureRecognizerDelegate,
-    StoreSubscriber
-{
+final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRecognizerDelegate {
     var tableNode: ASTableNode {
         return node as! ASTableNode
     }
 
+    lazy var refreshControl: UIRefreshControl = { [weak self] in
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
+        return refresh
+    }()
+
     let itemType: ItemType
-    var fetchingMore = false
-    var hasMoreItems = true
-    var items = [Item]()
+    var state = ItemListViewModel()
     var fetchingContext: ASBatchContext?
 
     init(_ storyType: ItemType) {
@@ -34,11 +32,12 @@ final class ItemListViewController:
     override func viewDidLoad() {
         super.viewDidLoad()
         tableNode.leadingScreensForBatching = 1
+        tableNode.view.refreshControl = refreshControl
 
         let longPressGesture = UILongPressGestureRecognizer(
             target: self,
-            action: #selector(didLongPressOnStory(gesture:)))
-        longPressGesture.minimumPressDuration = 1
+            action: #selector(longPress(gesture:)))
+        longPressGesture.minimumPressDuration = 0.5
         longPressGesture.delegate = self
         tableNode.view.addGestureRecognizer(longPressGesture)
     }
@@ -47,7 +46,9 @@ final class ItemListViewController:
         super.viewWillAppear(animated)
         parent?.title = itemType.description
         store.subscribe(self) { subscription in
-            subscription.select { state in (state.tabs[self.itemType]!, state.selectedItem) }
+            subscription.select { state in
+                ItemListViewModel(list: state.tabs[self.itemType]!, details: state.selectedItem)
+            }
         }
     }
 
@@ -56,10 +57,85 @@ final class ItemListViewController:
         store.unsubscribe(self)
     }
 
-    func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        let rowCount = self.tableNode(tableNode, numberOfRowsInSection: 0)
+    func refreshData(sender: UIRefreshControl) {
+        store.dispatch(fetchItemList(itemType))
+    }
 
-        if fetchingMore && indexPath.row == rowCount - 1 {
+    func longPress(gesture: UILongPressGestureRecognizer) {
+        guard
+            gesture.state == UIGestureRecognizerState.began,
+            let index = tableNode.indexPathForRow(at: gesture.location(in: tableNode.view))
+        else {
+            return
+        }
+
+        let story = state.items[index.row]
+        tableNode.selectRow(at: index, animated: false, scrollPosition: .none)
+        store.dispatch(routeTo(original: story, from: self))
+    }
+}
+
+extension ItemListViewController: StoreSubscriber {
+    func newState(state newState: ItemListViewModel) {
+        let previous = state.items.count
+        let current = newState.items.count
+        let fetching = newState.fetching
+
+        state = newState
+
+        tableNode.performBatchUpdates({
+            let rows = tableNode.numberOfRows(inSection: 0)
+            let indexPath = { IndexPath(row: $0, section: 0) }
+            switch fetching {
+            case .some(.list(.finished)):
+                if refreshControl.isRefreshing {
+                    refreshControl.endRefreshing()
+                }
+                if previous > 0 {
+                    tableNode.deleteRows(at: (0..<previous).map(indexPath), with: .none)
+                }
+            case .some(.items(.started)):
+                if rows == current {
+                    tableNode.insertRows(at: [indexPath(current)], with: .none)
+                }
+            case .some(.items(.finished)):
+                if rows > previous {
+                    tableNode.deleteRows(at: [indexPath(previous)], with: .none)
+                }
+                if current > previous {
+                    tableNode.insertRows(at: (previous..<current).map(indexPath), with: .none)
+                }
+                fetchingContext?.completeBatchFetching(true)
+            default:
+                break
+            }
+        })
+
+        if
+            case .none = newState.selectedItem,
+            let selectedRow = tableNode.indexPathForSelectedRow
+        {
+            tableNode.deselectRow(at: selectedRow, animated: true)
+        }
+    }
+}
+
+extension ItemListViewController: ASTableDataSource, ASTableDelegate {
+    func numberOfSections(in tableNode: ASTableNode) -> Int {
+        return 1
+    }
+
+    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
+        switch state.fetching {
+        case .some(.items(.started)):
+            return state.items.count + 1
+        default:
+            return state.items.count
+        }
+    }
+
+    func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
+        if indexPath.row >= state.items.count {
             return {
                 let node = LoadingCellNode()
                 node.style.height = ASDimensionMake(44.0)
@@ -67,82 +143,24 @@ final class ItemListViewController:
             }
         }
 
-        let item = items[indexPath.row]
+        let item = state.items[indexPath.row]
         return {
             return ItemCellNode(item)
         }
     }
 
-    func numberOfSections(in tableNode: ASTableNode) -> Int {
-        return 1
-    }
-
-    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-        return fetchingMore ? items.count + 1 : items.count
-    }
-
     func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
-        return hasMoreItems
+        return state.hasMoreItems
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        self.fetchingContext = context
+        fetchingContext = context
         store.dispatch(fetchItems(itemType))
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-        let story = items[indexPath.row]
+        let story = state.items[indexPath.row]
         store.dispatch(routeTo(story, from: self))
-    }
-
-    func didLongPressOnStory(gesture: UILongPressGestureRecognizer) {
-        if
-            gesture.state == UIGestureRecognizerState.began,
-            let index = tableNode.indexPathForRow(at: gesture.location(in: tableNode.view))
-        {
-            let story = items[index.row]
-            tableNode.selectRow(at: index, animated: false, scrollPosition: .none)
-            store.dispatch(routeTo(original: story, from: self))
-        }
-    }
-
-    func newState(state: (ItemList, ItemDetails?)) {
-        let (state, selectedItem) = state
-        let wasFetchingMore = fetchingMore
-        let oldItems = items
-        fetchingMore = state.fetchingMore
-        items = state.items
-        hasMoreItems = state.ids.count == 0 || state.items.count < state.ids.count
-
-        tableNode.performBatchUpdates({
-            let rowCountChange = items.count - oldItems.count
-            if rowCountChange > 0 {
-                let indexPaths = (oldItems.count..<items.count).map { index in
-                    IndexPath(row: index, section: 0)
-                }
-                tableNode.insertRows(at: indexPaths, with: .none)
-            }
-
-            if fetchingMore != wasFetchingMore {
-                if fetchingMore {
-                    tableNode.insertRows(
-                        at: [IndexPath(row: state.items.count, section: 0)],
-                        with: .none)
-                } else {
-                    tableNode.deleteRows(
-                        at: [IndexPath(row: oldItems.count, section: 0)],
-                        with: .none)
-                    fetchingContext?.completeBatchFetching(true)
-                }
-            }
-        }, completion: nil)
-
-        if
-            case .none = selectedItem,
-            let selectedRow = tableNode.indexPathForSelectedRow
-        {
-            tableNode.deselectRow(at: selectedRow, animated: true)
-        }
     }
 }
 

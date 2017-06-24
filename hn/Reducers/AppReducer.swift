@@ -10,15 +10,17 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         }
         switch action.action {
         case .fetch:
-            itemList.fetchingMore = true
+            itemList.ids = []
+            itemList.fetching = .list(.started)
         case let .fetchedIds(ids):
             itemList.ids = ids
-            itemList.fetchingMore = true
+            itemList.items = []
+            itemList.fetching = .list(.finished)
         case .fetchItems(_):
-            itemList.fetchingMore = true
+            itemList.fetching = .items(.started)
         case let .fetchedItems(items):
             itemList.items += items
-            itemList.fetchingMore = false
+            itemList.fetching = .items(.finished)
         }
         state.tabs[action.itemType] = itemList
     case let action as ItemListAction:
@@ -35,10 +37,11 @@ func appReducer(action: Action, state: AppState?) -> AppState {
     case let action as CommentFetchAction:
         switch action {
         case .fetch(comments: _):
-            state.selectedItem?.fetchingMore = true
+            state.selectedItem?.comments = []
+            state.selectedItem?.fetching = .started
         case let .fetched(comments: comments):
-            state.selectedItem?.comments += comments
-            state.selectedItem?.fetchingMore = false
+            state.selectedItem?.comments = comments
+            state.selectedItem?.fetching = .finished
         }
     default:
         break

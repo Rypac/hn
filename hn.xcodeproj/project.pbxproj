@@ -24,6 +24,8 @@
 		812126871EC8039000A4B61F /* ObjectMapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812126731EC7081800A4B61F /* ObjectMapper.framework */; };
 		812126881EC8039000A4B61F /* ObjectMapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 812126731EC7081800A4B61F /* ObjectMapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		814DF7E01EFB3A9300C0A886 /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DF7DF1EFB3A9300C0A886 /* CommentCell.swift */; };
+		814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8741EFE2389004CB013 /* ItemListViewModel.swift */; };
+		814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */; };
 		815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815B42771EC6ED8C00487C99 /* AppDelegate.swift */; };
 		815B427F1EC6ED8C00487C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 815B427E1EC6ED8C00487C99 /* Assets.xcassets */; };
 		8165DF0A1EFBE0CF0019E801 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165DF091EFBE0CF0019E801 /* Sequence.swift */; };
@@ -69,6 +71,8 @@
 		812126781EC70EE700A4B61F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		812126791EC70EE700A4B61F /* AlamofireObjectMapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireObjectMapper.framework; path = Carthage/Build/iOS/AlamofireObjectMapper.framework; sourceTree = "<group>"; };
 		814DF7DF1EFB3A9300C0A886 /* CommentCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentCell.swift; path = Views/CommentCell.swift; sourceTree = "<group>"; };
+		814EF8741EFE2389004CB013 /* ItemListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewModel.swift; path = ViewModels/ItemListViewModel.swift; sourceTree = "<group>"; };
+		814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsViewModel.swift; path = ViewModels/ItemDetailsViewModel.swift; sourceTree = "<group>"; };
 		815B42741EC6ED8C00487C99 /* hn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		815B42771EC6ED8C00487C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		815B427E1EC6ED8C00487C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -165,6 +169,15 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		814EF8731EFE235E004CB013 /* ViewModels */ = {
+			isa = PBXGroup;
+			children = (
+				814EF8741EFE2389004CB013 /* ItemListViewModel.swift */,
+				814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */,
+			);
+			name = ViewModels;
+			sourceTree = "<group>";
+		};
 		815B426B1EC6ED8C00487C99 = {
 			isa = PBXGroup;
 			children = (
@@ -191,6 +204,7 @@
 				8100428D1EF8916F001E2B42 /* Reducers */,
 				8100428A1EF8915F001E2B42 /* Services */,
 				8100428C1EF8916B001E2B42 /* Views */,
+				814EF8731EFE235E004CB013 /* ViewModels */,
 				815B42771EC6ED8C00487C99 /* AppDelegate.swift */,
 				487A49183E506D24DF83F3F7 /* AppState.swift */,
 				815B427E1EC6ED8C00487C99 /* Assets.xcassets */,
@@ -294,7 +308,9 @@
 				81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */,
 				8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */,
 				811683C21EF92F4600680511 /* ItemCell.swift in Sources */,
+				814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */,
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
+				814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */,
 				8165DF0A1EFBE0CF0019E801 /* Sequence.swift in Sources */,
 				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,
 				81E2A5601EF7DC40004045FF /* ItemDetailsViewController.swift in Sources */,

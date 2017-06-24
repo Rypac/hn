@@ -8,12 +8,8 @@ enum CommentFetchAction: Action {
     case fetched(comments: [Item])
 }
 
-func fetchNextCommentBatch(state: AppState, store: Store<AppState>) -> Action? {
-    guard
-        let state = state.selectedItem,
-        let kids = state.item.descendants,
-        kids > state.comments.count
-    else {
+func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
+    guard let state = state.selectedItem else {
         return .none
     }
 

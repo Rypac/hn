@@ -10,13 +10,13 @@ struct AppState: StateType {
 struct ItemList {
     var ids = [Int]()
     var items = [Item]()
-    var fetchingMore = false
+    var fetching: ContainerFetchState? = .none
 }
 
 struct ItemDetails {
     var item: Item
     var comments = [Item]()
-    var fetchingMore = false
+    var fetching: FetchState? = .none
 
     init(_ item: Item) {
         self.item = item
@@ -45,4 +45,14 @@ extension ItemType: CustomStringConvertible {
         case .updates: return "Updates"
         }
     }
+}
+
+enum ContainerFetchState {
+    case list(FetchState)
+    case items(FetchState)
+}
+
+enum FetchState {
+    case started
+    case finished
 }

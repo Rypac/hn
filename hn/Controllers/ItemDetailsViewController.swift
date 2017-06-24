@@ -2,19 +2,22 @@ import UIKit
 import AsyncDisplayKit
 import ReSwift
 
-final class ItemDetailsViewController: ASViewController<ASDisplayNode>, StoreSubscriber {
+final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     var tableNode: ASTableNode {
         return node as! ASTableNode
     }
 
-    var item: Item
-    var comments = [Item]()
-    var fetchingMore = false
-    var hasMoreComments = true
+    lazy var refreshControl: UIRefreshControl = { [weak self] in
+        let refresh = UIRefreshControl()
+        refresh.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
+        return refresh
+    }()
+
+    var state: ItemDetailsViewModel
     var fetchingContext: ASBatchContext?
 
     init(_ item: Item) {
-        self.item = item
+        state = ItemDetailsViewModel(details: ItemDetails(item))
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
@@ -27,13 +30,14 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode>, StoreSub
     override func viewDidLoad() {
         super.viewDidLoad()
         tableNode.allowsSelection = false
+        tableNode.view.refreshControl = refreshControl
     }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        title = "\(item.descendants ?? 0) comments"
+        title = "\(state.item.descendants ?? 0) comments"
         store.subscribe(self) { subscription in
-            subscription.select { state in state.selectedItem! }
+            subscription.select { state in ItemDetailsViewModel(details: state.selectedItem!) }
         }
     }
 
@@ -45,56 +49,67 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode>, StoreSub
     override func didMove(toParentViewController parent: UIViewController?) {
         super.didMove(toParentViewController: parent)
         if case .none = parent {
-            store.dispatch(ItemListAction.dismiss(item))
+            store.dispatch(ItemListAction.dismiss(state.item))
         }
     }
 
-    func newState(state: ItemDetails) {
-        let wasFetchingMore = fetchingMore
-        let oldComments = comments
-        item = state.item
-        comments = state.comments
-        fetchingMore = state.fetchingMore
+    func refreshData(sender: UIRefreshControl) {
+        store.dispatch(fetchComments)
+    }
+}
+
+extension ItemDetailsViewController: StoreSubscriber {
+    func newState(state newState: ItemDetailsViewModel) {
+        let previous = state.comments.count
+        let current = newState.comments.count
+        let fetching = newState.fetching
+
+        state = newState
 
         tableNode.performBatchUpdates({
-            let rowCountChange = comments.count - oldComments.count
-            if rowCountChange > 0 {
-                let indexPaths = (oldComments.count..<comments.count).map { index in
-                    IndexPath(row: index, section: 0)
+            let indexPath = { IndexPath(row: $0, section: 0) }
+            switch fetching {
+            case .some(.started):
+                if previous > 0 {
+                    tableNode.deleteRows(at: (0..<previous).map(indexPath), with: .none)
                 }
-                tableNode.insertRows(at: indexPaths, with: .none)
-            }
-
-            if fetchingMore != wasFetchingMore {
-                if fetchingMore {
-                    tableNode.insertRows(
-                        at: [IndexPath(row: comments.count, section: 0)],
-                        with: .none)
-                } else {
-                    tableNode.deleteRows(
-                        at: [IndexPath(row: oldComments.count, section: 0)],
-                        with: .none)
-                    fetchingContext?.completeBatchFetching(true)
+                if current == 0 {
+                    tableNode.insertRows(at: [indexPath(current)], with: .none)
                 }
+            case .some(.finished):
+                if refreshControl.isRefreshing {
+                    refreshControl.endRefreshing()
+                }
+                if previous == 0 {
+                    tableNode.deleteRows(at: [indexPath(previous)], with: .none)
+                }
+                if current > previous {
+                    tableNode.insertRows(at: (previous..<current).map(indexPath), with: .none)
+                }
+                fetchingContext?.completeBatchFetching(true)
+            default:
+                break
             }
-        }, completion: nil)
+        })
     }
 }
 
 extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
-    func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
-        return hasMoreComments
+    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
+        switch state.fetching {
+        case .some(.started):
+            return state.comments.count + 1
+        default:
+            return state.comments.count
+        }
     }
 
-    func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        self.fetchingContext = context
-        store.dispatch(fetchNextCommentBatch)
+    func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
+        return state.hasMoreItems
     }
 
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        let rowCount = self.tableNode(tableNode, numberOfRowsInSection: 0)
-
-        if fetchingMore && indexPath.row == rowCount - 1 {
+        if indexPath.row >= state.comments.count {
             return {
                 let node = LoadingCellNode()
                 node.style.height = ASDimensionMake(44.0)
@@ -102,7 +117,7 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
             }
         }
 
-        let comment = comments[indexPath.row]
+        let comment = state.comments[indexPath.row]
         return {
             return CommentCellNode(comment)
         }
@@ -112,7 +127,8 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
         return 1
     }
 
-    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-        return fetchingMore ? comments.count + 1 : comments.count
+    func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
+        fetchingContext = context
+        store.dispatch(fetchComments)
     }
 }
