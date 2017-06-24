@@ -3,11 +3,12 @@ struct ItemDetailsViewModel {
     let comments: [Item]
     let fetching: FetchState?
     let hasMoreItems: Bool
+    let headerOffset = 1
 
     init(details: ItemDetails) {
         item = details.item
         fetching = details.fetching
-        comments = details.comments
+        comments = [details.item] + details.comments
         hasMoreItems = details.fetching != .started && (details.item.descendants ?? 0) > details.comments.count
     }
 }

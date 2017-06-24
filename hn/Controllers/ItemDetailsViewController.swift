@@ -35,7 +35,6 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        title = "\(state.item.descendants ?? 0) comments"
         store.subscribe(self) { subscription in
             subscription.select { state in ItemDetailsViewModel(details: state.selectedItem!) }
         }
@@ -63,24 +62,27 @@ extension ItemDetailsViewController: StoreSubscriber {
         let previous = state.comments.count
         let current = newState.comments.count
         let fetching = newState.fetching
+        let offset = newState.headerOffset
 
         state = newState
+
+        title = "\(newState.item.descendants ?? 0) comments"
 
         tableNode.performBatchUpdates({
             let indexPath = { IndexPath(row: $0, section: 0) }
             switch fetching {
             case .some(.started):
-                if previous > 0 {
-                    tableNode.deleteRows(at: (0..<previous).map(indexPath), with: .none)
+                if previous > offset {
+                    tableNode.deleteRows(at: (offset..<previous).map(indexPath), with: .none)
                 }
-                if current == 0 {
+                if current == offset {
                     tableNode.insertRows(at: [indexPath(current)], with: .none)
                 }
             case .some(.finished):
                 if refreshControl.isRefreshing {
                     refreshControl.endRefreshing()
                 }
-                if previous == 0 {
+                if previous == offset {
                     tableNode.deleteRows(at: [indexPath(previous)], with: .none)
                 }
                 if current > previous {
@@ -117,9 +119,11 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
             }
         }
 
-        let comment = state.comments[indexPath.row]
+        let row = indexPath.row
+        let comment = state.comments[row]
+        let headerOffset = state.headerOffset
         return {
-            return CommentCellNode(comment)
+            return row < headerOffset ? ItemDetailCellNode(comment) : CommentCellNode(comment)
         }
     }
 
