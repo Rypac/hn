@@ -17,11 +17,11 @@ extension String {
 }
 
 private let entityEncodings: [String: Character] = [
-    "quot" : "\"",
-    "amp"  : "&",
-    "apos" : "'",
-    "lt"   : "<",
-    "gt"   : ">"
+    "quot": "\"",
+    "amp" : "&",
+    "apos": "'",
+    "lt"  : "<",
+    "gt"  : ">"
 ]
 
 extension String {
