@@ -25,7 +25,7 @@ final class CommentCellNode: ASCellNode {
 extension CommentCellNode {
     convenience init(_ item: Item) {
         self.init()
-        let comment = item.text ?? ""
+        let comment = item.text?.decodingHtmlEntities() ?? ""
         let author = item.deleted ? .some("deleted") : item.by
         let time = item.time.map { Date(timeIntervalSince1970: TimeInterval($0)).relative(to: Date()) }
         let info = [author, time].flatMap { $0 }.joined(separator: " ")

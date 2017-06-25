@@ -111,11 +111,10 @@ extension ItemListViewController: StoreSubscriber {
             }
         })
 
-        if
-            case .none = newState.selectedItem,
-            let selectedRow = tableNode.indexPathForSelectedRow
+        if case .none = newState.selectedItem,
+            let index = tableNode.indexPathForSelectedRow
         {
-            tableNode.deselectRow(at: selectedRow, animated: true)
+            tableNode.deselectRow(at: index, animated: true)
         }
     }
 }
