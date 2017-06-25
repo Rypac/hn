@@ -28,7 +28,7 @@
 		815B427F1EC6ED8C00487C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 815B427E1EC6ED8C00487C99 /* Assets.xcassets */; };
 		8165DF0A1EFBE0CF0019E801 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165DF091EFBE0CF0019E801 /* Sequence.swift */; };
 		8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165DF0B1EFBF4980019E801 /* UIKit.swift */; };
-		817CF3C21EFF65BA00B69DF4 /* StringTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817CF3C11EFF65BA00B69DF4 /* StringTests.swift */; };
+		817CF3C21EFF65BA00B69DF4 /* StringSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817CF3C11EFF65BA00B69DF4 /* StringSpec.swift */; };
 		817CF3C31EFF65F600B69DF4 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AE1EFF64A600B69DF4 /* Nimble.framework */; };
 		817CF3C41EFF65F600B69DF4 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AF1EFF64A600B69DF4 /* Quick.framework */; };
 		817CF3C61EFF660B00B69DF4 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 817CF3AE1EFF64A600B69DF4 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -88,7 +88,7 @@
 		817CF3AF1EFF64A600B69DF4 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		817CF3B61EFF656100B69DF4 /* hnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		817CF3BA1EFF656100B69DF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		817CF3C11EFF65BA00B69DF4 /* StringTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringTests.swift; path = Extensions/StringTests.swift; sourceTree = "<group>"; };
+		817CF3C11EFF65BA00B69DF4 /* StringSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StringSpec.swift; path = Extensions/StringSpec.swift; sourceTree = "<group>"; };
 		81CDCD1F1EFE6B510044D1DF /* ItemDetailsCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsCellNode.swift; path = Views/ItemDetailsCellNode.swift; sourceTree = "<group>"; };
 		81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AsyncDisplayKit.framework; path = Carthage/Build/iOS/AsyncDisplayKit.framework; sourceTree = "<group>"; };
 		81E2A55C1EF7CC70004045FF /* AlamofireNetworkActivityIndicator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireNetworkActivityIndicator.framework; path = Carthage/Build/iOS/AlamofireNetworkActivityIndicator.framework; sourceTree = "<group>"; };
@@ -248,7 +248,7 @@
 		817CF3C01EFF658500B69DF4 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				817CF3C11EFF65BA00B69DF4 /* StringTests.swift */,
+				817CF3C11EFF65BA00B69DF4 /* StringSpec.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -409,7 +409,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				817CF3C21EFF65BA00B69DF4 /* StringTests.swift in Sources */,
+				817CF3C21EFF65BA00B69DF4 /* StringSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
