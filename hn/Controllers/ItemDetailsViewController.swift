@@ -29,7 +29,6 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableNode.allowsSelection = false
         tableNode.view.refreshControl = refreshControl
     }
 
@@ -65,7 +64,7 @@ extension ItemDetailsViewController: StoreSubscriber {
         let offset = newState.headerOffset
 
         state = newState
-        title = "\(newState.totalComments) comments"
+        title = newState.title
 
         tableNode.performBatchUpdates({
             let indexPath = { IndexPath(row: $0, section: 0) }
@@ -122,7 +121,9 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
         let comment = state.comments[row]
         let headerOffset = state.headerOffset
         return {
-            return row < headerOffset ? ItemDetailCellNode(comment) : CommentCellNode(comment)
+            let node = row < headerOffset ? ItemDetailCellNode(comment) : CommentCellNode(comment)
+            node.selectionStyle = .none
+            return node
         }
     }
 
@@ -133,5 +134,11 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         fetchingContext = context
         store.dispatch(fetchComments)
+    }
+
+    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+        if indexPath.row < state.headerOffset {
+            store.dispatch(routeTo(original: state.item, from: self))
+        }
     }
 }
