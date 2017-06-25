@@ -2,3 +2,6 @@ github "Alamofire/Alamofire" ~> 4.4
 github "Alamofire/AlamofireNetworkActivityIndicator" ~> 2.2
 github "TextureGroup/Texture" ~> 2.3
 github "ReSwift/ReSwift" ~> 4.0
+
+github "Quick/Quick" ~> 1.1
+github "Quick/Nimble" ~> 7.0
