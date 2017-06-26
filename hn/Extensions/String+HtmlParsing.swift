@@ -13,11 +13,19 @@ enum Tag {
     case close(FormattingOption?)
 }
 
-private let tagTable: [Character: FormattingOption] = [
+private let htmlTags: [Character: FormattingOption] = [
     "p": .paragraph,
     "i": .italic,
     "b": .bold,
     "a": .url
+]
+
+private let entityEncodings: [String: Character] = [
+    "quot": "\"",
+    "amp" : "&",
+    "apos": "'",
+    "lt"  : "<",
+    "gt"  : ">"
 ]
 
 extension String {
@@ -56,6 +64,19 @@ extension String {
                         break
                     }
                     position = index(after: range.upperBound)
+                } else {
+                    break parser
+                }
+            case "&":
+                let start = index(after: position)
+                if start < endIndex, let end = range(of: ";", range: start..<endIndex) {
+                    let encoded = self[start..<end.lowerBound]
+                    if let decoded = encoded.decode() {
+                        result.append(decoded)
+                    } else {
+                        result.append(self[position..<end.upperBound])
+                    }
+                    position = end.upperBound
                 } else {
                     break parser
                 }
@@ -99,23 +120,37 @@ extension String {
         }
     }
 
-    private func parseInnerTag(from tagStart: Index) -> (FormattingOption?, Index)? {
-        guard let close = parseTagEnd(after: tagStart) else {
+    private func parseInnerTag(from start: Index) -> (FormattingOption?, Index)? {
+        let next = index(after: start)
+        let remaining = self[next..<endIndex]
+        guard let close = remaining.characters.index(of: ">") else {
             return .none
         }
 
-        let tag = self[tagStart]
-        return (tagTable[tag], close)
+        let end = index(next, offsetBy: distance(from: remaining.startIndex, to: close))
+        let tag = self[start]
+        return (htmlTags[tag], end)
     }
 
-    private func parseTagEnd(after tagStart: Index) -> Index? {
-        var next = index(after: tagStart)
-        while next < endIndex {
-            if self[next] == ">" {
-                return next
-            }
-            next = index(after: next)
+    private func decode() -> Character? {
+        guard hasPrefix("#") else {
+            return entityEncodings[self]
         }
-        return .none
+
+        let offset = index(after: startIndex)
+        let encoded = self[offset..<endIndex]
+        return encoded.hasPrefix("x") || encoded.hasPrefix("X")
+            ? encoded[index(after: encoded.startIndex)..<encoded.endIndex].decode(base: 16)
+            : encoded.decode(base: 10)
+    }
+
+    private func decode(base: Int) -> Character? {
+        guard
+            let code = UInt32(self, radix: base),
+            let unicode = UnicodeScalar(code)
+        else {
+            return .none
+        }
+        return Character(unicode)
     }
 }
