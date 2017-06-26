@@ -20,6 +20,7 @@
 		811D4E171EFF2C3700B49F38 /* ReSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; };
 		811D4E191EFF3CFF00B49F38 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811D4E181EFF3CFF00B49F38 /* String.swift */; };
 		812126771EC7088D00A4B61F /* HackerNewsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126761EC7088D00A4B61F /* HackerNewsApi.swift */; };
+		812C83651F00D42500DFC70E /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812C83641F00D42500DFC70E /* UIFont.swift */; };
 		814DF7E01EFB3A9300C0A886 /* CommentCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */; };
 		814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8741EFE2389004CB013 /* ItemListViewModel.swift */; };
 		814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */; };
@@ -76,6 +77,7 @@
 		811D4E181EFF3CFF00B49F38 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = String.swift; path = Extensions/String.swift; sourceTree = "<group>"; };
 		812126761EC7088D00A4B61F /* HackerNewsApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HackerNewsApi.swift; path = Services/HackerNewsApi.swift; sourceTree = "<group>"; };
 		812126781EC70EE700A4B61F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		812C83641F00D42500DFC70E /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIFont.swift; path = Extensions/UIFont.swift; sourceTree = "<group>"; };
 		814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentCellNode.swift; path = Views/CommentCellNode.swift; sourceTree = "<group>"; };
 		814EF8741EFE2389004CB013 /* ItemListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewModel.swift; path = ViewModels/ItemListViewModel.swift; sourceTree = "<group>"; };
 		814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsViewModel.swift; path = ViewModels/ItemDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -178,6 +180,7 @@
 				811D4E181EFF3CFF00B49F38 /* String.swift */,
 				81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */,
 				8165DF0B1EFBF4980019E801 /* UIKit.swift */,
+				812C83641F00D42500DFC70E /* UIFont.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -406,6 +409,7 @@
 				811683C51EF9346300680511 /* Date.swift in Sources */,
 				487A42603799E2F9AC261E74 /* AppState.swift in Sources */,
 				8118DBB01EF5133600934BA4 /* LoadingCellNode.swift in Sources */,
+				812C83651F00D42500DFC70E /* UIFont.swift in Sources */,
 				81820D511EFFB2B700FB460F /* String+HtmlParsing.swift in Sources */,
 				814DF7E01EFB3A9300C0A886 /* CommentCellNode.swift in Sources */,
 				81CDCD201EFE6B510044D1DF /* ItemDetailsCellNode.swift in Sources */,
