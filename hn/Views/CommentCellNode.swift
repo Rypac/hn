@@ -25,16 +25,48 @@ final class CommentCellNode: ASCellNode {
 extension CommentCellNode {
     convenience init(_ item: Item) {
         self.init()
-        let comment = item.text?.decodingHtmlEntities() ?? ""
         let author = item.deleted ? .some("deleted") : item.by
         let time = item.time.map { Date(timeIntervalSince1970: TimeInterval($0)).relative(to: Date()) }
         let info = [author, time].flatMap { $0 }.joined(separator: " ")
 
-        text.attributedText = NSAttributedString(
-            string: comment,
-            attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
+        text.attributedText = formatted(comment: item.text)
         details.attributedText = NSAttributedString(
             string: info,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
+    }
+
+    private func formatted(comment: String?) -> NSAttributedString {
+        let font = UIFont.preferredFont(forTextStyle: .body)
+        guard let comment = comment else {
+            return NSAttributedString(string: "", attributes: [NSFontAttributeName: font])
+        }
+
+        let (plainText, formattingPoints) = comment.strippingHtmlElements()
+        let formatted = NSMutableAttributedString(
+            string: plainText,
+            attributes: [NSFontAttributeName: font])
+        for (type, range) in formattingPoints {
+            switch type {
+            case .bold:
+                if let bold = font.boldVariant {
+                    formatted.addAttributes(
+                        [NSFontAttributeName: bold],
+                        range: plainText.nsRange(from: range))
+                }
+            case .italic:
+                if let italic = font.italicVariant {
+                    formatted.addAttributes(
+                        [NSFontAttributeName: italic],
+                        range: plainText.nsRange(from: range))
+                }
+            case .url:
+                formatted.addAttributes(
+                    [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue],
+                    range: plainText.nsRange(from: range))
+            default:
+                break
+            }
+        }
+        return formatted
     }
 }
