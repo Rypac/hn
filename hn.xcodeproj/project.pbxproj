@@ -22,6 +22,8 @@
 		812126771EC7088D00A4B61F /* HackerNewsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126761EC7088D00A4B61F /* HackerNewsApi.swift */; };
 		812C83651F00D42500DFC70E /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812C83641F00D42500DFC70E /* UIFont.swift */; };
 		81367DB91F025396004AF6C6 /* AsyncDisplayKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */; };
+		81367DBC1F027B63004AF6C6 /* ItemDetailsActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DBB1F027B63004AF6C6 /* ItemDetailsActionSpec.swift */; };
+		81367DBF1F028C11004AF6C6 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DBE1F028C11004AF6C6 /* Item.swift */; };
 		814DF7E01EFB3A9300C0A886 /* CommentCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */; };
 		814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8741EFE2389004CB013 /* ItemListViewModel.swift */; };
 		814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */; };
@@ -79,6 +81,8 @@
 		812126781EC70EE700A4B61F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		812C83641F00D42500DFC70E /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIFont.swift; path = Extensions/UIFont.swift; sourceTree = "<group>"; };
 		81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AsyncDisplayKit.swift; path = Extensions/AsyncDisplayKit.swift; sourceTree = "<group>"; };
+		81367DBB1F027B63004AF6C6 /* ItemDetailsActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsActionSpec.swift; path = Actions/ItemDetailsActionSpec.swift; sourceTree = "<group>"; };
+		81367DBE1F028C11004AF6C6 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Item.swift; path = TestSetup/Item.swift; sourceTree = "<group>"; };
 		814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentCellNode.swift; path = Views/CommentCellNode.swift; sourceTree = "<group>"; };
 		814EF8741EFE2389004CB013 /* ItemListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewModel.swift; path = ViewModels/ItemListViewModel.swift; sourceTree = "<group>"; };
 		814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsViewModel.swift; path = ViewModels/ItemDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -199,6 +203,22 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		81367DBA1F027B3D004AF6C6 /* Actions */ = {
+			isa = PBXGroup;
+			children = (
+				81367DBB1F027B63004AF6C6 /* ItemDetailsActionSpec.swift */,
+			);
+			name = Actions;
+			sourceTree = "<group>";
+		};
+		81367DBD1F028BE9004AF6C6 /* TestSetup */ = {
+			isa = PBXGroup;
+			children = (
+				81367DBE1F028C11004AF6C6 /* Item.swift */,
+			);
+			name = TestSetup;
+			sourceTree = "<group>";
+		};
 		814EF8731EFE235E004CB013 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -248,6 +268,8 @@
 		817CF3B71EFF656100B69DF4 /* hnTests */ = {
 			isa = PBXGroup;
 			children = (
+				81367DBD1F028BE9004AF6C6 /* TestSetup */,
+				81367DBA1F027B3D004AF6C6 /* Actions */,
 				817CF3C01EFF658500B69DF4 /* Extensions */,
 				817CF3BA1EFF656100B69DF4 /* Info.plist */,
 			);
@@ -421,6 +443,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81367DBC1F027B63004AF6C6 /* ItemDetailsActionSpec.swift in Sources */,
+				81367DBF1F028C11004AF6C6 /* Item.swift in Sources */,
 				81820D531EFFB4B600FB460F /* String+HtmlParsingSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
