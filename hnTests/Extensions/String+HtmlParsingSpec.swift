@@ -43,7 +43,10 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns a paragraph formatting element applied to the appropriate range") {
                     let (_, formatting) = original.strippingHtmlElements()
-                    let (type, range) = formatting.first!
+                    guard let (type, range) = formatting.first else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
                     let tag = original.range(of: "<p>")!
                     let upper = original.index(tag.lowerBound, offsetBy: 2)
                     let formatRange = tag.lowerBound..<upper
@@ -65,7 +68,10 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns an italic formatting element applied to the appropriate range") {
                     let (result, formatting) = original.strippingHtmlElements()
-                    let (type, range) = formatting.first!
+                    guard let (type, range) = formatting.first else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
 
                     expect(formatting).to(haveCount(1))
                     expect(type).to(equal(FormattingOption.italic))
@@ -83,11 +89,77 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns a bold formatting element applied to the appropriate range") {
                     let (result, formatting) = original.strippingHtmlElements()
-                    let (type, range) = formatting.first!
+                    guard let (type, range) = formatting.first else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
 
                     expect(formatting).to(haveCount(1))
                     expect(type).to(equal(FormattingOption.bold))
                     expect(range).to(equal(result.range(of: "string")))
+                }
+            }
+
+            context("when the string contains a pair of <a> tags") {
+                let original = "I find <a href=\"https://www.google.com\">this search engine</a> to be helpful."
+
+                it("returns a string without the <a> tags") {
+                    let (result, _) = original.strippingHtmlElements()
+                    expect(result).to(equal("I find this search engine to be helpful."))
+                }
+
+                it("returns a url formatting element applied to the appropriate range") {
+                    let (result, formatting) = original.strippingHtmlElements()
+                    guard let (type, range) = formatting.first else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
+
+                    expect(formatting).to(haveCount(1))
+                    expect(type).to(equal(FormattingOption.url))
+                    expect(range).to(equal(result.range(of: "this search engine")))
+                }
+            }
+
+            context("when the string contains a pair of <pre> tags") {
+                let original = "This is <pre>  really critical  </pre> stuff."
+
+                it("returns a string without the <pre> tags") {
+                    let (result, _) = original.strippingHtmlElements()
+                    expect(result).to(equal("This is   really critical   stuff."))
+                }
+
+                it("returns a preformatted formatting element applied to the appropriate range") {
+                    let (result, formatting) = original.strippingHtmlElements()
+                    guard let (type, range) = formatting.first else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
+
+                    expect(formatting).to(haveCount(1))
+                    expect(type).to(equal(FormattingOption.preformatted))
+                    expect(range).to(equal(result.range(of: "  really critical  ")))
+                }
+            }
+
+            context("when the string contains a pair of <code> tags") {
+                let original = "I like to use the <code>++</code> operator."
+
+                it("returns a string without the <code> tags") {
+                    let (result, _) = original.strippingHtmlElements()
+                    expect(result).to(equal("I like to use the ++ operator."))
+                }
+
+                it("returns a preformatted formatting element applied to the appropriate range") {
+                    let (result, formatting) = original.strippingHtmlElements()
+                    guard let (type, range) = formatting.first else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
+
+                    expect(formatting).to(haveCount(1))
+                    expect(type).to(equal(FormattingOption.code))
+                    expect(range).to(equal(result.range(of: "++")))
                 }
             }
 

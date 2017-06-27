@@ -6,6 +6,7 @@ enum FormattingOption {
     case italic
     case bold
     case code
+    case preformatted
 }
 
 enum Tag {
@@ -13,19 +14,21 @@ enum Tag {
     case close(FormattingOption?)
 }
 
-private let htmlTags: [Character: FormattingOption] = [
+private let htmlTags: [String: FormattingOption] = [
     "p": .paragraph,
     "i": .italic,
     "b": .bold,
-    "a": .url
+    "a": .url,
+    "pre": .preformatted,
+    "code": .code
 ]
 
 private let entityEncodings: [String: Character] = [
     "quot": "\"",
-    "amp" : "&",
     "apos": "'",
-    "lt"  : "<",
-    "gt"  : ">"
+    "amp": "&",
+    "lt": "<",
+    "gt": ">"
 ]
 
 extension String {
@@ -122,14 +125,13 @@ extension String {
 
     private func parseInnerTag(from start: Index) -> (FormattingOption?, Index)? {
         let next = index(after: start)
-        let remaining = self[next..<endIndex]
-        guard let close = remaining.characters.index(of: ">") else {
+        guard let close = range(of: ">", range: next..<endIndex)?.lowerBound else {
             return .none
         }
 
-        let end = index(next, offsetBy: distance(from: remaining.startIndex, to: close))
-        let tag = self[start]
-        return (htmlTags[tag], end)
+        let end = range(of: " ", range: next..<close)?.lowerBound ?? close
+        let tag = self[start..<end]
+        return (htmlTags[tag], close)
     }
 
     private func decode() -> Character? {

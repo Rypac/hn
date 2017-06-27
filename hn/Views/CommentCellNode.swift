@@ -59,6 +59,12 @@ extension CommentCellNode {
                         [NSFontAttributeName: italic],
                         range: plainText.nsRange(from: range))
                 }
+            case .code:
+                if let monospace = font.monospaceVariant {
+                    formatted.addAttributes(
+                        [NSFontAttributeName: monospace],
+                        range: plainText.nsRange(from: range))
+                }
             case .url:
                 formatted.addAttributes(
                     [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue],
