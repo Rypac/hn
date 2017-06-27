@@ -18,7 +18,7 @@ final class ItemDetailCellNode: ASCellNode {
         cellStack.style.flexGrow = 1.0
         cellStack.children = [title, details]
 
-        return ASInsetLayoutSpec(insets: UIEdgeInsets(horizontal: 8, vertical: 4), child: cellStack)
+        return ASInsetLayoutSpec(insets: UIEdgeInsets(all: 8), child: cellStack)
     }
 }
 

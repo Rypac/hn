@@ -27,7 +27,7 @@ final class ItemCellNode: ASCellNode {
             alignItems: .center,
             children: [textStack, comments])
 
-        return ASInsetLayoutSpec(insets: UIEdgeInsets(horizontal: 8, vertical: 4), child: cellStack)
+        return ASInsetLayoutSpec(insets: UIEdgeInsets(horizontal: 8, vertical: 6), child: cellStack)
     }
 }
 
