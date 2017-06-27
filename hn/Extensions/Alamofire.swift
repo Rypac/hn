@@ -1,5 +1,9 @@
 import Alamofire
 
+typealias ApiResponse<T> = (Result<T>) -> Void
+
+typealias ApiRequest<T> = (_ endpoint: URLConvertible, _ onCompletion: @escaping ApiResponse<T>) -> Void
+
 protocol JsonDecodable {
     init?(json: [String: Any])
 }
@@ -8,7 +12,7 @@ extension String: LocalizedError {
     public var errorDescription: String? { return self }
 }
 
-func fetch<T: JsonDecodable>(_ endpoint: URLConvertible, onCompletion: @escaping (Result<T>) -> Void) {
+func fetch<T: JsonDecodable>(_ endpoint: URLConvertible, onCompletion: @escaping ApiResponse<T>) {
     Alamofire.request(endpoint).validate().responseJSON { response in
         if let json = response.value as? [String: Any], let decoded = T(json: json) {
             onCompletion(.success(decoded))
@@ -18,7 +22,7 @@ func fetch<T: JsonDecodable>(_ endpoint: URLConvertible, onCompletion: @escaping
     }
 }
 
-func fetch<T: JsonDecodable>(_ endpoint: URLConvertible, onCompletion: @escaping (Result<[T]>) -> Void) {
+func fetch<T: JsonDecodable>(_ endpoint: URLConvertible, onCompletion: @escaping ApiResponse<[T]>) {
     Alamofire.request(endpoint).validate().responseJSON { response in
         if let json = response.value as? [[String: Any]] {
             let decoded = json.flatMap { T(json: $0) }

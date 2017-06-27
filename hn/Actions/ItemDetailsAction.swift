@@ -1,7 +1,5 @@
 import Foundation
 import ReSwift
-import Alamofire
-import UIKit
 
 enum CommentFetchAction: Action {
     case fetch(comments: [Int])
@@ -13,7 +11,7 @@ func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
         return .none
     }
 
-    fetchSiblings(forItem: state.item) { items in
+    fetchSiblingsForItem(with: fetch)(state.item) { items in
         DispatchQueue.main.async {
             store.dispatch(CommentFetchAction.fetched(comments: items))
         }
@@ -22,19 +20,27 @@ func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
     return CommentFetchAction.fetch(comments: [state.item.id])
 }
 
-private func fetchSiblings(forItem item: Item, onCompletion: @escaping ([Item]) -> Void) {
-    (item.kids ?? []).flatMap(async: fetchSiblings, withResult: onCompletion)
+typealias FetchItemsBy<T> = (_ value: T, _ onCompletion: @escaping ([Item]) -> Void) -> Void
+
+func fetchSiblingsForItem(with request: @escaping ApiRequest<Item>) -> FetchItemsBy<Item> {
+    return { item, onCompletion in
+        let siblings = item.kids ?? []
+        siblings.flatMap(async: fetchSiblingsForId(with: request), withResult: onCompletion)
+    }
 }
 
-private func fetchSiblings(forItem id: Int, onCompletion: @escaping ([Item]) -> Void) {
-    fetch(Endpoint.item(id)) { (item: Result<Item>) in
-        guard case let .success(item) = item else {
-            onCompletion([])
-            return
-        }
+func fetchSiblingsForId(with request: @escaping ApiRequest<Item>) -> FetchItemsBy<Int> {
+    return { id, onCompletion in
+        request(Endpoint.item(id)) { item in
+            guard case let .success(item) = item else {
+                onCompletion([])
+                return
+            }
 
-        (item.kids ?? []).flatMap(async: fetchSiblings) { items in
-            onCompletion([item] + items)
+            let siblings = item.kids ?? []
+            siblings.flatMap(async: fetchSiblingsForId(with: request)) { items in
+                onCompletion([item] + items)
+            }
         }
     }
 }
