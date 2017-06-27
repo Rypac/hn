@@ -6,34 +6,10 @@ final class ItemCellNode: ASCellNode {
     let details = ASTextNode()
     let comments = ASTextNode()
 
-    override init() {
+    init(_ item: Item) {
         super.init()
-        addSubnode(text)
-        addSubnode(details)
-        addSubnode(comments)
-    }
+        automaticallyManagesSubnodes = true
 
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let textStack = ASStackLayoutSpec.vertical()
-        textStack.spacing = 4
-        textStack.style.flexShrink = 1.0
-        textStack.style.flexGrow = 1.0
-        textStack.children = [text, details]
-
-        let cellStack = ASStackLayoutSpec(
-            direction: .horizontal,
-            spacing: 20,
-            justifyContent: .start,
-            alignItems: .center,
-            children: [textStack, comments])
-
-        return ASInsetLayoutSpec(insets: UIEdgeInsets(horizontal: 8, vertical: 6), child: cellStack)
-    }
-}
-
-extension ItemCellNode {
-    convenience init(_ item: Item) {
-        self.init()
         guard
             let title = item.title,
             let score = item.score,
@@ -56,5 +32,23 @@ extension ItemCellNode {
                 string: "\(descendants)",
                 attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
         }
+    }
+
+    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        return ASInsetLayoutSpec(
+            insets: UIEdgeInsets(horizontal: 8, vertical: 6),
+            child: ASStackLayoutSpec(
+                direction: .horizontal,
+                spacing: 20,
+                justifyContent: .start,
+                alignItems: .center,
+                children: [
+                    ASStackLayoutSpec(
+                        direction: .vertical,
+                        spacing: 4,
+                        flex: (shrink: 1.0, grow: 1.0),
+                        children: [text, details]),
+                    comments
+                ]))
     }
 }

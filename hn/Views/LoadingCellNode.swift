@@ -7,11 +7,10 @@ final class LoadingCellNode: ASCellNode {
 
     override init() {
         super.init()
-        addSubnode(text)
+        automaticallyManagesSubnodes = true
         text.attributedText = NSAttributedString(
             string: "Loading...",
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
-        addSubnode(spinner)
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

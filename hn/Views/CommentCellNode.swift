@@ -5,70 +5,64 @@ final class CommentCellNode: ASCellNode {
     let text = ASTextNode()
     let details = ASTextNode()
 
-    override init() {
+    init(_ item: Item) {
         super.init()
-        addSubnode(text)
-        addSubnode(details)
-    }
+        automaticallyManagesSubnodes = true
 
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let cellStack = ASStackLayoutSpec.vertical()
-        cellStack.spacing = 4
-        cellStack.style.flexShrink = 1.0
-        cellStack.style.flexGrow = 1.0
-        cellStack.children = [details, text]
-
-        return ASInsetLayoutSpec(insets: UIEdgeInsets(all: 8), child: cellStack)
-    }
-}
-
-extension CommentCellNode {
-    convenience init(_ item: Item) {
-        self.init()
         let author = item.deleted ? .some("deleted") : item.by
         let time = item.time.map { Date(timeIntervalSince1970: TimeInterval($0)).relative(to: Date()) }
         let info = [author, time].flatMap { $0 }.joined(separator: " ")
 
-        text.attributedText = formatted(comment: item.text)
+        text.attributedText = item.text?.formatted()
         details.attributedText = NSAttributedString(
             string: info,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
     }
 
-    private func formatted(comment: String?) -> NSAttributedString {
-        let font = UIFont.preferredFont(forTextStyle: .body)
-        guard let comment = comment else {
-            return NSAttributedString(string: "", attributes: [NSFontAttributeName: font])
-        }
+    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        return ASInsetLayoutSpec(
+            insets: UIEdgeInsets(all: 8),
+            child: ASStackLayoutSpec(
+                direction: .vertical,
+                spacing: 4,
+                flex: (shrink: 1.0, grow: 1.0),
+                children: [details, text]))
+    }
+}
 
-        let (plainText, formattingPoints) = comment.strippingHtmlElements()
+extension String {
+    internal func formatted() -> NSAttributedString {
+        let (text, formattingPoints) = strippingHtmlElements()
+
+        let font = UIFont.preferredFont(forTextStyle: .body)
         let formatted = NSMutableAttributedString(
-            string: plainText,
+            string: text,
             attributes: [NSFontAttributeName: font])
+
         for (type, range) in formattingPoints {
             switch type {
             case .bold:
                 if let bold = font.boldVariant {
                     formatted.addAttributes(
                         [NSFontAttributeName: bold],
-                        range: plainText.nsRange(from: range))
+                        range: text.nsRange(from: range))
                 }
             case .italic:
                 if let italic = font.italicVariant {
                     formatted.addAttributes(
                         [NSFontAttributeName: italic],
-                        range: plainText.nsRange(from: range))
+                        range: text.nsRange(from: range))
                 }
             case .code:
                 if let monospace = font.monospaceVariant {
                     formatted.addAttributes(
                         [NSFontAttributeName: monospace],
-                        range: plainText.nsRange(from: range))
+                        range: text.nsRange(from: range))
                 }
             case .url:
                 formatted.addAttributes(
-                    [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue],
-                    range: plainText.nsRange(from: range))
+                    [NSLinkAttributeName: text[range]],
+                    range: text.nsRange(from: range))
             default:
                 break
             }

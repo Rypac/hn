@@ -21,6 +21,7 @@
 		811D4E191EFF3CFF00B49F38 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811D4E181EFF3CFF00B49F38 /* String.swift */; };
 		812126771EC7088D00A4B61F /* HackerNewsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126761EC7088D00A4B61F /* HackerNewsApi.swift */; };
 		812C83651F00D42500DFC70E /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812C83641F00D42500DFC70E /* UIFont.swift */; };
+		81367DB91F025396004AF6C6 /* AsyncDisplayKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */; };
 		814DF7E01EFB3A9300C0A886 /* CommentCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */; };
 		814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8741EFE2389004CB013 /* ItemListViewModel.swift */; };
 		814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */; };
@@ -77,6 +78,7 @@
 		812126761EC7088D00A4B61F /* HackerNewsApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HackerNewsApi.swift; path = Services/HackerNewsApi.swift; sourceTree = "<group>"; };
 		812126781EC70EE700A4B61F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		812C83641F00D42500DFC70E /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIFont.swift; path = Extensions/UIFont.swift; sourceTree = "<group>"; };
+		81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AsyncDisplayKit.swift; path = Extensions/AsyncDisplayKit.swift; sourceTree = "<group>"; };
 		814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentCellNode.swift; path = Views/CommentCellNode.swift; sourceTree = "<group>"; };
 		814EF8741EFE2389004CB013 /* ItemListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewModel.swift; path = ViewModels/ItemListViewModel.swift; sourceTree = "<group>"; };
 		814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsViewModel.swift; path = ViewModels/ItemDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -179,6 +181,7 @@
 				81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */,
 				8165DF0B1EFBF4980019E801 /* UIKit.swift */,
 				812C83641F00D42500DFC70E /* UIFont.swift */,
+				81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -399,6 +402,7 @@
 				815739991EFE897300EB5CF3 /* Alamofire.swift in Sources */,
 				814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */,
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
+				81367DB91F025396004AF6C6 /* AsyncDisplayKit.swift in Sources */,
 				814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */,
 				8165DF0A1EFBE0CF0019E801 /* Sequence.swift in Sources */,
 				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,

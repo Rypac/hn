@@ -5,26 +5,9 @@ final class ItemDetailCellNode: ASCellNode {
     let title = ASTextNode()
     let details = ASTextNode()
 
-    override init() {
+    init(_ item: Item) {
         super.init()
-        addSubnode(title)
-        addSubnode(details)
-    }
-
-    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let cellStack = ASStackLayoutSpec.vertical()
-        cellStack.spacing = 4
-        cellStack.style.flexShrink = 1.0
-        cellStack.style.flexGrow = 1.0
-        cellStack.children = [title, details]
-
-        return ASInsetLayoutSpec(insets: UIEdgeInsets(all: 8), child: cellStack)
-    }
-}
-
-extension ItemDetailCellNode {
-    convenience init(_ item: Item) {
-        self.init()
+        automaticallyManagesSubnodes = true
         guard let text = item.title else {
             return
         }
@@ -40,5 +23,15 @@ extension ItemDetailCellNode {
         details.attributedText = NSAttributedString(
             string: info,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
+    }
+
+    override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        return ASInsetLayoutSpec(
+            insets: UIEdgeInsets(all: 8),
+            child: ASStackLayoutSpec(
+                direction: .vertical,
+                spacing: 4,
+                flex: (shrink: 1.0, grow: 1.0),
+                children: [title, details]))
     }
 }
