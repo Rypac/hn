@@ -23,9 +23,8 @@ class StringHtmlParsingSpec: QuickSpec {
                 let original = "What is <w>this?"
 
                 it("returns a string without the unknown tag") {
-                    let stripped = "What is this?"
                     let (result, _) = original.strippingHtmlElements()
-                    expect(result).to(equal(stripped))
+                    expect(result).to(equal("What is this?"))
                 }
 
                 it("returns no formatting points") {
@@ -38,29 +37,19 @@ class StringHtmlParsingSpec: QuickSpec {
                 let original = "This is a string.<p>This is another string."
 
                 it("returns a string without the <p> tag") {
-                    let stripped = "This is a string.\n\nThis is another string."
                     let (result, _) = original.strippingHtmlElements()
-                    expect(result).to(equal(stripped))
+                    expect(result).to(equal("This is a string.\n\nThis is another string."))
                 }
 
-                it("returns a single formatting element") {
+                it("returns a paragraph formatting element applied to the appropriate range") {
                     let (_, formatting) = original.strippingHtmlElements()
-                    expect(formatting).to(haveCount(1))
-                }
-
-                it("correctly parses the <p> tag formatting option") {
-                    let (_, formatting) = original.strippingHtmlElements()
-                    let (type, _) = formatting.first!
-                    expect(type).to(equal(FormattingOption.paragraph))
-                }
-
-                it("applies the formatting to the region enclosed by the <p> tag") {
-                    let (_, formatting) = original.strippingHtmlElements()
-                    let (_, range) = formatting.first!
+                    let (type, range) = formatting.first!
                     let tag = original.range(of: "<p>")!
                     let upper = original.index(tag.lowerBound, offsetBy: 2)
                     let formatRange = tag.lowerBound..<upper
 
+                    expect(formatting).to(haveCount(1))
+                    expect(type).to(equal(FormattingOption.paragraph))
                     expect(range.lowerBound).to(equal(tag.lowerBound))
                     expect(range).to(equal(formatRange))
                 }
@@ -70,31 +59,17 @@ class StringHtmlParsingSpec: QuickSpec {
                 let original = "This is an <i>interesting</i> string."
 
                 it("returns a string without the <i> tags") {
-                    let stripped = "This is an interesting string."
                     let (result, _) = original.strippingHtmlElements()
-                    expect(result).to(equal(stripped))
+                    expect(result).to(equal("This is an interesting string."))
                 }
 
-                it("returns a single formatting element") {
-                    let (_, formatting) = original.strippingHtmlElements()
+                it("returns an italic formatting element applied to the appropriate range") {
+                    let (result, formatting) = original.strippingHtmlElements()
+                    let (type, range) = formatting.first!
+
                     expect(formatting).to(haveCount(1))
-                }
-
-                it("correctly parses the <i> tag formatting option") {
-                    let (_, formatting) = original.strippingHtmlElements()
-                    let (type, _) = formatting.first!
                     expect(type).to(equal(FormattingOption.italic))
-                }
-
-                it("applies the formatting to the region enclosed by the <i> tags") {
-                    let (_, formatting) = original.strippingHtmlElements()
-                    let (_, range) = formatting.first!
-                    let tag = original.range(of: "<i>")!
-                    let upper = original.index(tag.lowerBound, offsetBy: 11)
-                    let formatRange = tag.lowerBound..<upper
-
-                    expect(range.lowerBound).to(equal(tag.lowerBound))
-                    expect(range).to(equal(formatRange))
+                    expect(range).to(equal(result.range(of: "interesting")))
                 }
             }
 
@@ -102,31 +77,17 @@ class StringHtmlParsingSpec: QuickSpec {
                 let original = "This is an interesting <b>string</b>."
 
                 it("returns a string without the <b> tags") {
-                    let stripped = "This is an interesting string."
                     let (result, _) = original.strippingHtmlElements()
-                    expect(result).to(equal(stripped))
+                    expect(result).to(equal("This is an interesting string."))
                 }
 
-                it("returns a single formatting element") {
-                    let (_, formatting) = original.strippingHtmlElements()
+                it("returns a bold formatting element applied to the appropriate range") {
+                    let (result, formatting) = original.strippingHtmlElements()
+                    let (type, range) = formatting.first!
+
                     expect(formatting).to(haveCount(1))
-                }
-
-                it("correctly parses the <b> tag formatting option") {
-                    let (_, formatting) = original.strippingHtmlElements()
-                    let (type, _) = formatting.first!
                     expect(type).to(equal(FormattingOption.bold))
-                }
-
-                it("applies the formatting to the region enclosed by the <b> tags") {
-                    let (_, formatting) = original.strippingHtmlElements()
-                    let (_, range) = formatting.first!
-                    let tag = original.range(of: "<b>")!
-                    let upper = original.index(tag.lowerBound, offsetBy: 6)
-                    let formatRange = tag.lowerBound..<upper
-
-                    expect(range.lowerBound).to(equal(tag.lowerBound))
-                    expect(range).to(equal(formatRange))
+                    expect(range).to(equal(result.range(of: "string")))
                 }
             }
 
@@ -134,9 +95,8 @@ class StringHtmlParsingSpec: QuickSpec {
                 let original = "This is an <i>interesting string."
 
                 it("returns a string without the tags") {
-                    let original = "This is an interesting string."
                     let (result, _) = original.strippingHtmlElements()
-                    expect(result).to(equal(original))
+                    expect(result).to(equal("This is an interesting string."))
                 }
 
                 it("returns no formatting points") {
@@ -149,9 +109,8 @@ class StringHtmlParsingSpec: QuickSpec {
                 let original = "This<p><b>is</b> <b>a</b> string.<i>This</i> is<p>another <i>string</i>."
 
                 it("returns a string without the tags") {
-                    let stripped = "This\n\nis a string.This is\n\nanother string."
                     let (result, _) = original.strippingHtmlElements()
-                    expect(result).to(equal(stripped))
+                    expect(result).to(equal("This\n\nis a string.This is\n\nanother string."))
                 }
 
                 it("returns all of the formatting elements") {
@@ -164,9 +123,8 @@ class StringHtmlParsingSpec: QuickSpec {
                 let original = "This <i>string <b>is</b> really</i> cool."
 
                 it("returns a string without the tags") {
-                    let stripped = "This string is really cool."
                     let (result, _) = original.strippingHtmlElements()
-                    expect(result).to(equal(stripped))
+                    expect(result).to(equal("This string is really cool."))
                 }
 
                 it("returns all of the formatting elements") {
