@@ -4,12 +4,16 @@ import AsyncDisplayKit
 final class CommentCellNode: ASCellNode {
     let text = ASTextNode()
     let details = ASTextNode()
+    let depth: CGFloat
 
-    init(_ item: Item) {
+    init(_ comment: CommentItem) {
+        depth = CGFloat(comment.depth)
+
         super.init()
         automaticallyManagesSubnodes = true
 
-        let author = item.deleted ? .some("deleted") : item.by
+        let item = comment.item
+        let author = item.deleted ? .some("deleted") : item.author
         let time = item.time.map { Date(timeIntervalSince1970: TimeInterval($0)).relative(to: Date()) }
         let info = [author, time].flatMap { $0 }.joined(separator: " ")
 
@@ -21,7 +25,7 @@ final class CommentCellNode: ASCellNode {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         return ASInsetLayoutSpec(
-            insets: UIEdgeInsets(all: 8),
+            insets: UIEdgeInsets(top: 8, left: 10 * depth, bottom: 8, right: 8),
             child: ASStackLayoutSpec(
                 direction: .vertical,
                 spacing: 4,

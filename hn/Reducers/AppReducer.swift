@@ -36,11 +36,11 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         }
     case let action as CommentFetchAction:
         switch action {
-        case .fetch(comments: _):
-            state.selectedItem?.comments = []
+        case let .fetch(item: item):
+            state.selectedItem?.item = item.with(kids: [])
             state.selectedItem?.fetching = .started
-        case let .fetched(comments: comments):
-            state.selectedItem?.comments = comments
+        case let .fetched(item: item):
+            state.selectedItem?.item = item
             state.selectedItem?.fetching = .finished
         }
     default:

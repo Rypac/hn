@@ -1,32 +1,47 @@
-import Foundation
 import Alamofire
+import PromiseKit
 
-struct Item {
-    let id: Int
-    let title: String?
-    let text: String?
-    let score: Int?
-    let by: String?
-    let time: Int?
-    let type: String?
-    let url: String?
-    let descendants: Int?
-    let kids: [Int]?
-    let parts: [Int]?
-    let dead: Bool
-    let deleted: Bool
+struct Firebase {
+    struct Item {
+        let id: Int
+        let title: String?
+        let text: String?
+        let score: Int?
+        let by: String?
+        let time: Int?
+        let type: String?
+        let url: String?
+        let parent: Int?
+        let descendants: Int?
+        let kids: [Int]?
+        let parts: [Int]?
+        let dead: Bool
+        let deleted: Bool
+    }
+
+    struct User {
+        let id: String
+        let karma: Int
+        let created: Int
+        let about: String?
+        let submitted: [Int]?
+        let delay: Int?
+    }
+
+    enum Endpoint {
+        case topStories
+        case newStories
+        case bestStories
+        case showHN
+        case askHN
+        case jobs
+        case updates
+        case user(Int)
+        case item(Int)
+    }
 }
 
-struct User {
-    let id: String
-    let karma: Int
-    let created: Int
-    let about: String?
-    let submitted: [Int]?
-    let delay: Int?
-}
-
-extension Item: JsonDecodable {
+extension Firebase.Item: JsonDecodable {
     init?(json: [String: Any]) {
         guard let id = json["id"] as? Int else {
             return nil
@@ -39,6 +54,7 @@ extension Item: JsonDecodable {
         time = json["time"] as? Int
         type = json["type"] as? String
         url = json["url"] as? String
+        parent = json["parent"] as? Int
         descendants = json["descendants"] as? Int
         kids = json["kids"] as? [Int]
         parts = json["parts"] as? [Int]
@@ -47,7 +63,27 @@ extension Item: JsonDecodable {
     }
 }
 
-extension User: JsonDecodable {
+extension Firebase.Item {
+    func toItem() -> Item {
+        return Item(
+            id: id,
+            title: title,
+            text: text,
+            score: score,
+            author: by,
+            time: time,
+            type: type,
+            url: url,
+            parent: parent,
+            descendants: descendants,
+            kids: kids?.map(Reference.id) ?? [],
+            parts: parts,
+            dead: dead,
+            deleted: deleted)
+    }
+}
+
+extension Firebase.User: JsonDecodable {
     init?(json: [String: Any]) {
         guard
             let id = json["id"] as? String,
@@ -65,23 +101,13 @@ extension User: JsonDecodable {
     }
 }
 
-enum Endpoint {
-    case topStories
-    case newStories
-    case bestStories
-    case showHN
-    case askHN
-    case jobs
-    case updates
-    case user(Int)
-    case item(Int)
-}
 
-extension Endpoint: URLConvertible {
+
+extension Firebase.Endpoint: URLConvertible {
     static let baseUrl = "https://hacker-news.firebaseio.com/v0"
 
     func asURL() throws -> URL {
-        return try "\(Endpoint.baseUrl)/\(path)".asURL()
+        return try "\(Firebase.Endpoint.baseUrl)/\(path)".asURL()
     }
 
     var path: String {
@@ -96,5 +122,29 @@ extension Endpoint: URLConvertible {
         case .item(let id): return "/item/\(id).json"
         case .user(let id): return "/user/\(id).json"
         }
+    }
+}
+
+extension ItemType {
+    var endpoint: Firebase.Endpoint {
+        switch self {
+        case .topStories: return .topStories
+        case .newStories: return .newStories
+        case .bestStories: return .bestStories
+        case .showHN: return .showHN
+        case .askHN: return .askHN
+        case .jobs: return .jobs
+        case .updates: return .updates
+        }
+    }
+}
+
+func fetch(stories: ItemType) -> Promise<[Int]> {
+    return fetch(stories.endpoint)
+}
+
+func fetch(item id: Int) -> Promise<Item> {
+    return fetch(Firebase.Endpoint.item(id)).then { (item: Firebase.Item) in
+        Promise(value: item.toItem())
     }
 }

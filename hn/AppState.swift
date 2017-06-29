@@ -15,7 +15,6 @@ struct ItemList {
 
 struct ItemDetails {
     var item: Item
-    var comments = [Item]()
     var fetching: FetchState? = .none
 
     init(_ item: Item) {
@@ -55,4 +54,32 @@ enum ContainerFetchState {
 enum FetchState {
     case started
     case finished
+}
+
+struct Item {
+    let id: Int
+    let title: String?
+    let text: String?
+    let score: Int?
+    let author: String?
+    let time: Int?
+    let type: String?
+    let url: String?
+    let parent: Int?
+    let descendants: Int?
+    private(set) var kids: [Reference<Item>]
+    let parts: [Int]?
+    let dead: Bool
+    let deleted: Bool
+
+    func with(kids: [Item]) -> Item {
+        var copy = self
+        copy.kids = kids.map(Reference.value)
+        return copy
+    }
+}
+
+enum Reference<T> {
+    case id(Int)
+    case value(T)
 }

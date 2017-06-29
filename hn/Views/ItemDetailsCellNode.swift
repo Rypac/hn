@@ -12,7 +12,7 @@ final class ItemDetailCellNode: ASCellNode {
             return
         }
 
-        let author = item.by.map { "by \($0)" }
+        let author = item.author.map { "by \($0)" }
         let score = item.score.map { "\($0) points" }
         let time = item.time.map { Date(timeIntervalSince1970: TimeInterval($0)).relative(to: Date()) }
         let info = [score, author, time].flatMap { $0 }.joined(separator: " ")

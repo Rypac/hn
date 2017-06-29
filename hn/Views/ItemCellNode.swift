@@ -13,7 +13,7 @@ final class ItemCellNode: ASCellNode {
         guard
             let title = item.title,
             let score = item.score,
-            let author = item.by,
+            let author = item.author,
             let timestamp = item.time
         else {
             return

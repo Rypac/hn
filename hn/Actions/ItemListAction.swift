@@ -23,19 +23,7 @@ enum ItemListAction: Action {
     case dismissOriginal
 }
 
-extension ItemType {
-    var endpoint: Endpoint {
-        switch self {
-        case .topStories: return .topStories
-        case .newStories: return .newStories
-        case .bestStories: return .bestStories
-        case .showHN: return .showHN
-        case .askHN: return .askHN
-        case .jobs: return .jobs
-        case .updates: return .updates
-        }
-    }
-}
+
 
 typealias ActionCreator<T: StateType> = (T, Store<T>) -> Action?
 
@@ -51,7 +39,7 @@ func fetchItems(_ type: ItemType) -> ActionCreator<AppState> {
 
 func fetchItemList(_ type: ItemType) -> ActionCreator<AppState> {
     return { state, store in
-        fetch(type.endpoint).then { (ids: [Int]) in
+        fetch(stories: type).then { ids in
             store.dispatch(FetchAction(itemType: type, action: .fetchedIds(ids)))
         }.then {
             store.dispatch(fetchNextItemBatch(type))
@@ -75,7 +63,7 @@ func fetchNextItemBatch(_ type: ItemType) -> ActionCreator<AppState> {
         let end = start + min(16, state.ids.count - state.items.count)
         let ids = Array(state.ids[start..<end])
 
-        when(fulfilled: ids.map { fetch(Endpoint.item($0)) }).then { items in
+        when(fulfilled: ids.map(fetch(item:))).then { items in
             store.dispatch(FetchAction(itemType: type, action: .fetchedItems(items)))
         }.catch { error in
             print("Failed to fetch items: \(error)")

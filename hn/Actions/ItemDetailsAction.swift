@@ -2,8 +2,8 @@ import PromiseKit
 import ReSwift
 
 enum CommentFetchAction: Action {
-    case fetch(comments: [Int])
-    case fetched(comments: [Item])
+    case fetch(item: Item)
+    case fetched(item: Item)
 }
 
 func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
@@ -11,31 +11,43 @@ func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
         return .none
     }
 
-    fetchSiblingsForItem(with: fetch)(state.item).then { items in
-        store.dispatch(CommentFetchAction.fetched(comments: items))
+    fetchSiblingsForId(with: fetch(item:))(state.item.id).then { item in
+        store.dispatch(CommentFetchAction.fetched(item: item))
     }.catch { error in
         print("Failed to fetch comments for item \(state.item.id): \(error)")
     }
 
-    return CommentFetchAction.fetch(comments: [state.item.id])
+    return CommentFetchAction.fetch(item: state.item)
 }
 
-func fetchSiblingsForItem(with request: @escaping ApiRequest<Item>) -> (Item) -> Promise<[Item]> {
-    let fetchSiblings = { fetchSiblingsForId(with: request)($0) }
+func fetchSiblingsForItem(with request: @escaping (Int) -> Promise<Item>) -> (Item) -> Promise<Item> {
+    let fetchSiblings = { (item: Reference<Item>) -> Promise<Item> in
+        switch item {
+        case let .id(id): return fetchSiblingsForId(with: request)(id)
+        case let .value(item): return Promise(value: item)
+        }
+    }
     return { item in
-        when(fulfilled: (item.kids ?? []).map(fetchSiblings)).then { items in
-            items.flatMap { $0 }
+        when(fulfilled: item.kids.map(fetchSiblings)).then { items in
+            item.with(kids: items)
         }
     }
 }
 
-func fetchSiblingsForId(with request: @escaping ApiRequest<Item>) -> (Int) -> Promise<[Item]> {
-    let fetchSiblings = { fetchSiblingsForId(with: request)($0) }
+func fetchSiblingsForId(with request: @escaping (Int) -> Promise<Item>) -> (Int) -> Promise<Item> {
+    let fetchSiblings = { (item: Reference<Item>) -> Promise<Item> in
+        switch item {
+        case let .id(id): return fetchSiblingsForId(with: request)(id)
+        case let .value(item): return Promise(value: item)
+        }
+    }
     return { id in
-        request(Endpoint.item(id)).then { item in
-            when(fulfilled: (item.kids ?? []).map(fetchSiblings)).then { items in
-                [item] + items.flatMap { $0 }
+        request(id).then { item in
+            when(fulfilled: item.kids.map(fetchSiblings)).then { items in
+                item.with(kids: items)
+            }.recover { error in
+                item
             }
-        }.recover { _ in [] }
+        }
     }
 }
