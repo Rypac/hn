@@ -19,6 +19,7 @@
 		811D4E161EFF2C3700B49F38 /* AsyncDisplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */; };
 		811D4E171EFF2C3700B49F38 /* ReSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; };
 		811D4E191EFF3CFF00B49F38 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811D4E181EFF3CFF00B49F38 /* String.swift */; };
+		811F6E0D1F04ABD2000C5EE2 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 811F6E0C1F04ABD2000C5EE2 /* PromiseKit.framework */; };
 		812126771EC7088D00A4B61F /* HackerNewsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126761EC7088D00A4B61F /* HackerNewsApi.swift */; };
 		812C83651F00D42500DFC70E /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812C83641F00D42500DFC70E /* UIFont.swift */; };
 		81367DB91F025396004AF6C6 /* AsyncDisplayKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */; };
@@ -30,7 +31,6 @@
 		815739991EFE897300EB5CF3 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815739981EFE897300EB5CF3 /* Alamofire.swift */; };
 		815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815B42771EC6ED8C00487C99 /* AppDelegate.swift */; };
 		815B427F1EC6ED8C00487C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 815B427E1EC6ED8C00487C99 /* Assets.xcassets */; };
-		8165DF0A1EFBE0CF0019E801 /* Sequence.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165DF091EFBE0CF0019E801 /* Sequence.swift */; };
 		8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165DF0B1EFBF4980019E801 /* UIKit.swift */; };
 		817CF3C31EFF65F600B69DF4 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AE1EFF64A600B69DF4 /* Nimble.framework */; };
 		817CF3C41EFF65F600B69DF4 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AF1EFF64A600B69DF4 /* Quick.framework */; };
@@ -77,6 +77,7 @@
 		8118DBAD1EF50DF100934BA4 /* ItemListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewController.swift; path = Controllers/ItemListViewController.swift; sourceTree = "<group>"; };
 		8118DBAF1EF5133600934BA4 /* LoadingCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingCellNode.swift; path = Views/LoadingCellNode.swift; sourceTree = "<group>"; };
 		811D4E181EFF3CFF00B49F38 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = String.swift; path = Extensions/String.swift; sourceTree = "<group>"; };
+		811F6E0C1F04ABD2000C5EE2 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
 		812126761EC7088D00A4B61F /* HackerNewsApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HackerNewsApi.swift; path = Services/HackerNewsApi.swift; sourceTree = "<group>"; };
 		812126781EC70EE700A4B61F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		812C83641F00D42500DFC70E /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIFont.swift; path = Extensions/UIFont.swift; sourceTree = "<group>"; };
@@ -91,7 +92,6 @@
 		815B42771EC6ED8C00487C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		815B427E1EC6ED8C00487C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		815B42831EC6ED8C00487C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8165DF091EFBE0CF0019E801 /* Sequence.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Sequence.swift; path = Extensions/Sequence.swift; sourceTree = "<group>"; };
 		8165DF0B1EFBF4980019E801 /* UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIKit.swift; path = Extensions/UIKit.swift; sourceTree = "<group>"; };
 		817CF3AE1EFF64A600B69DF4 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		817CF3AF1EFF64A600B69DF4 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
@@ -111,6 +111,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				811F6E0D1F04ABD2000C5EE2 /* PromiseKit.framework in Frameworks */,
 				811D4E141EFF2C3700B49F38 /* Alamofire.framework in Frameworks */,
 				811D4E151EFF2C3700B49F38 /* AlamofireNetworkActivityIndicator.framework in Frameworks */,
 				811D4E161EFF2C3700B49F38 /* AsyncDisplayKit.framework in Frameworks */,
@@ -180,7 +181,6 @@
 			children = (
 				815739981EFE897300EB5CF3 /* Alamofire.swift */,
 				811683C41EF9346300680511 /* Date.swift */,
-				8165DF091EFBE0CF0019E801 /* Sequence.swift */,
 				811D4E181EFF3CFF00B49F38 /* String.swift */,
 				81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */,
 				8165DF0B1EFBF4980019E801 /* UIKit.swift */,
@@ -193,6 +193,7 @@
 		812126721EC7081800A4B61F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				811F6E0C1F04ABD2000C5EE2 /* PromiseKit.framework */,
 				817CF3AE1EFF64A600B69DF4 /* Nimble.framework */,
 				817CF3AF1EFF64A600B69DF4 /* Quick.framework */,
 				812126781EC70EE700A4B61F /* Alamofire.framework */,
@@ -294,7 +295,7 @@
 				815B42701EC6ED8C00487C99 /* Sources */,
 				815B42711EC6ED8C00487C99 /* Frameworks */,
 				815B42721EC6ED8C00487C99 /* Resources */,
-				812126751EC7082400A4B61F /* ShellScript */,
+				812126751EC7082400A4B61F /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -385,7 +386,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		812126751EC7082400A4B61F /* ShellScript */ = {
+		812126751EC7082400A4B61F /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -395,12 +396,15 @@
 				"$(SRCROOT)/Carthage/Build/iOS/AlamofireNetworkActivityIndicator.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AsyncDisplayKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ReSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
 			);
+			name = "Run Script";
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AlamofireNetworkActivityIndicator.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AsyncDisplayKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ReSwift.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/PromiseKit.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -426,7 +430,6 @@
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
 				81367DB91F025396004AF6C6 /* AsyncDisplayKit.swift in Sources */,
 				814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */,
-				8165DF0A1EFBE0CF0019E801 /* Sequence.swift in Sources */,
 				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,
 				81E2A5601EF7DC40004045FF /* ItemDetailsViewController.swift in Sources */,
 				811683C51EF9346300680511 /* Date.swift in Sources */,

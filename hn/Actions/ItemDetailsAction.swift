@@ -1,4 +1,4 @@
-import Foundation
+import PromiseKit
 import ReSwift
 
 enum CommentFetchAction: Action {
@@ -11,36 +11,31 @@ func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
         return .none
     }
 
-    fetchSiblingsForItem(with: fetch)(state.item) { items in
-        DispatchQueue.main.async {
-            store.dispatch(CommentFetchAction.fetched(comments: items))
-        }
+    fetchSiblingsForItem(with: fetch)(state.item).then { items in
+        store.dispatch(CommentFetchAction.fetched(comments: items))
+    }.catch { error in
+        print("Failed to fetch comments for item \(state.item.id): \(error)")
     }
 
     return CommentFetchAction.fetch(comments: [state.item.id])
 }
 
-typealias FetchItemsBy<T> = (_ value: T, _ onCompletion: @escaping ([Item]) -> Void) -> Void
-
-func fetchSiblingsForItem(with request: @escaping ApiRequest<Item>) -> FetchItemsBy<Item> {
-    return { item, onCompletion in
-        let siblings = item.kids ?? []
-        siblings.flatMap(async: fetchSiblingsForId(with: request), withResult: onCompletion)
+func fetchSiblingsForItem(with request: @escaping ApiRequest<Item>) -> (Item) -> Promise<[Item]> {
+    let fetchSiblings = { fetchSiblingsForId(with: request)($0) }
+    return { item in
+        when(fulfilled: (item.kids ?? []).map(fetchSiblings)).then { items in
+            items.flatMap { $0 }
+        }
     }
 }
 
-func fetchSiblingsForId(with request: @escaping ApiRequest<Item>) -> FetchItemsBy<Int> {
-    return { id, onCompletion in
-        request(Endpoint.item(id)) { item in
-            guard case let .success(item) = item else {
-                onCompletion([])
-                return
+func fetchSiblingsForId(with request: @escaping ApiRequest<Item>) -> (Int) -> Promise<[Item]> {
+    let fetchSiblings = { fetchSiblingsForId(with: request)($0) }
+    return { id in
+        request(Endpoint.item(id)).then { item in
+            when(fulfilled: (item.kids ?? []).map(fetchSiblings)).then { items in
+                [item] + items.flatMap { $0 }
             }
-
-            let siblings = item.kids ?? []
-            siblings.flatMap(async: fetchSiblingsForId(with: request)) { items in
-                onCompletion([item] + items)
-            }
-        }
+        }.recover { _ in [] }
     }
 }

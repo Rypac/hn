@@ -1,8 +1,7 @@
 import Alamofire
+import PromiseKit
 
-typealias ApiResponse<T> = (Result<T>) -> Void
-
-typealias ApiRequest<T> = (_ endpoint: URLConvertible, _ onCompletion: @escaping ApiResponse<T>) -> Void
+typealias ApiRequest<T> = (_ endpoint: URLConvertible) -> Promise<T>
 
 protocol JsonDecodable {
     init?(json: [String: Any])
@@ -12,37 +11,28 @@ extension String: LocalizedError {
     public var errorDescription: String? { return self }
 }
 
-func fetch<T: JsonDecodable>(_ endpoint: URLConvertible, onCompletion: @escaping ApiResponse<T>) {
-    Alamofire.request(endpoint).validate().responseJSON { response in
-        if let json = response.value as? [String: Any], let decoded = T(json: json) {
-            onCompletion(.success(decoded))
-        } else {
-            onCompletion(.failure("Error decoding JSON object as \(T.self)"))
+private func request(_ endpoint: URLConvertible) -> Promise<DataResponse<Any>> {
+    return PromiseKit.wrap {
+        Alamofire.request(endpoint).validate().responseJSON(completionHandler: $0)
+    }
+}
+
+func fetch<T: JsonDecodable>(_ endpoint: URLConvertible) -> Promise<T> {
+    return request(endpoint).then { response in
+        guard let json = response.value as? [String: Any], let decoded = T(json: json) else {
+            throw "Error decoding JSON object as \(T.self)"
         }
+
+        return Promise(value: decoded)
     }
 }
 
-func fetch<T: JsonDecodable>(_ endpoint: URLConvertible, onCompletion: @escaping ApiResponse<[T]>) {
-    Alamofire.request(endpoint).validate().responseJSON { response in
-        if let json = response.value as? [[String: Any]] {
-            let decoded = json.flatMap { T(json: $0) }
-            if decoded.count == json.count {
-                onCompletion(.success(decoded))
-                return
-            }
+func fetch<T>(_ endpoint: URLConvertible) -> Promise<T> {
+    return request(endpoint).then { response in
+        guard let result = response.result.value as? T else {
+            throw "Error decoding value as \(T.self)"
         }
-        onCompletion(.failure("Error decoding JSON object as [\(T.self)]"))
-    }
-}
 
-func fetch<T>(_ endpoint: URLConvertible, onCompletion: @escaping (T) -> Void) {
-    Alamofire.request(endpoint).validate().responseJSON { response in
-        (response.result.value as? T).map(onCompletion)
-    }
-}
-
-func fetch<T>(_ endpoint: URLConvertible, onCompletion: @escaping ([T]) -> Void) {
-    Alamofire.request(endpoint).validate().responseJSON { response in
-        (response.result.value as? [T]).map(onCompletion)
+        return Promise(value: result)
     }
 }

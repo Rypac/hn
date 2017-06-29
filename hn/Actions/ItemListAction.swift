@@ -1,8 +1,8 @@
-import Foundation
+import PromiseKit
 import ReSwift
-import Alamofire
-import UIKit
 import SafariServices
+import UIKit
+
 
 struct FetchAction: Action {
     let itemType: ItemType
@@ -51,11 +51,12 @@ func fetchItems(_ type: ItemType) -> ActionCreator<AppState> {
 
 func fetchItemList(_ type: ItemType) -> ActionCreator<AppState> {
     return { state, store in
-        fetch(type.endpoint) { (ids: [Int]) in
-            DispatchQueue.main.async {
-                store.dispatch(FetchAction(itemType: type, action: .fetchedIds(ids)))
-                store.dispatch(fetchNextItemBatch(type))
-            }
+        fetch(type.endpoint).then { (ids: [Int]) in
+            store.dispatch(FetchAction(itemType: type, action: .fetchedIds(ids)))
+        }.then {
+            store.dispatch(fetchNextItemBatch(type))
+        }.catch { error in
+            print("Failed to fetch \(type) list: \(error)")
         }
         return FetchAction(itemType: type, action: .fetch)
     }
@@ -74,13 +75,11 @@ func fetchNextItemBatch(_ type: ItemType) -> ActionCreator<AppState> {
         let end = start + min(16, state.ids.count - state.items.count)
         let ids = Array(state.ids[start..<end])
 
-        ids.flatMap(async: { id, onCompletion in
-            fetch(Endpoint.item(id)) { (item: Result<Item>) in
-                onCompletion(item.value)
-            }
-        }, withResult: { items in
+        when(fulfilled: ids.map { fetch(Endpoint.item($0)) }).then { items in
             store.dispatch(FetchAction(itemType: type, action: .fetchedItems(items)))
-        })
+        }.catch { error in
+            print("Failed to fetch items: \(error)")
+        }
 
         return FetchAction(itemType: type, action: .fetchItems(ids: ids))
     }
