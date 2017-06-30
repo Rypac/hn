@@ -39,7 +39,7 @@ func fetchItems(_ type: ItemType) -> ActionCreator<AppState> {
 
 func fetchItemList(_ type: ItemType) -> ActionCreator<AppState> {
     return { state, store in
-        fetch(stories: type).then { ids in
+        Firebase.fetch(stories: type).then { ids in
             store.dispatch(FetchAction(itemType: type, action: .fetchedIds(ids)))
         }.then {
             store.dispatch(fetchNextItemBatch(type))
@@ -63,7 +63,7 @@ func fetchNextItemBatch(_ type: ItemType) -> ActionCreator<AppState> {
         let end = start + min(16, state.ids.count - state.items.count)
         let ids = Array(state.ids[start..<end])
 
-        when(fulfilled: ids.map(fetch(item:))).then { items in
+        when(fulfilled: ids.map(Firebase.fetch(item:))).then { items in
             store.dispatch(FetchAction(itemType: type, action: .fetchedItems(items)))
         }.catch { error in
             print("Failed to fetch items: \(error)")

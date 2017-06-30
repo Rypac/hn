@@ -119,9 +119,10 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
 
         let row = indexPath.row
         let comment = state.comments[row]
+        let item = comment.item
         let headerOffset = state.headerOffset
         return {
-            let node = row < headerOffset ? ItemDetailCellNode(comment.item) : CommentCellNode(comment)
+            let node = row < headerOffset ? ItemDetailCellNode(item) : CommentCellNode(comment)
             node.selectionStyle = .none
             return node
         }

@@ -39,6 +39,16 @@ struct Firebase {
         case user(Int)
         case item(Int)
     }
+
+    static func fetch(stories: ItemType) -> Promise<[Int]> {
+        return request(stories.endpoint)
+    }
+
+    static func fetch(item id: Int) -> Promise<hn.Item> {
+        return request(Endpoint.item(id)).then { (item: Item) in
+            Promise(value: item.toItem())
+        }
+    }
 }
 
 extension Firebase.Item: JsonDecodable {
@@ -101,8 +111,6 @@ extension Firebase.User: JsonDecodable {
     }
 }
 
-
-
 extension Firebase.Endpoint: URLConvertible {
     static let baseUrl = "https://hacker-news.firebaseio.com/v0"
 
@@ -136,15 +144,5 @@ extension ItemType {
         case .jobs: return .jobs
         case .updates: return .updates
         }
-    }
-}
-
-func fetch(stories: ItemType) -> Promise<[Int]> {
-    return fetch(stories.endpoint)
-}
-
-func fetch(item id: Int) -> Promise<Item> {
-    return fetch(Firebase.Endpoint.item(id)).then { (item: Firebase.Item) in
-        Promise(value: item.toItem())
     }
 }

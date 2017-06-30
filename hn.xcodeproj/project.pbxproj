@@ -20,7 +20,7 @@
 		811D4E171EFF2C3700B49F38 /* ReSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; };
 		811D4E191EFF3CFF00B49F38 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811D4E181EFF3CFF00B49F38 /* String.swift */; };
 		811F6E0D1F04ABD2000C5EE2 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 811F6E0C1F04ABD2000C5EE2 /* PromiseKit.framework */; };
-		812126771EC7088D00A4B61F /* HackerNewsApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126761EC7088D00A4B61F /* HackerNewsApi.swift */; };
+		812126771EC7088D00A4B61F /* FirebaseApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126761EC7088D00A4B61F /* FirebaseApi.swift */; };
 		812C83651F00D42500DFC70E /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812C83641F00D42500DFC70E /* UIFont.swift */; };
 		81367DB91F025396004AF6C6 /* AsyncDisplayKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */; };
 		81367DBC1F027B63004AF6C6 /* ItemDetailsActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DBB1F027B63004AF6C6 /* ItemDetailsActionSpec.swift */; };
@@ -78,7 +78,7 @@
 		8118DBAF1EF5133600934BA4 /* LoadingCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LoadingCellNode.swift; path = Views/LoadingCellNode.swift; sourceTree = "<group>"; };
 		811D4E181EFF3CFF00B49F38 /* String.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = String.swift; path = Extensions/String.swift; sourceTree = "<group>"; };
 		811F6E0C1F04ABD2000C5EE2 /* PromiseKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = PromiseKit.framework; path = Carthage/Build/iOS/PromiseKit.framework; sourceTree = "<group>"; };
-		812126761EC7088D00A4B61F /* HackerNewsApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HackerNewsApi.swift; path = Services/HackerNewsApi.swift; sourceTree = "<group>"; };
+		812126761EC7088D00A4B61F /* FirebaseApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FirebaseApi.swift; path = Services/FirebaseApi.swift; sourceTree = "<group>"; };
 		812126781EC70EE700A4B61F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		812C83641F00D42500DFC70E /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIFont.swift; path = Extensions/UIFont.swift; sourceTree = "<group>"; };
 		81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AsyncDisplayKit.swift; path = Extensions/AsyncDisplayKit.swift; sourceTree = "<group>"; };
@@ -134,7 +134,7 @@
 		8100428A1EF8915F001E2B42 /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				812126761EC7088D00A4B61F /* HackerNewsApi.swift */,
+				812126761EC7088D00A4B61F /* FirebaseApi.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -420,7 +420,7 @@
 			files = (
 				811D4E191EFF3CFF00B49F38 /* String.swift in Sources */,
 				8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */,
-				812126771EC7088D00A4B61F /* HackerNewsApi.swift in Sources */,
+				812126771EC7088D00A4B61F /* FirebaseApi.swift in Sources */,
 				8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */,
 				81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */,
 				8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */,

@@ -17,7 +17,7 @@ private func request(_ endpoint: URLConvertible) -> Promise<DataResponse<Any>> {
     }
 }
 
-func fetch<T: JsonDecodable>(_ endpoint: URLConvertible) -> Promise<T> {
+func request<T: JsonDecodable>(_ endpoint: URLConvertible) -> Promise<T> {
     return request(endpoint).then { response in
         guard let json = response.value as? [String: Any], let decoded = T(json: json) else {
             throw "Error decoding JSON object as \(T.self)"
@@ -27,7 +27,7 @@ func fetch<T: JsonDecodable>(_ endpoint: URLConvertible) -> Promise<T> {
     }
 }
 
-func fetch<T>(_ endpoint: URLConvertible) -> Promise<T> {
+func request<T>(_ endpoint: URLConvertible) -> Promise<T> {
     return request(endpoint).then { response in
         guard let result = response.result.value as? T else {
             throw "Error decoding value as \(T.self)"

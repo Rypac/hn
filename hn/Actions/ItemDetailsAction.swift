@@ -11,27 +11,13 @@ func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
         return .none
     }
 
-    fetchSiblingsForId(with: fetch(item:))(state.item.id).then { item in
+    fetchSiblingsForId(with: Firebase.fetch(item:))(state.item.id).then { item in
         store.dispatch(CommentFetchAction.fetched(item: item))
     }.catch { error in
         print("Failed to fetch comments for item \(state.item.id): \(error)")
     }
 
     return CommentFetchAction.fetch(item: state.item)
-}
-
-func fetchSiblingsForItem(with request: @escaping (Int) -> Promise<Item>) -> (Item) -> Promise<Item> {
-    let fetchSiblings = { (item: Reference<Item>) -> Promise<Item> in
-        switch item {
-        case let .id(id): return fetchSiblingsForId(with: request)(id)
-        case let .value(item): return Promise(value: item)
-        }
-    }
-    return { item in
-        when(fulfilled: item.kids.map(fetchSiblings)).then { items in
-            item.with(kids: items)
-        }
-    }
 }
 
 func fetchSiblingsForId(with request: @escaping (Int) -> Promise<Item>) -> (Int) -> Promise<Item> {
