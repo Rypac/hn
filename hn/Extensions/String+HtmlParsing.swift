@@ -41,6 +41,22 @@ extension String {
         var position = startIndex
         var tags = [FormattingOption: [Range<Index>]]()
 
+        func push(tag: FormattingOption) {
+            let tagRange = result.endIndex..<result.endIndex
+            var stack = tags[tag] ?? []
+            stack.append(tagRange)
+            tags[tag] = stack
+        }
+
+        func pop(tag: FormattingOption) {
+            if let parsed = tags[tag]?.popLast() {
+                let tagStart = parsed.lowerBound
+                points.append((tag, tagStart..<result.endIndex))
+            }
+        }
+
+        var balancedStartParagraphTag = false
+
         parser: while position < endIndex {
             let character = self[position]
             switch character {
@@ -49,19 +65,22 @@ extension String {
                     switch tag {
                     case let .open(.some(innerTag)):
                         if innerTag == .paragraph {
-                            let tagStart = result.endIndex
-                            result.append("\n\n")
-                            points.append((innerTag, tagStart..<result.endIndex))
-                        } else {
-                            let tagRange = result.endIndex..<result.endIndex
-                            var stack = tags[innerTag] ?? []
-                            stack.append(tagRange)
-                            tags[innerTag] = stack
+                            if position == startIndex {
+                                balancedStartParagraphTag = true
+                            } else if let lastTag = tags[innerTag]?.last {
+                                result.append("\n\n")
+                                points.append((innerTag, lastTag.upperBound..<result.endIndex))
+                            } else if !balancedStartParagraphTag {
+                                let openTagEnd = result.endIndex
+                                result.append("\n\n")
+                                points.append((innerTag, result.startIndex..<openTagEnd))
+                            }
                         }
+                        push(tag: innerTag)
                     case let .close(.some(innerTag)):
-                        if let parsed = tags[innerTag]?.popLast() {
-                            let tagStart = parsed.lowerBound
-                            points.append((innerTag, tagStart..<result.endIndex))
+                        pop(tag: innerTag)
+                        if innerTag == .paragraph && range.upperBound < index(before: endIndex) {
+                            result.append("\n\n")
                         }
                     default:
                         break
@@ -92,6 +111,10 @@ extension String {
         if position < endIndex {
             result.append(self[position..<endIndex])
         }
+        if let unbalancedFinalTag = tags[.paragraph]?.last {
+            points.append((.paragraph, unbalancedFinalTag.upperBound..<result.endIndex))
+        }
+
         return (result, points)
     }
 

@@ -33,7 +33,7 @@ class StringHtmlParsingSpec: QuickSpec {
                 }
             }
 
-            context("when the string contains a <p> tag") {
+            context("when the string contains an unbalanced <p> tag") {
                 let original = "This is a string.<p>This is another string."
 
                 it("returns a string without the <p> tag") {
@@ -41,20 +41,70 @@ class StringHtmlParsingSpec: QuickSpec {
                     expect(result).to(equal("This is a string.\n\nThis is another string."))
                 }
 
-                it("returns a paragraph formatting element applied to the appropriate range") {
-                    let (_, formatting) = original.strippingHtmlElements()
-                    guard let (type, range) = formatting.first else {
+                it("returns paragraph formatting elements applied to the appropriate range") {
+                    let (result, formatting) = original.strippingHtmlElements()
+                    guard formatting.count > 1 else {
                         fail("Should contain formatting elements")
                         return
                     }
-                    let tag = original.range(of: "<p>")!
-                    let upper = original.index(tag.lowerBound, offsetBy: 2)
-                    let formatRange = tag.lowerBound..<upper
+
+                    let tag1 = result.range(of: "This is a string.")!
+                    let tag2 = result.range(of: "This is another string.")!
+
+                    expect(formatting).to(haveCount(2))
+                    expect(formatting[0].0).to(equal(FormattingOption.paragraph))
+                    expect(formatting[0].1).to(equal(tag1))
+
+                    expect(formatting[1].0).to(equal(FormattingOption.paragraph))
+                    expect(formatting[1].1).to(equal(tag2))
+                }
+            }
+
+            context("when the string is enclosed in <p> tags") {
+                let original = "<p>This is a string. This is another string.</p>"
+
+                it("returns a string without the <p> tags") {
+                    let (result, _) = original.strippingHtmlElements()
+                    expect(result).to(equal("This is a string. This is another string."))
+                }
+
+                it("returns a paragraph formatting element applied to the appropriate range") {
+                    let (result, formatting) = original.strippingHtmlElements()
+                    guard formatting.count > 0 else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
 
                     expect(formatting).to(haveCount(1))
-                    expect(type).to(equal(FormattingOption.paragraph))
-                    expect(range.lowerBound).to(equal(tag.lowerBound))
-                    expect(range).to(equal(formatRange))
+                    expect(formatting[0].0).to(equal(FormattingOption.paragraph))
+                    expect(formatting[0].1).to(equal(result.startIndex..<result.endIndex))
+                }
+            }
+
+            context("when the string contains multiple <p> tags") {
+                let original = "<p>This is a string.</p><p>This is another string.</p>"
+
+                it("returns a string without the <p> tags") {
+                    let (result, _) = original.strippingHtmlElements()
+                    expect(result).to(equal("This is a string.\n\nThis is another string."))
+                }
+
+                it("returns paragraph formatting elements applied to the appropriate ranges") {
+                    let (result, formatting) = original.strippingHtmlElements()
+                    guard formatting.count > 1 else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
+
+                    let tag1 = result.range(of: "This is a string.")!
+                    let tag2 = result.range(of: "This is another string.")!
+
+                    expect(formatting).to(haveCount(2))
+                    expect(formatting[0].0).to(equal(FormattingOption.paragraph))
+                    expect(formatting[0].1).to(equal(tag1))
+
+                    expect(formatting[1].0).to(equal(FormattingOption.paragraph))
+                    expect(formatting[1].1).to(equal(tag2))
                 }
             }
 
@@ -187,21 +237,30 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns all of the formatting elements") {
                     let (_, formatting) = original.strippingHtmlElements()
-                    expect(formatting).to(haveCount(6))
+                    expect(formatting).to(haveCount(7))
                 }
             }
 
             context("when the string contains overlapping tags") {
-                let original = "This <i>string <b>is</b> really</i> cool."
+                let original = "This <i>string <b>has</b> to be really</i> cool."
 
                 it("returns a string without the tags") {
                     let (result, _) = original.strippingHtmlElements()
-                    expect(result).to(equal("This string is really cool."))
+                    expect(result).to(equal("This string has to be really cool."))
                 }
 
                 it("returns all of the formatting elements") {
-                    let (_, formatting) = original.strippingHtmlElements()
+                    let (result, formatting) = original.strippingHtmlElements()
+                    guard formatting.count > 1 else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
+
                     expect(formatting).to(haveCount(2))
+                    expect(formatting[0].0).to(equal(FormattingOption.bold))
+                    expect(formatting[0].1).to(equal(result.range(of: "has")))
+                    expect(formatting[1].0).to(equal(FormattingOption.italic))
+                    expect(formatting[1].1).to(equal(result.range(of: "string has to be really")))
                 }
             }
 
