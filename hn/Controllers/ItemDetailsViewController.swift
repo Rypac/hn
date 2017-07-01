@@ -52,7 +52,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }
 
     func refreshData(sender: UIRefreshControl) {
-        store.dispatch(fetchComments)
+        store.dispatch(fetchComments(forItem: state.item))
     }
 }
 
@@ -134,12 +134,12 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         fetchingContext = context
-        store.dispatch(fetchComments)
+        store.dispatch(fetchComments(forItem: state.item))
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row < state.headerOffset {
-            store.dispatch(routeTo(original: state.item, from: self))
+            routeTo(original: state.item, from: self)
         }
     }
 }

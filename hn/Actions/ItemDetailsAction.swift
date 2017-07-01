@@ -6,18 +6,15 @@ enum CommentFetchAction: Action {
     case fetched(item: Item)
 }
 
-func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
-    guard let state = state.selectedItem else {
-        return .none
-    }
-
-    fetchSiblingsForId(with: Algolia.fetch(item:))(state.item.id).then { item in
+func fetchComments(forItem item: Item) -> Action {
+    firstly {
+        fetchSiblingsForId(with: Algolia.fetch(item:))(item.id)
+    }.then { item in
         store.dispatch(CommentFetchAction.fetched(item: item))
     }.catch { error in
-        print("Failed to fetch comments for item \(state.item.id): \(error)")
+        print("Failed to fetch comments for item \(item.id): \(error)")
     }
-
-    return CommentFetchAction.fetch(item: state.item)
+    return CommentFetchAction.fetch(item: item)
 }
 
 func fetchSiblingsForId(with request: @escaping (Int) -> Promise<Item>) -> (Int) -> Promise<Item> {
