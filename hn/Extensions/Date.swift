@@ -8,12 +8,12 @@ extension Date {
             return "now"
         case 1..<60:
             return "just now"
-        case 60..<3600:
+        case 60..<3_600:
             return "\(Int(round(interval / 60))) minutes ago"
-        case 3600..<86400:
-            return "\(Int(round(interval / 3600))) hours ago"
+        case 3_600..<86_400:
+            return "\(Int(round(interval / 3_600))) hours ago"
         default:
-            return "\(Int(round(interval / 86400))) days ago"
+            return "\(Int(round(interval / 86_400))) days ago"
         }
     }
 }

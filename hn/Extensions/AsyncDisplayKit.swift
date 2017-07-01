@@ -1,12 +1,12 @@
 import AsyncDisplayKit
 
 extension ASStackLayoutSpec {
-    public convenience init(
+    convenience init(
         direction: ASStackLayoutDirection,
         spacing: CGFloat,
         flex: (shrink: CGFloat, grow: CGFloat),
-        children: [ASLayoutElement])
-    {
+        children: [ASLayoutElement]
+    ) {
         self.init(
             direction: direction,
             spacing: spacing,

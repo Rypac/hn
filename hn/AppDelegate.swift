@@ -1,6 +1,6 @@
-import UIKit
 import AlamofireNetworkActivityIndicator
 import ReSwift
+import UIKit
 
 let store = Store<AppState>(
     reducer: appReducer,

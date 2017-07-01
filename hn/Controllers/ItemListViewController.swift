@@ -1,11 +1,11 @@
-import UIKit
 import AsyncDisplayKit
 import ReSwift
 import SafariServices
+import UIKit
 
 final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRecognizerDelegate {
     var tableNode: ASTableNode {
-        return node as! ASTableNode
+        return node as! ASTableNode // swiftlint:disable:this force_cast
     }
 
     lazy var refreshControl: UIRefreshControl = { [weak self] in
@@ -111,9 +111,7 @@ extension ItemListViewController: StoreSubscriber {
             }
         })
 
-        if case .none = newState.selectedItem,
-            let index = tableNode.indexPathForSelectedRow
-        {
+        if case .none = newState.selectedItem, let index = tableNode.indexPathForSelectedRow {
             tableNode.deselectRow(at: index, animated: true)
         }
     }

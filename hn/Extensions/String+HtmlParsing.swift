@@ -1,3 +1,4 @@
+// swiftlint:disable cyclomatic_complexity function_body_length
 import Foundation
 
 enum Tag {

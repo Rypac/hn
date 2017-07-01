@@ -27,7 +27,7 @@ extension Item {
         let kids = self.kids.flatMap { kid -> Item? in
             switch kid {
             case .value(let item): return item
-            case .id(_): return .none
+            case .id: return .none
             }
         }
         return [CommentItem(item: self, depth: depth)] + kids.flatMap { $0.flatten(depth: depth + 1) }

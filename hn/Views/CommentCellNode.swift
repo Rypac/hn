@@ -1,5 +1,5 @@
-import UIKit
 import AsyncDisplayKit
+import UIKit
 
 final class CommentCellNode: ASCellNode {
     let text = ASTextNode()

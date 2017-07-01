@@ -3,7 +3,6 @@ import ReSwift
 import SafariServices
 import UIKit
 
-
 struct FetchAction: Action {
     let itemType: ItemType
     let action: ItemFetchState
@@ -23,8 +22,6 @@ enum ItemListAction: Action {
     case dismissOriginal
 }
 
-
-
 typealias ActionCreator<T: StateType> = (T, Store<T>) -> Action?
 
 func fetchItems(_ type: ItemType) -> ActionCreator<AppState> {
@@ -39,7 +36,9 @@ func fetchItems(_ type: ItemType) -> ActionCreator<AppState> {
 
 func fetchItemList(_ type: ItemType) -> ActionCreator<AppState> {
     return { state, store in
-        Firebase.fetch(stories: type).then { ids in
+        firstly {
+            Firebase.fetch(stories: type)
+        }.then { ids in
             store.dispatch(FetchAction(itemType: type, action: .fetchedIds(ids)))
         }.then {
             store.dispatch(fetchNextItemBatch(type))

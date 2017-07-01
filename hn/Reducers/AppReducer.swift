@@ -1,3 +1,4 @@
+// swiftlint:disable cyclomatic_complexity
 import ReSwift
 
 func appReducer(action: Action, state: AppState?) -> AppState {
@@ -16,7 +17,7 @@ func appReducer(action: Action, state: AppState?) -> AppState {
             itemList.ids = ids
             itemList.items = []
             itemList.fetching = .list(.finished)
-        case .fetchItems(_):
+        case .fetchItems:
             itemList.fetching = .items(.started)
         case let .fetchedItems(items):
             itemList.items += items
@@ -29,7 +30,7 @@ func appReducer(action: Action, state: AppState?) -> AppState {
             state.selectedItem = ItemDetails(item)
         case let .viewOriginal(item):
             state.selectedItem = ItemDetails(item)
-        case .dismiss(_):
+        case .dismiss:
             state.selectedItem = .none
         case .dismissOriginal:
             state.selectedItem = .none

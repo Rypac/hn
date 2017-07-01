@@ -1,13 +1,13 @@
-import UIKit
 import AsyncDisplayKit
 import ReSwift
+import UIKit
 
 final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     var tableNode: ASTableNode {
-        return node as! ASTableNode
+        return node as! ASTableNode // swiftlint:disable:this force_cast
     }
 
-    lazy var refreshControl: UIRefreshControl = { [weak self] in
+    lazy var refreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
         return refresh

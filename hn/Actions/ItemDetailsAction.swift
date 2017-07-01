@@ -21,7 +21,7 @@ func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
 }
 
 func fetchSiblingsForId(with request: @escaping (Int) -> Promise<Item>) -> (Int) -> Promise<Item> {
-    let fetchSiblings = { (item: Reference<Item>) -> Promise<Item> in
+    let fetchChild = { (item: Reference<Item>) -> Promise<Item> in
         switch item {
         case let .id(id): return fetchSiblingsForId(with: request)(id)
         case let .value(item): return Promise(value: item)
@@ -29,11 +29,9 @@ func fetchSiblingsForId(with request: @escaping (Int) -> Promise<Item>) -> (Int)
     }
     return { id in
         request(id).then { item in
-            when(fulfilled: item.kids.map(fetchSiblings)).then { items in
-                item.with(kids: items)
-            }.recover { error in
-                item
-            }
+            when(fulfilled: item.kids.map(fetchChild))
+                .then { items in item.with(kids: items) }
+                .recover { _ in item }
         }
     }
 }

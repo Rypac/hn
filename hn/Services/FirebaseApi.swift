@@ -42,7 +42,7 @@ extension Item {
         url = json["url"] as? String
         parent = json["parent"] as? Int
         descendants = json["descendants"] as? Int
-        kids = (json["kids"] as? [Int]).map{ $0.map(Reference.id) } ?? []
+        kids = (json["kids"] as? [Int]).map { $0.map(Reference.id) } ?? []
         parts = json["parts"] as? [Int]
         deleted = json["deleted"] as? Bool ?? false
         dead = json["dead"] as? Bool ?? false
