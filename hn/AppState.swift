@@ -67,7 +67,7 @@ struct Item {
     let url: String?
     let parent: Int?
     let descendants: Int?
-    private(set) var kids: [Reference<Item>]
+    internal(set) var kids: [Reference<Item>]
     let parts: [Int]?
     let dead: Bool
     let deleted: Bool
@@ -82,4 +82,13 @@ struct Item {
 enum Reference<T> {
     case id(Int)
     case value(T)
+}
+
+struct User {
+    let username: String
+    let karma: Int
+    let created: Int
+    let id: Int?
+    let about: String?
+    let delay: Int?
 }

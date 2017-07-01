@@ -1,10 +1,6 @@
 import Alamofire
 import PromiseKit
 
-protocol JsonDecodable {
-    init?(json: [String: Any])
-}
-
 extension String: LocalizedError {
     public var errorDescription: String? { return self }
 }
@@ -15,16 +11,6 @@ private func request(_ endpoint: URLConvertible) -> Promise<DataResponse<Any>> {
     }
 }
 
-func request<T: JsonDecodable>(_ endpoint: URLConvertible) -> Promise<T> {
-    return request(endpoint).then { response in
-        guard let json = response.value as? [String: Any], let decoded = T(json: json) else {
-            throw "Error decoding JSON object as \(T.self)"
-        }
-
-        return Promise(value: decoded)
-    }
-}
-
 func request<T>(_ endpoint: URLConvertible) -> Promise<T> {
     return request(endpoint).then { response in
         guard let result = response.result.value as? T else {
@@ -32,5 +18,15 @@ func request<T>(_ endpoint: URLConvertible) -> Promise<T> {
         }
 
         return Promise(value: result)
+    }
+}
+
+func request<U, T>(_ endpoint: URLConvertible, withMapper mapper: @escaping (U) -> T?) -> Promise<T> {
+    return request(endpoint).then { response in
+        guard let json = response.value as? U, let decoded = mapper(json) else {
+            throw "Error decoding value with mapping \(U.self) -> \(T.self)"
+        }
+
+        return Promise(value: decoded)
     }
 }

@@ -2,32 +2,6 @@ import Alamofire
 import PromiseKit
 
 struct Firebase {
-    struct Item {
-        let id: Int
-        let title: String?
-        let text: String?
-        let score: Int?
-        let by: String?
-        let time: Int?
-        let type: String?
-        let url: String?
-        let parent: Int?
-        let descendants: Int?
-        let kids: [Int]?
-        let parts: [Int]?
-        let dead: Bool
-        let deleted: Bool
-    }
-
-    struct User {
-        let id: String
-        let karma: Int
-        let created: Int
-        let about: String?
-        let submitted: [Int]?
-        let delay: Int?
-    }
-
     enum Endpoint {
         case topStories
         case newStories
@@ -44,15 +18,17 @@ struct Firebase {
         return request(stories.endpoint)
     }
 
-    static func fetch(item id: Int) -> Promise<hn.Item> {
-        return request(Endpoint.item(id)).then { (item: Item) in
-            Promise(value: item.toItem())
-        }
+    static func fetch(item id: Int) -> Promise<Item> {
+        return request(Endpoint.item(id), withMapper: Item.init(firebaseResponse:))
+    }
+
+    static func fetch(user username: String) -> Promise<User> {
+        return request(Endpoint.user(username), withMapper: User.init(firebaseResponse:))
     }
 }
 
-extension Firebase.Item: JsonDecodable {
-    init?(json: [String: Any]) {
+extension Item {
+    init?(firebaseResponse json: [String: Any]) {
         guard let id = json["id"] as? Int else {
             return nil
         }
@@ -60,54 +36,34 @@ extension Firebase.Item: JsonDecodable {
         title = json["title"] as? String
         text = json["text"] as? String
         score = json["score"] as? Int
-        by = json["by"] as? String
+        author = json["by"] as? String
         time = json["time"] as? Int
         type = json["type"] as? String
         url = json["url"] as? String
         parent = json["parent"] as? Int
         descendants = json["descendants"] as? Int
-        kids = json["kids"] as? [Int]
+        kids = (json["kids"] as? [Int]).map{ $0.map(Reference.id) } ?? []
         parts = json["parts"] as? [Int]
         deleted = json["deleted"] as? Bool ?? false
         dead = json["dead"] as? Bool ?? false
     }
 }
 
-extension Firebase.Item {
-    func toItem() -> Item {
-        return Item(
-            id: id,
-            title: title,
-            text: text,
-            score: score,
-            author: by,
-            time: time,
-            type: type,
-            url: url,
-            parent: parent,
-            descendants: descendants,
-            kids: kids?.map(Reference.id) ?? [],
-            parts: parts,
-            dead: dead,
-            deleted: deleted)
-    }
-}
-
-extension Firebase.User: JsonDecodable {
-    init?(json: [String: Any]) {
+extension User {
+    init?(firebaseResponse json: [String: Any]) {
         guard
-            let id = json["id"] as? String,
+            let username = json["id"] as? String,
             let karma = json["karma"] as? Int,
             let created = json["created"] as? Int
         else {
             return nil
         }
-        self.id = id
+        self.username = username
         self.karma = karma
         self.created = created
         about = json["about"] as? String
-        submitted = json["submitted"] as? [Int]
         delay = json["delay"] as? Int
+        id = .none
     }
 }
 

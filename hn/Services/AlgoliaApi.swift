@@ -2,98 +2,59 @@ import Alamofire
 import PromiseKit
 
 struct Algolia {
-    struct Item {
-        let id: Int
-        let title: String?
-        let text: String?
-        let points: Int?
-        let author: String?
-        let time: Int?
-        let type: String?
-        let url: String?
-        let parent: Int?
-        let story: Int?
-        let children: [Item]?
-    }
-
-    struct User {
-        let id: Int
-        let username: String
-        let karma: Int
-        let created: Int
-        let about: String?
-        let delay: Int?
-    }
-
     enum Endpoint {
         case item(Int)
         case user(String)
     }
 
-    static func fetch(item id: Int) -> Promise<hn.Item> {
-        return request(Endpoint.item(id)).then { (item: Item) in
-            Promise(value: item.toItem())
-        }
+    static func fetch(item id: Int) -> Promise<Item> {
+        return request(Endpoint.item(id), withMapper: Item.init(algoliaResponse:))
+    }
+
+    static func fetch(user username: String) -> Promise<User> {
+        return request(Endpoint.user(username), withMapper: User.init(algoliaResponse:))
     }
 }
 
-extension Algolia.Item: JsonDecodable {
-    init?(json: [String: Any]) {
+extension Item {
+    init?(algoliaResponse json: [String: Any]) {
         guard let id = json["id"] as? Int else {
             return nil
         }
         self.id = id
         title = json["title"] as? String
         text = json["text"] as? String
-        points = json["points"] as? Int
+        score = json["points"] as? Int
         author = json["author"] as? String
         time = json["created_at_i"] as? Int
         type = json["type"] as? String
         url = json["url"] as? String
-        story = json["story"] as? Int
         parent = json["parent"] as? Int
         if let children = json["children"] as? [[String: Any]] {
-            self.children = children.flatMap(Algolia.Item.init(json:))
+            kids = children.flatMap(Item.init(algoliaResponse:)).map(Reference.value)
         } else {
-            children = .none
+            kids = []
         }
+        descendants = kids.count
+        parts = .none
+        dead = false
+        deleted = author == .none
     }
 }
 
-extension Algolia.Item {
-    func toItem() -> Item {
-        return Item(
-            id: id,
-            title: title,
-            text: text,
-            score: points,
-            author: author,
-            time: time,
-            type: type,
-            url: url,
-            parent: parent,
-            descendants: children?.count,
-            kids: children?.map { .value($0.toItem()) } ?? [],
-            parts: .none,
-            dead: false,
-            deleted: author == .none)
-    }
-}
-
-extension Algolia.User: JsonDecodable {
-    init?(json: [String: Any]) {
+extension User {
+    init?(algoliaResponse json: [String: Any]) {
         guard
-            let id = json["id"] as? Int,
             let username = json["username"] as? String,
             let karma = json["karma"] as? Int,
             let created = json["created_at_i"] as? Int
         else {
             return nil
         }
-        self.id = id
         self.username = username
         self.karma = karma
         self.created = created
+        id = json["id"] as? Int
         about = json["about"] as? String
         delay = json["delay"] as? Int
     }
