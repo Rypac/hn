@@ -36,8 +36,8 @@ struct Firebase {
         case askHN
         case jobs
         case updates
-        case user(Int)
         case item(Int)
+        case user(String)
     }
 
     static func fetch(stories: ItemType) -> Promise<[Int]> {
@@ -128,7 +128,7 @@ extension Firebase.Endpoint: URLConvertible {
         case .jobs: return "/jobstories.json"
         case .updates: return "/updates.json"
         case .item(let id): return "/item/\(id).json"
-        case .user(let id): return "/user/\(id).json"
+        case .user(let username): return "/user/\(username).json"
         }
     }
 }

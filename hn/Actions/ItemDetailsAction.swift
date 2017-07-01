@@ -11,7 +11,7 @@ func fetchComments(state: AppState, store: Store<AppState>) -> Action? {
         return .none
     }
 
-    fetchSiblingsForId(with: Firebase.fetch(item:))(state.item.id).then { item in
+    fetchSiblingsForId(with: Algolia.fetch(item:))(state.item.id).then { item in
         store.dispatch(CommentFetchAction.fetched(item: item))
     }.catch { error in
         print("Failed to fetch comments for item \(state.item.id): \(error)")

@@ -1,8 +1,6 @@
 import Alamofire
 import PromiseKit
 
-typealias ApiRequest<T> = (_ endpoint: URLConvertible) -> Promise<T>
-
 protocol JsonDecodable {
     init?(json: [String: Any])
 }
