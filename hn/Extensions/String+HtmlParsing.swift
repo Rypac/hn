@@ -1,20 +1,11 @@
 import Foundation
 
-enum FormattingOption {
-    case paragraph
-    case url
-    case italic
-    case bold
-    case code
-    case preformatted
-}
-
 enum Tag {
-    case open(FormattingOption?)
-    case close(FormattingOption?)
+    case open(Formatting?)
+    case close(Formatting?)
 }
 
-private let htmlTags: [String: FormattingOption] = [
+private let htmlTags: [String: Formatting] = [
     "p": .paragraph,
     "i": .italic,
     "b": .bold,
@@ -32,76 +23,74 @@ private let entityEncodings: [String: Character] = [
 ]
 
 extension String {
-    typealias FormattingPoints = [(FormattingOption, Range<Index>)]
-
-    func strippingHtmlElements() -> (String, FormattingPoints) {
+    func strippingHtmlElements() -> FormattedString {
         var result = ""
-        var points = [(FormattingOption, Range<Index>)]()
+        var points = [(Formatting, Range<Index>)]()
 
         var position = startIndex
-        var tags = [FormattingOption: [Range<Index>]]()
+        var balancedStartParagraphTag = false
+        var tags = [Formatting: [Range<Index>]]()
 
-        func push(tag: FormattingOption) {
+        func push(tag: Formatting) {
             let tagRange = result.endIndex..<result.endIndex
             var stack = tags[tag] ?? []
             stack.append(tagRange)
             tags[tag] = stack
         }
 
-        func pop(tag: FormattingOption) {
+        func pop(tag: Formatting) {
             if let parsed = tags[tag]?.popLast() {
                 let tagStart = parsed.lowerBound
                 points.append((tag, tagStart..<result.endIndex))
             }
         }
 
-        var balancedStartParagraphTag = false
-
         parser: while position < endIndex {
             let character = self[position]
             switch character {
             case "<":
-                if let (tag, range) = parseTagStart(after: position) {
-                    switch tag {
-                    case let .open(.some(innerTag)):
-                        if innerTag == .paragraph {
-                            if position == startIndex {
-                                balancedStartParagraphTag = true
-                            } else if let lastTag = tags[innerTag]?.last {
-                                result.append("\n\n")
-                                points.append((innerTag, lastTag.upperBound..<result.endIndex))
-                            } else if !balancedStartParagraphTag {
-                                let openTagEnd = result.endIndex
-                                result.append("\n\n")
-                                points.append((innerTag, result.startIndex..<openTagEnd))
-                            }
-                        }
-                        push(tag: innerTag)
-                    case let .close(.some(innerTag)):
-                        pop(tag: innerTag)
-                        if innerTag == .paragraph && range.upperBound < index(before: endIndex) {
-                            result.append("\n\n")
-                        }
-                    default:
-                        break
-                    }
-                    position = index(after: range.upperBound)
-                } else {
+                guard let (tag, range) = parseTagStart(after: position) else {
                     break parser
                 }
+
+                switch tag {
+                case let .open(.some(innerTag)):
+                    if innerTag == .paragraph {
+                        if range.lowerBound == startIndex {
+                            balancedStartParagraphTag = true
+                        } else if let lastTag = tags[innerTag]?.last {
+                            let openTagEnd = result.endIndex
+                            result.append("\n\n")
+                            points.append((innerTag, lastTag.upperBound..<openTagEnd))
+                        } else if !balancedStartParagraphTag {
+                            let openTagEnd = result.endIndex
+                            result.append("\n\n")
+                            points.append((innerTag, result.startIndex..<openTagEnd))
+                        }
+                    }
+                    push(tag: innerTag)
+                case let .close(.some(innerTag)):
+                    pop(tag: innerTag)
+                    if innerTag == .paragraph && range.upperBound < index(before: endIndex) {
+                        result.append("\n\n")
+                    }
+                default:
+                    break
+                }
+                position = index(after: range.upperBound)
             case "&":
                 let start = index(after: position)
-                if start < endIndex, let end = range(of: ";", range: start..<endIndex) {
-                    let encoded = self[start..<end.lowerBound]
-                    if let decoded = encoded.decode() {
-                        result.append(decoded)
-                    } else {
-                        result.append(self[position..<end.upperBound])
-                    }
-                    position = end.upperBound
-                } else {
+                guard let end = range(of: ";", range: start..<endIndex) else {
                     break parser
                 }
+
+                let encoded = self[start..<end.lowerBound]
+                if let decoded = encoded.decode() {
+                    result.append(decoded)
+                } else {
+                    result.append(self[position..<end.upperBound])
+                }
+                position = end.upperBound
             default:
                 result.append(character)
                 position = index(after: position)
@@ -115,7 +104,7 @@ extension String {
             points.append((.paragraph, unbalancedFinalTag.upperBound..<result.endIndex))
         }
 
-        return (result, points)
+        return FormattedString(text: result, formatting: points)
     }
 
     private func parseTagStart(after tagStart: Index) -> (Tag, Range<Index>)? {
@@ -146,7 +135,7 @@ extension String {
         }
     }
 
-    private func parseInnerTag(from start: Index) -> (FormattingOption?, Index)? {
+    private func parseInnerTag(from start: Index) -> (Formatting?, Index)? {
         let next = index(after: start)
         guard let close = range(of: ">", range: next..<endIndex)?.lowerBound else {
             return .none

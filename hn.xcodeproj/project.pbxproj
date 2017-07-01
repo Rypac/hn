@@ -41,6 +41,7 @@
 		81CDCD201EFE6B510044D1DF /* ItemDetailsCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CDCD1F1EFE6B510044D1DF /* ItemDetailsCellNode.swift */; };
 		81E2A5601EF7DC40004045FF /* ItemDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2A55F1EF7DC40004045FF /* ItemDetailsViewController.swift */; };
 		81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2A5611EF7F263004045FF /* ItemDetailsAction.swift */; };
+		81E44CAC1F073E03008BF854 /* FormattedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E44CAB1F073E03008BF854 /* FormattedString.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +105,7 @@
 		81E2A55C1EF7CC70004045FF /* AlamofireNetworkActivityIndicator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireNetworkActivityIndicator.framework; path = Carthage/Build/iOS/AlamofireNetworkActivityIndicator.framework; sourceTree = "<group>"; };
 		81E2A55F1EF7DC40004045FF /* ItemDetailsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsViewController.swift; path = Controllers/ItemDetailsViewController.swift; sourceTree = "<group>"; };
 		81E2A5611EF7F263004045FF /* ItemDetailsAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsAction.swift; path = Actions/ItemDetailsAction.swift; sourceTree = "<group>"; };
+		81E44CAB1F073E03008BF854 /* FormattedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FormattedString.swift; path = Models/FormattedString.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -254,6 +256,7 @@
 				8100428E1EF89174001E2B42 /* Actions */,
 				8100428B1EF89164001E2B42 /* Controllers */,
 				811683C31EF9345400680511 /* Extensions */,
+				81E44CAA1F073DE9008BF854 /* Models */,
 				8100428D1EF8916F001E2B42 /* Reducers */,
 				8100428A1EF8915F001E2B42 /* Services */,
 				8100428C1EF8916B001E2B42 /* Views */,
@@ -283,6 +286,14 @@
 				81820D521EFFB4B600FB460F /* String+HtmlParsingSpec.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		81E44CAA1F073DE9008BF854 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				81E44CAB1F073E03008BF854 /* FormattedString.swift */,
+			);
+			name = Models;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -423,6 +434,7 @@
 				812126771EC7088D00A4B61F /* FirebaseApi.swift in Sources */,
 				8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */,
 				81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */,
+				81E44CAC1F073E03008BF854 /* FormattedString.swift in Sources */,
 				8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */,
 				811683C21EF92F4600680511 /* ItemCellNode.swift in Sources */,
 				815739991EFE897300EB5CF3 /* Alamofire.swift in Sources */,
