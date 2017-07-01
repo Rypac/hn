@@ -8,7 +8,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
         return node as! ASTableNode // swiftlint:disable:this force_cast
     }
 
-    lazy var refreshControl: UIRefreshControl = { [weak self] in
+    lazy var refreshControl: UIRefreshControl = {
         let refresh = UIRefreshControl()
         refresh.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
         return refresh
@@ -45,9 +45,10 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         parent?.title = itemType.description
+        let type = itemType
         store.subscribe(self) { subscription in
             subscription.select { state in
-                ItemListViewModel(list: state.tabs[self.itemType]!, details: state.selectedItem)
+                ItemListViewModel(list: state.tabs[type]!, details: state.selectedItem)
             }
         }
     }
@@ -117,7 +118,7 @@ extension ItemListViewController: StoreSubscriber {
     }
 }
 
-extension ItemListViewController: ASTableDataSource, ASTableDelegate {
+extension ItemListViewController: ASTableDataSource {
     func numberOfSections(in tableNode: ASTableNode) -> Int {
         return 1
     }
@@ -145,7 +146,9 @@ extension ItemListViewController: ASTableDataSource, ASTableDelegate {
             return ItemCellNode(item)
         }
     }
+}
 
+extension ItemListViewController: ASTableDelegate {
     func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
         return state.hasMoreItems
     }

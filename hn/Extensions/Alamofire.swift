@@ -6,7 +6,7 @@ extension String: LocalizedError {
 }
 
 private func request(_ endpoint: URLConvertible) -> Promise<DataResponse<Any>> {
-    return PromiseKit.wrap {
+    return wrap {
         Alamofire.request(endpoint).validate().responseJSON(completionHandler: $0)
     }
 }

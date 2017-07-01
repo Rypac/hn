@@ -1,4 +1,5 @@
 import AlamofireNetworkActivityIndicator
+import AsyncDisplayKit
 import ReSwift
 import UIKit
 
@@ -22,15 +23,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
-        ) -> Bool {
+    ) -> Bool {
         NetworkActivityIndicatorManager.shared.isEnabled = true
 
-        let tabController = UITabBarController()
+        let tabController = ASTabBarController()
         tabController.setViewControllers(visibleTabs(store.state.tabs), animated: false)
         tabController.selectedIndex = 2
         tabController.tabBar.isTranslucent = false
 
-        let navigationController = UINavigationController(rootViewController: tabController)
+        let navigationController = ASNavigationController(rootViewController: tabController)
         navigationController.navigationBar.isTranslucent = false
 
         window = UIWindow(frame: UIScreen.main.bounds)

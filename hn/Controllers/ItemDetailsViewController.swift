@@ -94,7 +94,11 @@ extension ItemDetailsViewController: StoreSubscriber {
     }
 }
 
-extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
+extension ItemDetailsViewController: ASTableDataSource {
+    func numberOfSections(in tableNode: ASTableNode) -> Int {
+        return 1
+    }
+
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
         switch state.fetching {
         case .some(.started):
@@ -102,10 +106,6 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
         default:
             return state.comments.count
         }
-    }
-
-    func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
-        return state.hasMoreItems
     }
 
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
@@ -119,17 +119,18 @@ extension ItemDetailsViewController: ASTableDataSource, ASTableDelegate {
 
         let row = indexPath.row
         let comment = state.comments[row]
-        let item = comment.item
         let headerOffset = state.headerOffset
         return {
-            let node = row < headerOffset ? ItemDetailCellNode(item) : CommentCellNode(comment)
+            let node = row < headerOffset ? ItemDetailCellNode(comment.item) : CommentCellNode(comment)
             node.selectionStyle = .none
             return node
         }
     }
+}
 
-    func numberOfSections(in tableNode: ASTableNode) -> Int {
-        return 1
+extension ItemDetailsViewController: ASTableDelegate {
+    func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
+        return state.hasMoreItems
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
