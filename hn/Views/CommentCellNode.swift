@@ -6,7 +6,7 @@ final class CommentCellNode: ASCellNode {
     let details = ASTextNode()
     let depth: CGFloat
 
-    init(_ comment: CommentItem) {
+    init(_ comment: Comment) {
         depth = CGFloat(comment.depth)
         super.init()
         automaticallyManagesSubnodes = true

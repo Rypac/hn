@@ -17,7 +17,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
     let itemType: ItemType
     var state = ItemListViewModel()
-    var diffCalculator = ASTableNodeDiffCalculator<Int, Item>()
+    var diffCalculator = ASTableNodeDiffCalculator<ItemListViewModel.Section, Item>()
     var fetchingContext: ASBatchContext?
 
     init(_ storyType: ItemType) {
@@ -93,7 +93,7 @@ extension ItemListViewController: StoreSubscriber {
             break
         }
 
-        diffCalculator.sectionedValues = SectionedValues([(0, newState.items)])
+        diffCalculator.sectionedValues = SectionedValues([(.items, newState.items)])
 
         if case .none = newState.selectedItem, let index = tableNode.indexPathForSelectedRow {
             tableNode.deselectRow(at: index, animated: true)

@@ -1,5 +1,11 @@
 import UIKit
 
+extension IndexPath {
+    func `as`<T: RawRepresentable>(_ type: T.Type) -> T? where T.RawValue == Int {
+        return T(rawValue: section)
+    }
+}
+
 extension UIEdgeInsets {
     init(all margin: CGFloat) {
         self.init(top: margin, left: margin, bottom: margin, right: margin)

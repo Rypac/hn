@@ -15,7 +15,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }()
 
     var state: ItemDetailsViewModel
-    var diffCalculator = ASTableNodeDiffCalculator<Int, CommentItem>()
+    var diffCalculator = ASTableNodeDiffCalculator<ItemDetailsViewModel.Section, Comment>()
     var fetchingContext: ASBatchContext?
 
     init(_ item: Item) {
@@ -51,13 +51,13 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
 
     override func didMove(toParentViewController parent: UIViewController?) {
         super.didMove(toParentViewController: parent)
-        if case .none = parent {
-            store.dispatch(ItemListAction.dismiss(state.item))
+        if parent == .none {
+            store.dispatch(ItemListAction.dismiss(state.parent.item))
         }
     }
 
     func refreshData(sender: UIRefreshControl) {
-        store.dispatch(fetchComments(forItem: state.item))
+        store.dispatch(fetchComments(forItem: state.parent.item))
     }
 }
 
@@ -66,12 +66,14 @@ extension ItemDetailsViewController: StoreSubscriber {
         state = newState
         title = newState.title
 
-        if case .some(.finished) = newState.fetching {
+        if newState.fetching == .finished {
             refreshControl.endRefreshing()
             fetchingContext?.completeBatchFetching(true)
         }
 
-        diffCalculator.sectionedValues = SectionedValues([(0, newState.comments)])
+        diffCalculator.sectionedValues = SectionedValues([
+            (.parent, [newState.parent]),
+            (.comments, newState.comments)])
     }
 }
 
@@ -85,10 +87,18 @@ extension ItemDetailsViewController: ASTableDataSource {
     }
 
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
+        if indexPath.as(ItemDetailsViewModel.Section.self) == .parent {
+            let comment = diffCalculator.value(atIndexPath: indexPath)
+            return {
+                let node = ItemDetailCellNode(comment.item)
+                node.selectionStyle = .none
+                return node
+            }
+        }
+
         let comment = diffCalculator.value(atIndexPath: indexPath)
-        let headerOffset = state.headerOffset
         return {
-            let node = indexPath.row < headerOffset ? ItemDetailCellNode(comment.item) : CommentCellNode(comment)
+            let node = CommentCellNode(comment)
             node.selectionStyle = .none
             return node
         }
@@ -102,12 +112,12 @@ extension ItemDetailsViewController: ASTableDelegate {
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
         fetchingContext = context
-        store.dispatch(fetchComments(forItem: state.item))
+        store.dispatch(fetchComments(forItem: state.parent.item))
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row < state.headerOffset {
-            routeTo(original: state.item, from: self)
+        if indexPath.as(ItemDetailsViewModel.Section.self) == .parent {
+            routeTo(original: state.parent.item, from: self)
         }
     }
 }
