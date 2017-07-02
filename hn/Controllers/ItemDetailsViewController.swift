@@ -1,4 +1,5 @@
 import AsyncDisplayKit
+import Dwifft
 import ReSwift
 import UIKit
 
@@ -14,6 +15,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }()
 
     var state: ItemDetailsViewModel
+    var diffCalculator = ASTableNodeDiffCalculator<Int, CommentItem>()
     var fetchingContext: ASBatchContext?
 
     init(_ item: Item) {
@@ -21,6 +23,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
+        diffCalculator.tableNode = tableNode
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -35,7 +38,9 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         store.subscribe(self) { subscription in
-            subscription.select { state in ItemDetailsViewModel(details: state.selectedItem!) }
+            subscription.select { state in
+                ItemDetailsViewModel(details: state.selectedItem!)
+            }
         }
     }
 
@@ -58,70 +63,32 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
 
 extension ItemDetailsViewController: StoreSubscriber {
     func newState(state newState: ItemDetailsViewModel) {
-        let previous = state.comments.count
-        let current = newState.comments.count
-        let fetching = newState.fetching
-        let offset = newState.headerOffset
-
         state = newState
         title = newState.title
 
-        tableNode.performBatchUpdates({
-            let indexPath = { IndexPath(row: $0, section: 0) }
-            switch fetching {
-            case .some(.started):
-                if previous > offset {
-                    tableNode.deleteRows(at: (offset..<previous).map(indexPath), with: .none)
-                }
-                if current == offset {
-                    tableNode.insertRows(at: [indexPath(current)], with: .none)
-                }
-            case .some(.finished):
-                if refreshControl.isRefreshing {
-                    refreshControl.endRefreshing()
-                }
-                if previous == offset {
-                    tableNode.deleteRows(at: [indexPath(previous)], with: .none)
-                }
-                if current > previous {
-                    tableNode.insertRows(at: (previous..<current).map(indexPath), with: .none)
-                }
-                fetchingContext?.completeBatchFetching(true)
-            default:
-                break
-            }
-        })
+        if case .some(.finished) = newState.fetching {
+            refreshControl.endRefreshing()
+            fetchingContext?.completeBatchFetching(true)
+        }
+
+        diffCalculator.sectionedValues = SectionedValues([(0, newState.comments)])
     }
 }
 
 extension ItemDetailsViewController: ASTableDataSource {
     func numberOfSections(in tableNode: ASTableNode) -> Int {
-        return 1
+        return diffCalculator.numberOfSections()
     }
 
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-        switch state.fetching {
-        case .some(.started):
-            return state.comments.count + 1
-        default:
-            return state.comments.count
-        }
+        return diffCalculator.numberOfObjects(inSection: section)
     }
 
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        if indexPath.row >= state.comments.count {
-            return {
-                let node = LoadingCellNode()
-                node.style.height = ASDimensionMake(44.0)
-                return node
-            }
-        }
-
-        let row = indexPath.row
-        let comment = state.comments[row]
+        let comment = diffCalculator.value(atIndexPath: indexPath)
         let headerOffset = state.headerOffset
         return {
-            let node = row < headerOffset ? ItemDetailCellNode(comment.item) : CommentCellNode(comment)
+            let node = indexPath.row < headerOffset ? ItemDetailCellNode(comment.item) : CommentCellNode(comment)
             node.selectionStyle = .none
             return node
         }

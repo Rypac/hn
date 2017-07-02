@@ -23,7 +23,7 @@ struct Item {
     }
 }
 
-enum Reference<T> {
+enum Reference<T> where T: Equatable {
     case id(Int)
     case value(T)
 }
@@ -37,6 +37,19 @@ extension Item: Equatable {
             lhs.text == rhs.text &&
             lhs.descendants == rhs.descendants &&
             lhs.parent == rhs.parent &&
-            lhs.kids.count == rhs.kids.count
+            lhs.kids == rhs.kids
+    }
+}
+
+extension Reference: Equatable {
+    static func == (_ lhs: Reference, _ rhs: Reference) -> Bool {
+        switch (lhs, rhs) {
+        case let (.id(lhs), .id(rhs)):
+            return lhs == rhs
+        case let (.value(lhs), .value(rhs)):
+            return lhs == rhs
+        default:
+            return false
+        }
     }
 }

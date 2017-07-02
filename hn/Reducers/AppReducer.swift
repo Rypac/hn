@@ -37,8 +37,7 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         }
     case let action as CommentFetchAction:
         switch action {
-        case let .fetch(item: item):
-            state.selectedItem?.item = item.with(kids: [])
+        case .fetch:
             state.selectedItem?.fetching = .started
         case let .fetched(item: item):
             state.selectedItem?.item = item

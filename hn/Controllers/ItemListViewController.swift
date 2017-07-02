@@ -1,4 +1,5 @@
 import AsyncDisplayKit
+import Dwifft
 import ReSwift
 import SafariServices
 import UIKit
@@ -16,6 +17,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
     let itemType: ItemType
     var state = ItemListViewModel()
+    var diffCalculator = ASTableNodeDiffCalculator<Int, Item>()
     var fetchingContext: ASBatchContext?
 
     init(_ storyType: ItemType) {
@@ -23,6 +25,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
+        diffCalculator.tableNode = tableNode
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -78,39 +81,19 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
 extension ItemListViewController: StoreSubscriber {
     func newState(state newState: ItemListViewModel) {
-        let previous = state.items.count
-        let current = newState.items.count
-        let fetching = newState.fetching
-
         state = newState
 
-        tableNode.performBatchUpdates({
-            let rows = tableNode.numberOfRows(inSection: 0)
-            let indexPath = { IndexPath(row: $0, section: 0) }
-            switch fetching {
-            case .some(.list(.finished)):
-                if refreshControl.isRefreshing {
-                    refreshControl.endRefreshing()
-                }
-                if previous > 0 {
-                    tableNode.deleteRows(at: (0..<previous).map(indexPath), with: .none)
-                }
-            case .some(.items(.started)):
-                if rows == current {
-                    tableNode.insertRows(at: [indexPath(current)], with: .none)
-                }
-            case .some(.items(.finished)):
-                if rows > previous {
-                    tableNode.deleteRows(at: [indexPath(previous)], with: .none)
-                }
-                if current > previous {
-                    tableNode.insertRows(at: (previous..<current).map(indexPath), with: .none)
-                }
-                fetchingContext?.completeBatchFetching(true)
-            default:
-                break
-            }
-        })
+        switch newState.fetching {
+        case .none:
+            refreshControl.manuallyBeginRefreshing(inView: tableNode.view)
+        case .some(.items(.finished)):
+            refreshControl.endRefreshing()
+            fetchingContext?.completeBatchFetching(true)
+        default:
+            break
+        }
+
+        diffCalculator.sectionedValues = SectionedValues([(0, newState.items)])
 
         if case .none = newState.selectedItem, let index = tableNode.indexPathForSelectedRow {
             tableNode.deselectRow(at: index, animated: true)
@@ -120,28 +103,15 @@ extension ItemListViewController: StoreSubscriber {
 
 extension ItemListViewController: ASTableDataSource {
     func numberOfSections(in tableNode: ASTableNode) -> Int {
-        return 1
+        return diffCalculator.numberOfSections()
     }
 
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-        switch state.fetching {
-        case .some(.items(.started)):
-            return state.items.count + 1
-        default:
-            return state.items.count
-        }
+        return diffCalculator.numberOfObjects(inSection: section)
     }
 
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        if indexPath.row >= state.items.count {
-            return {
-                let node = LoadingCellNode()
-                node.style.height = ASDimensionMake(44.0)
-                return node
-            }
-        }
-
-        let item = state.items[indexPath.row]
+        let item = diffCalculator.value(atIndexPath: indexPath)
         return {
             return ItemCellNode(item)
         }

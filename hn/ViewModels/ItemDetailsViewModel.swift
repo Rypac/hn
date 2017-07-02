@@ -12,13 +12,20 @@ struct ItemDetailsViewModel {
     let headerOffset = 1
 
     init(details: ItemDetails) {
+        let descendants = details.item.descendants ?? 0
+        let deletedOrphan = { (item: Item) in item.deleted && item.kids.isEmpty }
         let allComments = details.item.flatten()
-        let visibleComments = allComments.filter { !$0.item.deleted }
-        title = "\(visibleComments.count - 1) comments"
+        let visibleComments = allComments.filter { !deletedOrphan($0.item) }
+        let commentCount = visibleComments.count > 1
+            ? visibleComments.count - 1
+            : descendants
+
+        title = "\(commentCount) Comments"
         item = details.item
         fetching = details.fetching
         comments = visibleComments
-        hasMoreItems = details.fetching != .started && (details.item.descendants ?? 0) > allComments.count
+        hasMoreItems = details.fetching == .none ||
+            details.fetching == .finished && descendants > allComments.count
     }
 }
 
@@ -37,5 +44,13 @@ extension Item {
 extension CommentItem: Equatable {
     static func == (_ lhs: CommentItem, _ rhs: CommentItem) -> Bool {
         return lhs.item == rhs.item && lhs.depth == rhs.depth
+    }
+}
+
+extension ItemDetailsViewModel: Equatable {
+    static func == (_ lhs: ItemDetailsViewModel, _ rhs: ItemDetailsViewModel) -> Bool {
+        return lhs.fetching == rhs.fetching &&
+            lhs.hasMoreItems == rhs.hasMoreItems &&
+            lhs.comments == rhs.comments
     }
 }
