@@ -43,6 +43,9 @@
 		81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2A5611EF7F263004045FF /* ItemDetailsAction.swift */; };
 		81E44CAC1F073E03008BF854 /* FormattedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E44CAB1F073E03008BF854 /* FormattedString.swift */; };
 		81E44CAE1F073FE2008BF854 /* AlgoliaApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E44CAD1F073FE2008BF854 /* AlgoliaApi.swift */; };
+		9481B23C1F088BD900765EDB /* Dwifft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481B23B1F088BD900765EDB /* Dwifft.swift */; };
+		9481B23E1F088E2900765EDB /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481B23D1F088E2900765EDB /* Item.swift */; };
+		948BDCB01F0877DC00D10013 /* Dwifft.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 948BDCAF1F0877DC00D10013 /* Dwifft.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -108,6 +111,9 @@
 		81E2A5611EF7F263004045FF /* ItemDetailsAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsAction.swift; path = Actions/ItemDetailsAction.swift; sourceTree = "<group>"; };
 		81E44CAB1F073E03008BF854 /* FormattedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FormattedString.swift; path = Models/FormattedString.swift; sourceTree = "<group>"; };
 		81E44CAD1F073FE2008BF854 /* AlgoliaApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AlgoliaApi.swift; path = Services/AlgoliaApi.swift; sourceTree = "<group>"; };
+		9481B23B1F088BD900765EDB /* Dwifft.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Dwifft.swift; path = Extensions/Dwifft.swift; sourceTree = "<group>"; };
+		9481B23D1F088E2900765EDB /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Item.swift; path = Models/Item.swift; sourceTree = "<group>"; };
+		948BDCAF1F0877DC00D10013 /* Dwifft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Dwifft.framework; path = Carthage/Build/iOS/Dwifft.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,10 +121,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				811F6E0D1F04ABD2000C5EE2 /* PromiseKit.framework in Frameworks */,
 				811D4E141EFF2C3700B49F38 /* Alamofire.framework in Frameworks */,
 				811D4E151EFF2C3700B49F38 /* AlamofireNetworkActivityIndicator.framework in Frameworks */,
 				811D4E161EFF2C3700B49F38 /* AsyncDisplayKit.framework in Frameworks */,
+				948BDCB01F0877DC00D10013 /* Dwifft.framework in Frameworks */,
+				811F6E0D1F04ABD2000C5EE2 /* PromiseKit.framework in Frameworks */,
 				811D4E171EFF2C3700B49F38 /* ReSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -185,12 +192,13 @@
 			isa = PBXGroup;
 			children = (
 				815739981EFE897300EB5CF3 /* Alamofire.swift */,
+				81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */,
 				811683C41EF9346300680511 /* Date.swift */,
+				9481B23B1F088BD900765EDB /* Dwifft.swift */,
 				811D4E181EFF3CFF00B49F38 /* String.swift */,
 				81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */,
 				8165DF0B1EFBF4980019E801 /* UIKit.swift */,
 				812C83641F00D42500DFC70E /* UIFont.swift */,
-				81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -198,6 +206,7 @@
 		812126721EC7081800A4B61F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				948BDCAF1F0877DC00D10013 /* Dwifft.framework */,
 				811F6E0C1F04ABD2000C5EE2 /* PromiseKit.framework */,
 				817CF3AE1EFF64A600B69DF4 /* Nimble.framework */,
 				817CF3AF1EFF64A600B69DF4 /* Quick.framework */,
@@ -295,6 +304,7 @@
 			isa = PBXGroup;
 			children = (
 				81E44CAB1F073E03008BF854 /* FormattedString.swift */,
+				9481B23D1F088E2900765EDB /* Item.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -410,16 +420,18 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AlamofireNetworkActivityIndicator.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AsyncDisplayKit.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/ReSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Dwifft.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/ReSwift.framework",
 			);
 			name = "Run Script";
 			outputPaths = (
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AlamofireNetworkActivityIndicator.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AsyncDisplayKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ReSwift.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Dwifft.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/PromiseKit.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ReSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -452,6 +464,7 @@
 				8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */,
 				812126771EC7088D00A4B61F /* FirebaseApi.swift in Sources */,
 				8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */,
+				9481B23E1F088E2900765EDB /* Item.swift in Sources */,
 				81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */,
 				81E44CAC1F073E03008BF854 /* FormattedString.swift in Sources */,
 				8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */,
@@ -466,6 +479,7 @@
 				811683C51EF9346300680511 /* Date.swift in Sources */,
 				487A42603799E2F9AC261E74 /* AppState.swift in Sources */,
 				8118DBB01EF5133600934BA4 /* LoadingCellNode.swift in Sources */,
+				9481B23C1F088BD900765EDB /* Dwifft.swift in Sources */,
 				812C83651F00D42500DFC70E /* UIFont.swift in Sources */,
 				81820D511EFFB2B700FB460F /* String+HtmlParsing.swift in Sources */,
 				814DF7E01EFB3A9300C0A886 /* CommentCellNode.swift in Sources */,

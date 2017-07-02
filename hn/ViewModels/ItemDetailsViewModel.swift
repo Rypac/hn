@@ -33,3 +33,9 @@ extension Item {
         return [CommentItem(item: self, depth: depth)] + kids.flatMap { $0.flatten(depth: depth + 1) }
     }
 }
+
+extension CommentItem: Equatable {
+    static func == (_ lhs: CommentItem, _ rhs: CommentItem) -> Bool {
+        return lhs.item == rhs.item && lhs.depth == rhs.depth
+    }
+}
