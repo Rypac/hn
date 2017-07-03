@@ -13,33 +13,21 @@ struct ItemDetailsViewModel {
     let parent: Comment
     let comments: [Comment]
     let fetching: FetchState?
-    let hasMoreItems: Bool
+    let hasMoreComments: Bool
 
     init(details: ItemDetails) {
         let descendants = details.item.descendants ?? 0
         let deletedOrphan = { (item: Item) in item.deleted && item.kids.isEmpty }
-        let allComments = details.item.flatten().dropFirst()
+        let allComments = details.item.flattenComments()
         let visibleComments = allComments.filter { !deletedOrphan($0.item) }
-        let commentCount = visibleComments.isEmpty ? descendants : visibleComments.count
+        let commentCount = allComments.isEmpty ? descendants : visibleComments.count
 
         title = "\(commentCount) Comments"
         parent = Comment(item: details.item, depth: 0)
         fetching = details.fetching
         comments = visibleComments
-        hasMoreItems = details.fetching == .none ||
+        hasMoreComments = details.fetching == .none ||
             details.fetching == .finished && descendants > allComments.count
-    }
-}
-
-extension Item {
-    func flatten(depth: Int = 0) -> [Comment] {
-        let kids = self.kids.flatMap { kid -> Item? in
-            switch kid {
-            case .value(let item): return item
-            case .id: return .none
-            }
-        }
-        return [Comment(item: self, depth: depth)] + kids.flatMap { $0.flatten(depth: depth + 1) }
     }
 }
 
@@ -52,7 +40,7 @@ extension Comment: Equatable {
 extension ItemDetailsViewModel: Equatable {
     static func == (_ lhs: ItemDetailsViewModel, _ rhs: ItemDetailsViewModel) -> Bool {
         return lhs.fetching == rhs.fetching &&
-            lhs.hasMoreItems == rhs.hasMoreItems &&
+            lhs.hasMoreComments == rhs.hasMoreComments &&
             lhs.parent == rhs.parent &&
             lhs.comments == rhs.comments
     }

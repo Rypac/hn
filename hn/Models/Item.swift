@@ -53,3 +53,26 @@ extension Reference: Equatable {
         }
     }
 }
+
+extension Item {
+    func flatten() -> [Comment] {
+        return flatten(depth: 0)
+    }
+
+    func flattenComments() -> [Comment] {
+        return comments.flatMap { $0.flatten(depth: 0) }
+    }
+
+    private func flatten(depth: Int) -> [Comment] {
+        return [Comment(item: self, depth: depth)] + comments.flatMap { $0.flatten(depth: depth + 1) }
+    }
+
+    private var comments: [Item] {
+        return kids.flatMap {
+            switch $0 {
+            case .value(let item): return item
+            case .id: return .none
+            }
+        }
+    }
+}

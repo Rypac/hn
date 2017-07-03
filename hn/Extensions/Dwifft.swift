@@ -68,13 +68,13 @@ class ASTableNodeDiffCalculator<Section: Equatable, Value: Equatable> {
             for result in diff {
                 switch result {
                 case let .delete(section, row, _):
-                    tableNode.deleteRows(at: [IndexPath(row: row, section: section)], with: self.deletionAnimation)
+                    tableNode.deleteRows(at: [IndexPath(row: row, section: section)], with: deletionAnimation)
                 case let .insert(section, row, _):
-                    tableNode.insertRows(at: [IndexPath(row: row, section: section)], with: self.insertionAnimation)
+                    tableNode.insertRows(at: [IndexPath(row: row, section: section)], with: insertionAnimation)
                 case let .sectionDelete(section, _):
-                    tableNode.deleteSections(IndexSet(integer: section), with: self.deletionAnimation)
+                    tableNode.deleteSections(IndexSet(integer: section), with: deletionAnimation)
                 case let .sectionInsert(section, _):
-                    tableNode.insertSections(IndexSet(integer: section), with: self.insertionAnimation)
+                    tableNode.insertSections(IndexSet(integer: section), with: insertionAnimation)
                 }
             }
         })

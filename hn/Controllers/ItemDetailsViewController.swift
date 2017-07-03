@@ -27,7 +27,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("storyboards are incompatible with truth and beauty")
     }
 
     override func viewDidLoad() {
@@ -107,7 +107,7 @@ extension ItemDetailsViewController: ASTableDataSource {
 
 extension ItemDetailsViewController: ASTableDelegate {
     func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
-        return state.hasMoreItems
+        return state.hasMoreComments
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {

@@ -29,7 +29,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
     }
 
     required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        fatalError("storyboards are incompatible with truth and beauty")
     }
 
     override func viewDidLoad() {
@@ -112,9 +112,7 @@ extension ItemListViewController: ASTableDataSource {
 
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         let item = diffCalculator.value(atIndexPath: indexPath)
-        return {
-            return ItemCellNode(item)
-        }
+        return { ItemCellNode(item) }
     }
 }
 

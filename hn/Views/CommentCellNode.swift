@@ -24,7 +24,7 @@ final class CommentCellNode: ASCellNode {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         return ASInsetLayoutSpec(
-            insets: UIEdgeInsets(top: 8, left: 10 * depth, bottom: 8, right: 8),
+            insets: UIEdgeInsets(top: 8, left: 8 + 10 * depth, bottom: 8, right: 8),
             child: ASStackLayoutSpec(
                 direction: .vertical,
                 spacing: 4,
