@@ -1,5 +1,6 @@
 disabled_rules:
   - identifier_name
+  - type_name
 opt_in_rules:
   - attributes
   - closure_end_indentation
@@ -7,7 +8,6 @@ opt_in_rules:
   - conditional_returns_on_newline
   - empty_count
   - explicit_init
-  - extension_access_modifier
   - fatal_error_message
   - file_header
   - first_where
@@ -26,3 +26,6 @@ opt_in_rules:
   - vertical_parameter_alignment_on_call
 included:
   - hn
+
+large_tuple:
+  - 4

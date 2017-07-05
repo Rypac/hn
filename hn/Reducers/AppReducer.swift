@@ -5,7 +5,7 @@ func appReducer(action: Action, state: AppState?) -> AppState {
     var state = state ?? AppState()
 
     switch action {
-    case let action as FetchAction:
+    case let action as ItemListFetchAction:
         guard var itemList = state.tabs[action.itemType] else {
             return state
         }
@@ -20,11 +20,11 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         case .fetchItems:
             itemList.fetching = .items(.started)
         case let .fetchedItems(items):
-            itemList.items += items
+            itemList.items += items.flatMap(Post.init(fromItem:))
             itemList.fetching = .items(.finished)
         }
         state.tabs[action.itemType] = itemList
-    case let action as ItemListAction:
+    case let action as ItemListNavigationAction:
         switch action {
         case let .view(item):
             state.selectedItem = ItemDetails(item)
@@ -35,12 +35,14 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         case .dismissOriginal:
             state.selectedItem = .none
         }
-    case let action as CommentFetchAction:
+    case let action as CommentListFetchAction:
         switch action {
         case .fetch:
             state.selectedItem?.fetching = .started
         case let .fetched(item: item):
-            state.selectedItem?.item = item
+            if let post = Post(fromItem: item) {
+                state.selectedItem?.item = post
+            }
             state.selectedItem?.fetching = .finished
         }
     default:

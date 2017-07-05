@@ -2,22 +2,22 @@ import ReSwift
 
 struct AppState: StateType {
     var tabs = [ItemType: ItemList]()
-    var selectedTab: ItemList?
+    var selectedTab: ItemType?
     var selectedItem: ItemDetails?
 }
 
 struct ItemList {
     var ids = [Int]()
-    var items = [Item]()
+    var items = [Post]()
     var fetching: ContainerFetchState? = .none
 }
 
 struct ItemDetails {
-    var item: Item
+    var item: Post
     var fetching: FetchState? = .none
 
-    init(_ item: Item) {
-        self.item = item
+    init(_ post: Post) {
+        item = post
     }
 }
 

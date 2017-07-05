@@ -6,19 +6,16 @@ final class CommentCellNode: ASCellNode {
     let details = ASTextNode()
     let depth: CGFloat
 
-    init(_ comment: Comment) {
-        depth = CGFloat(comment.depth)
+    init(_ response: Comment, depth: Int) {
+        self.depth = CGFloat(depth)
         super.init()
         automaticallyManagesSubnodes = true
 
-        let item = comment.item
-        let author = item.deleted ? .some("deleted") : item.author
-        let time = item.time.map { Date(timeIntervalSince1970: TimeInterval($0)).relative(to: Date()) }
-        let info = [author, time].flatMap { $0 }.joined(separator: " ")
+        let (text, details) = response.cellText()
 
-        text.attributedText = item.text?.strippingHtmlElements().attributedText
-        details.attributedText = NSAttributedString(
-            string: info,
+        self.text.attributedText = text?.strippingHtmlElements().attributedText
+        self.details.attributedText = NSAttributedString(
+            string: details,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
     }
 
@@ -30,5 +27,19 @@ final class CommentCellNode: ASCellNode {
                 spacing: 4,
                 flex: (shrink: 1.0, grow: 1.0),
                 children: [details, text]))
+    }
+}
+
+extension Comment {
+     fileprivate func cellText() -> (String?, String) {
+        switch content {
+        case .details(let content):
+            let time = Date(timeIntervalSince1970: TimeInterval(content.time)).relative(to: Date())
+            return (content.text, "\(content.author) \(time)")
+        case .dead:
+            return (.none, "dead")
+        case .deleted:
+            return (.none, "deleted")
+        }
     }
 }

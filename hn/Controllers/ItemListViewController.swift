@@ -17,7 +17,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
     let itemType: ItemType
     var state = ItemListViewModel()
-    var diffCalculator = ASTableNodeDiffCalculator<ItemListViewModel.Section, Item>()
+    var diffCalculator = ASTableNodeDiffCalculator<ItemListViewModel.Section, Post>()
     var fetchingContext: ASBatchContext?
 
     init(_ storyType: ItemType) {
@@ -134,6 +134,6 @@ extension ItemListViewController: ASTableDelegate {
 
 extension ItemListViewController: SFSafariViewControllerDelegate {
     func safariViewControllerDidFinish(_ controller: SFSafariViewController) {
-        store.dispatch(ItemListAction.dismissOriginal)
+        store.dispatch(ItemListNavigationAction.dismissOriginal)
     }
 }

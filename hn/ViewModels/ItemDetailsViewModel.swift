@@ -1,5 +1,5 @@
-struct Comment {
-    let item: Item
+struct PostResponse {
+    let comment: Comment
     let depth: Int
 }
 
@@ -10,30 +10,23 @@ struct ItemDetailsViewModel {
     }
 
     let title: String
-    let parent: Comment
-    let comments: [Comment]
+    let parent: Post
+    let comments: [PostResponse]
     let fetching: FetchState?
     let hasMoreComments: Bool
 
     init(details: ItemDetails) {
-        let descendants = details.item.descendants ?? 0
-        let deletedOrphan = { (item: Item) in item.deleted && item.kids.isEmpty }
+        let descendants = details.item.descendants
         let allComments = details.item.flattenComments()
-        let visibleComments = allComments.filter { !deletedOrphan($0.item) }
+        let visibleComments = allComments.filter { !$0.0.isOrphaned }
         let commentCount = allComments.isEmpty ? descendants : visibleComments.count
 
         title = "\(commentCount) Comments"
-        parent = Comment(item: details.item, depth: 0)
+        parent = details.item
         fetching = details.fetching
-        comments = visibleComments
+        comments = visibleComments.map(PostResponse.init(comment:depth:))
         hasMoreComments = details.fetching == .none ||
             details.fetching == .finished && descendants > allComments.count
-    }
-}
-
-extension Comment: Equatable {
-    static func == (_ lhs: Comment, _ rhs: Comment) -> Bool {
-        return lhs.item == rhs.item && lhs.depth == rhs.depth
     }
 }
 
@@ -43,5 +36,11 @@ extension ItemDetailsViewModel: Equatable {
             lhs.hasMoreComments == rhs.hasMoreComments &&
             lhs.parent == rhs.parent &&
             lhs.comments == rhs.comments
+    }
+}
+
+extension PostResponse: Equatable {
+    static func == (_ lhs: PostResponse, _ rhs: PostResponse) -> Bool {
+        return lhs.depth == rhs.depth && lhs.comment == rhs.comment
     }
 }

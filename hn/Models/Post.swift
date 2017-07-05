@@ -1,0 +1,74 @@
+import Foundation
+
+struct Post {
+    struct Details {
+        let title: String
+        let text: String?
+        let author: String
+        let time: UnixTimestamp
+        let url: String?
+        let score: Int
+    }
+    struct Actions {
+        var upvoted: Bool
+        var saved: Bool
+        var hidden: Bool
+    }
+    let id: Id
+    let content: Content<Details>
+    let descendants: Int
+    let comments: [Comment]
+    var actions: Actions
+}
+
+extension Post {
+    func flattenComments() -> [(Comment, Int)] {
+        return comments.flatMap { $0.flatten() }
+    }
+}
+
+extension Post: ItemInitialisable {
+    init?(fromItem item: Item) {
+        guard let details = Content<Details>(fromItem: item) else {
+            return nil
+        }
+        id = item.id
+        content = details
+        descendants = item.descendants ?? 0
+        comments = item.kids.flatMap { $0.bindValue(Comment.init(fromItem:)) }
+        actions = Actions(upvoted: false, saved: false, hidden: false)
+    }
+}
+
+extension Post.Details: ItemInitialisable {
+    init?(fromItem item: Item) {
+        guard
+            let title = item.title,
+            let author = item.author,
+            let time = item.time,
+            let score = item.score
+        else {
+            return nil
+        }
+        self.title = title
+        self.author = author
+        self.time = time
+        self.score = score
+        text = item.text
+        url = item.url
+    }
+}
+
+extension Post: Equatable {
+    static func == (_ lhs: Post, _ rhs: Post) -> Bool {
+        return lhs.id == rhs.id &&
+            lhs.actions == rhs.actions &&
+            lhs.comments == rhs.comments
+    }
+}
+
+extension Post.Actions: Equatable {
+    static func == (_ lhs: Post.Actions, _ rhs: Post.Actions) -> Bool {
+        return lhs.hidden == rhs.hidden
+    }
+}

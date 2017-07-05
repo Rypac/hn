@@ -27,18 +27,34 @@ struct Firebase {
     }
 }
 
+extension Item.PostType {
+    init?(firebaseResponse type: String) {
+        switch type {
+        case "story": self = .story
+        case "comment": self = .comment
+        case "job": self = .job
+        case "poll": self = .poll
+        case "pollopt": self = .pollOption
+        default: return nil
+        }
+    }
+}
+
 extension Item {
     init?(firebaseResponse json: [String: Any]) {
-        guard let id = json["id"] as? Int else {
+        guard
+            let id = json["id"] as? Int,
+            let type = (json["type"] as? String).flatMap(PostType.init(firebaseResponse:))
+        else {
             return nil
         }
         self.id = id
+        self.type = type
         title = json["title"] as? String
         text = json["text"] as? String
         score = json["score"] as? Int
         author = json["by"] as? String
         time = json["time"] as? Int
-        type = json["type"] as? String
         url = json["url"] as? String
         parent = json["parent"] as? Int
         descendants = json["descendants"] as? Int

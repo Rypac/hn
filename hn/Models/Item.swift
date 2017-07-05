@@ -1,13 +1,29 @@
 import Foundation
 
+typealias Id = Int
+typealias UnixTimestamp = Int
+
+protocol ItemInitialisable {
+    init?(fromItem item: Item)
+}
+
+enum Reference<T> {
+    case id(Int)
+    case value(T)
+}
+
 struct Item {
-    let id: Int
+    enum PostType {
+        case story, comment, job, poll, pollOption
+    }
+
+    let id: Id
+    let type: PostType
     let title: String?
     let text: String?
     let score: Int?
     let author: String?
-    let time: Int?
-    let type: String?
+    let time: UnixTimestamp?
     let url: String?
     let parent: Int?
     let descendants: Int?
@@ -23,56 +39,18 @@ struct Item {
     }
 }
 
-enum Reference<T> where T: Equatable {
-    case id(Int)
-    case value(T)
-}
-
-extension Item: Equatable {
-    static func == (_ lhs: Item, _ rhs: Item) -> Bool {
-        return lhs.id == rhs.id &&
-            lhs.deleted == rhs.deleted &&
-            lhs.dead == rhs.dead &&
-            lhs.title == rhs.title &&
-            lhs.text == rhs.text &&
-            lhs.descendants == rhs.descendants &&
-            lhs.parent == rhs.parent &&
-            lhs.kids == rhs.kids
-    }
-}
-
-extension Reference: Equatable {
-    static func == (_ lhs: Reference, _ rhs: Reference) -> Bool {
-        switch (lhs, rhs) {
-        case let (.id(lhs), .id(rhs)):
-            return lhs == rhs
-        case let (.value(lhs), .value(rhs)):
-            return lhs == rhs
-        default:
-            return false
+extension Reference {
+    func bindValue<U>(_ transform: (T) -> U?) -> U? {
+        switch self {
+        case .id: return .none
+        case .value(let val): return transform(val)
         }
     }
-}
 
-extension Item {
-    func flatten() -> [Comment] {
-        return flatten(depth: 0)
-    }
-
-    func flattenComments() -> [Comment] {
-        return comments.flatMap { $0.flatten(depth: 0) }
-    }
-
-    private func flatten(depth: Int) -> [Comment] {
-        return [Comment(item: self, depth: depth)] + comments.flatMap { $0.flatten(depth: depth + 1) }
-    }
-
-    private var comments: [Item] {
-        return kids.flatMap {
-            switch $0 {
-            case .value(let item): return item
-            case .id: return .none
-            }
+    func bindId<U>(_ transform: (Int) -> U?) -> U? {
+        switch self {
+        case .id(let id): return transform(id)
+        case .value: return .none
         }
     }
 }

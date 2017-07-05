@@ -3,7 +3,7 @@ struct ItemListViewModel {
         case items = 0
     }
 
-    let items: [Item]
+    let items: [Post]
     let fetching: ContainerFetchState?
     let hasMoreItems: Bool
     let selectedItem: ItemDetails?

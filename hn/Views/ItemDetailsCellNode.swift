@@ -5,23 +5,23 @@ final class ItemDetailCellNode: ASCellNode {
     let title = ASTextNode()
     let details = ASTextNode()
 
-    init(_ item: Item) {
+    init(_ post: Post) {
         super.init()
         automaticallyManagesSubnodes = true
-        guard let text = item.title else {
+
+        guard let content = post.content.details else {
             return
         }
 
-        let author = item.author.map { "by \($0)" }
-        let score = item.score.map { "\($0) points" }
-        let time = item.time.map { Date(timeIntervalSince1970: TimeInterval($0)).relative(to: Date()) }
-        let info = [score, author, time].flatMap { $0 }.joined(separator: " ")
+        let author = "by \(content.author)"
+        let score = "\(content.score) points"
+        let time = Date(timeIntervalSince1970: TimeInterval(content.time)).relative(to: Date())
 
         title.attributedText = NSAttributedString(
-            string: text,
+            string: content.title,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .headline)])
         details.attributedText = NSAttributedString(
-            string: info,
+            string: [author, score, time].joined(separator: " "),
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
     }
 

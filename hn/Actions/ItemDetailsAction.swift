@@ -1,20 +1,25 @@
 import PromiseKit
 import ReSwift
 
-enum CommentFetchAction: Action {
-    case fetch(item: Item)
+enum CommentListFetchAction: Action {
+    case fetch(post: Post)
     case fetched(item: Item)
 }
 
-func fetchComments(forItem item: Item) -> Action {
+enum CommentListNavigationAction: Action {
+    case view(post: Post)
+    case dismiss
+}
+
+func fetchComments(forPost post: Post) -> Action {
     firstly {
-        fetchSiblingsForId(with: Algolia.fetch(item:))(item.id)
+        fetchSiblingsForId(with: Algolia.fetch(item:))(post.id)
     }.then { item in
-        store.dispatch(CommentFetchAction.fetched(item: item))
+        store.dispatch(CommentListFetchAction.fetched(item: item))
     }.catch { error in
-        print("Failed to fetch comments for item \(item.id): \(error)")
+        print("Failed to fetch comments for item \(post.id): \(error)")
     }
-    return CommentFetchAction.fetch(item: item)
+    return CommentListFetchAction.fetch(post: post)
 }
 
 func fetchSiblingsForId(with request: @escaping (Int) -> Promise<Item>) -> (Int) -> Promise<Item> {

@@ -6,32 +6,27 @@ final class ItemCellNode: ASCellNode {
     let details = ASTextNode()
     let comments = ASTextNode()
 
-    init(_ item: Item) {
+    init(_ post: Post) {
         super.init()
         automaticallyManagesSubnodes = true
 
-        guard
-            let title = item.title,
-            let score = item.score,
-            let author = item.author,
-            let timestamp = item.time
-        else {
+        guard let content = post.content.details else {
             return
         }
 
-        let date = Date(timeIntervalSince1970: TimeInterval(timestamp))
-        let timeSincePosting = date.relative(to: Date())
+        let author = "by \(content.author)"
+        let score = "\(content.score) points"
+        let time = Date(timeIntervalSince1970: TimeInterval(content.time)).relative(to: Date())
+
         text.attributedText = NSAttributedString(
-            string: title,
+            string: content.title,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
         details.attributedText = NSAttributedString(
-            string: "\(score) points by \(author) \(timeSincePosting)",
+            string: [author, score, time].joined(separator: " "),
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
-        if let descendants = item.descendants {
-            comments.attributedText = NSAttributedString(
-                string: "\(descendants)",
-                attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
-        }
+        comments.attributedText = NSAttributedString(
+            string: "\(post.descendants)",
+            attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .body)])
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

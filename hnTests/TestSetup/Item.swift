@@ -4,12 +4,12 @@ extension Item {
     init(withId id: Int, kids: [Reference<Item>]) {
         self.init(
             id: id,
+            type: .story,
             title: .none,
             text: .none,
             score: .none,
             author: .none,
             time: .none,
-            type: .none,
             url: .none,
             parent: .none,
             descendants: .none,

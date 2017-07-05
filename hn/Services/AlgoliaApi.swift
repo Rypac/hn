@@ -16,18 +16,34 @@ struct Algolia {
     }
 }
 
+extension Item.PostType {
+    init?(algoliaResponse type: String) {
+        switch type {
+        case "story": self = .story
+        case "comment": self = .comment
+        case "job": self = .job
+        case "poll": self = .poll
+        case "pollopt": self = .pollOption
+        default: return nil
+        }
+    }
+}
+
 extension Item {
     init?(algoliaResponse json: [String: Any]) {
-        guard let id = json["id"] as? Int else {
+        guard
+            let id = json["id"] as? Int,
+            let type = (json["type"] as? String).flatMap(PostType.init(algoliaResponse:))
+        else {
             return nil
         }
         self.id = id
+        self.type = type
         title = json["title"] as? String
         text = json["text"] as? String
         score = json["points"] as? Int
         author = json["author"] as? String
         time = json["created_at_i"] as? Int
-        type = json["type"] as? String
         url = json["url"] as? String
         parent = json["parent"] as? Int
         if let children = json["children"] as? [[String: Any]] {
