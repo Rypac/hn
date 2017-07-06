@@ -14,12 +14,23 @@ struct ItemDetailsViewModel {
         let descendants = details.post.descendants
         let allComments = details.comments
         let visibleComments = allComments.filter { !$0.isOrphaned }
-        let commentCount = allComments.isEmpty ? descendants : visibleComments.count
+
+        func collapseAll(_ comment: Comment) -> [Id] {
+            return [comment.id] + visibleComments.filter { comment.responses.contains($0.id) }.flatMap(collapseAll)
+        }
+        func collectCollapsed(_ comment: Comment) -> [Id] {
+            let collapsed = comment.actions.collapsed ? collapseAll : collectCollapsed
+            return visibleComments.filter { comment.responses.contains($0.id) }.flatMap(collapsed)
+        }
+
+        let collapsedIds = visibleComments.flatMap(collectCollapsed)
+        let finalComment = visibleComments.filter { !collapsedIds.contains($0.id) }
+        let commentCount = allComments.isEmpty ? descendants : finalComment.count
 
         title = "\(commentCount) Comments"
         parent = details.post
         fetching = details.fetching
-        comments = visibleComments
+        comments = finalComment
         hasMoreComments = details.fetching == .none ||
             details.fetching == .finished && descendants > allComments.count
     }

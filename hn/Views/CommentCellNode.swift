@@ -13,7 +13,7 @@ final class CommentCellNode: ASCellNode {
 
         let (text, details) = comment.cellText()
 
-        self.text.attributedText = text?.strippingHtmlElements().attributedText
+        self.text.attributedText = (comment.actions.collapsed ? "..." : text)?.strippingHtmlElements().attributedText
         self.details.attributedText = NSAttributedString(
             string: details,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])

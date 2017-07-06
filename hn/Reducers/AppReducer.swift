@@ -46,6 +46,13 @@ func appReducer(action: Action, state: AppState?) -> AppState {
             }
             state.selectedItem?.fetching = .finished
         }
+    case let action as CommentItemAction:
+        switch action {
+        case let .collapse(comment):
+            if let index = state.selectedItem?.comments.index(where: { $0.id == comment.id }) {
+                state.selectedItem?.comments[index].actions.collapsed = !comment.actions.collapsed
+            }
+        }
     default:
         break
     }

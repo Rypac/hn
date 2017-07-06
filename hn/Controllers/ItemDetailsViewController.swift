@@ -118,8 +118,14 @@ extension ItemDetailsViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.as(ItemDetailsViewModel.Section.self) == .parent {
+        switch indexPath.as(ItemDetailsViewModel.Section.self) {
+        case .parent?:
             routeTo(original: state.parent, from: self)
+        case .comments?:
+            let comment = diffCalculator.value(atIndexPath: indexPath)
+            store.dispatch(CommentItemAction.collapse(comment))
+        default:
+            break
         }
     }
 }

@@ -86,7 +86,7 @@ extension ItemListViewController: StoreSubscriber {
         switch newState.fetching {
         case .none:
             refreshControl.manuallyBeginRefreshing(inView: tableNode.view)
-        case .some(.items(.finished)):
+        case .items(.finished)?:
             refreshControl.endRefreshing()
             fetchingContext?.completeBatchFetching(true)
         default:

@@ -11,6 +11,10 @@ enum CommentListNavigationAction: Action {
     case dismiss
 }
 
+enum CommentItemAction: Action {
+    case collapse(Comment)
+}
+
 func fetchComments(forPost post: Post) -> Action {
     firstly {
         fetchSiblingsForId(with: Algolia.fetch(item:))(post.id)
