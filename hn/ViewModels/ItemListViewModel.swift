@@ -3,15 +3,15 @@ struct ItemListViewModel {
         case items = 0
     }
 
-    let items: [Post]
+    let posts: [Post]
     let fetching: ContainerFetchState?
     let hasMoreItems: Bool
     let selectedItem: ItemDetails?
 
     init(list: ItemList = ItemList(), details: ItemDetails? = .none) {
         fetching = list.fetching
-        items = list.items
-        hasMoreItems = list.ids.isEmpty || list.items.count < list.ids.count
+        posts = list.posts
+        hasMoreItems = list.ids.isEmpty || list.posts.count < list.ids.count
         selectedItem = details
     }
 }

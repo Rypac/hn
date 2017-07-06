@@ -1,4 +1,4 @@
-// swiftlint:disable cyclomatic_complexity
+// swiftlint:disable cyclomatic_complexity function_body_length
 import ReSwift
 
 func appReducer(action: Action, state: AppState?) -> AppState {
@@ -15,21 +15,21 @@ func appReducer(action: Action, state: AppState?) -> AppState {
             itemList.fetching = .list(.started)
         case let .fetchedIds(ids):
             itemList.ids = ids
-            itemList.items = []
+            itemList.posts = []
             itemList.fetching = .list(.finished)
         case .fetchItems:
             itemList.fetching = .items(.started)
         case let .fetchedItems(items):
-            itemList.items += items.flatMap(Post.init(fromItem:))
+            itemList.posts += items.flatMap(Post.init(fromItem:))
             itemList.fetching = .items(.finished)
         }
         state.tabs[action.itemType] = itemList
     case let action as ItemListNavigationAction:
         switch action {
-        case let .view(item):
-            state.selectedItem = ItemDetails(item)
-        case let .viewOriginal(item):
-            state.selectedItem = ItemDetails(item)
+        case let .view(post):
+            state.selectedItem = ItemDetails(post)
+        case let .viewOriginal(post):
+            state.selectedItem = ItemDetails(post)
         case .dismiss:
             state.selectedItem = .none
         case .dismissOriginal:
@@ -40,8 +40,9 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         case .fetch:
             state.selectedItem?.fetching = .started
         case let .fetched(item: item):
-            if let post = Post(fromItem: item) {
-                state.selectedItem?.item = post
+            if let (post, comments) = item.extractPostAndComments() {
+                state.selectedItem?.post = post
+                state.selectedItem?.comments = comments
             }
             state.selectedItem?.fetching = .finished
         }

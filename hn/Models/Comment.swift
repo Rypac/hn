@@ -14,7 +14,8 @@ struct Comment {
     }
     let id: Id
     let content: Content<Details>
-    let responses: [Comment]
+    let responses: [Id]
+    var depth: Int
     var actions: Actions
 }
 
@@ -24,14 +25,6 @@ extension Comment {
         case .dead, .deleted: return responses.isEmpty
         default: return false
         }
-    }
-
-    func flatten() -> [(Comment, Int)] {
-        return flatten(depth: 0)
-    }
-
-    private func flatten(depth: Int) -> [(Comment, Int)] {
-        return responses.reduce([(self, depth)]) { $0 + $1.flatten(depth: depth + 1) }
     }
 }
 
@@ -44,8 +37,14 @@ extension Comment: ItemInitialisable {
         }
         id = item.id
         content = details
-        responses = item.kids.flatMap { $0.bindValue(Comment.init(fromItem:)) }
+        responses = item.kids.map { $0.id }
         actions = Actions(upvoted: false, saved: false, collapsed: false)
+        depth = 0
+    }
+
+    init?(fromItem item: Item, depth: Int) {
+        self.init(fromItem: item)
+        self.depth = depth
     }
 }
 

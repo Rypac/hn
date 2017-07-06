@@ -50,13 +50,13 @@ func fetchNextItemBatch(_ type: ItemType) -> Store<AppState>.ActionCreator {
     return { state, store in
         guard
             let state = state.tabs[type],
-            state.ids.count > state.items.count
+            state.ids.count > state.posts.count
         else {
             return .none
         }
 
-        let start = state.items.count
-        let end = start + min(16, state.ids.count - state.items.count)
+        let start = state.posts.count
+        let end = start + min(16, state.ids.count - state.posts.count)
         let ids = Array(state.ids[start..<end])
 
         firstly {

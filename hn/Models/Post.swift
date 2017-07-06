@@ -17,14 +17,8 @@ struct Post {
     let id: Id
     let content: Content<Details>
     let descendants: Int
-    let comments: [Comment]
+    let comments: [Id]
     var actions: Actions
-}
-
-extension Post {
-    func flattenComments() -> [(Comment, Int)] {
-        return comments.flatMap { $0.flatten() }
-    }
 }
 
 // MARK: - ItemInitialisable
@@ -37,7 +31,7 @@ extension Post: ItemInitialisable {
         id = item.id
         content = details
         descendants = item.descendants ?? 0
-        comments = item.kids.flatMap { $0.bindValue(Comment.init(fromItem:)) }
+        comments = item.kids.map { $0.id }
         actions = Actions(upvoted: false, saved: false, hidden: false)
     }
 }

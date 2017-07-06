@@ -6,12 +6,12 @@ final class CommentCellNode: ASCellNode {
     let details = ASTextNode()
     let depth: CGFloat
 
-    init(_ response: Comment, depth: Int) {
-        self.depth = CGFloat(depth)
+    init(_ comment: Comment) {
+        self.depth = CGFloat(comment.depth)
         super.init()
         automaticallyManagesSubnodes = true
 
-        let (text, details) = response.cellText()
+        let (text, details) = comment.cellText()
 
         self.text.attributedText = text?.strippingHtmlElements().attributedText
         self.details.attributedText = NSAttributedString(

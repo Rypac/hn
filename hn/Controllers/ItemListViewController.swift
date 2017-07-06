@@ -73,7 +73,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
             return
         }
 
-        let story = state.items[index.row]
+        let story = state.posts[index.row]
         tableNode.selectRow(at: index, animated: false, scrollPosition: .none)
         routeTo(original: story, from: self)
     }
@@ -93,7 +93,7 @@ extension ItemListViewController: StoreSubscriber {
             break
         }
 
-        diffCalculator.sectionedValues = SectionedValues([(.items, newState.items)])
+        diffCalculator.sectionedValues = SectionedValues([(.items, newState.posts)])
 
         if case .none = newState.selectedItem, let index = tableNode.indexPathForSelectedRow {
             tableNode.deselectRow(at: index, animated: true)
@@ -127,7 +127,7 @@ extension ItemListViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-        let story = state.items[indexPath.row]
+        let story = state.posts[indexPath.row]
         routeTo(story, from: self)
     }
 }

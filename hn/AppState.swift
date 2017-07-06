@@ -8,16 +8,17 @@ struct AppState: StateType {
 
 struct ItemList {
     var ids = [Int]()
-    var items = [Post]()
+    var posts = [Post]()
     var fetching: ContainerFetchState? = .none
 }
 
 struct ItemDetails {
-    var item: Post
+    var post: Post
+    var comments: [Comment] = []
     var fetching: FetchState? = .none
 
     init(_ post: Post) {
-        item = post
+        self.post = post
     }
 }
 

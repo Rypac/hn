@@ -15,7 +15,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }()
 
     var state: ItemDetailsViewModel
-    var diffCalculator = ASTableNodeDiffCalculator<ItemDetailsViewModel.Section, PostResponse>()
+    var diffCalculator = ASTableNodeDiffCalculator<ItemDetailsViewModel.Section, Comment>()
     var fetchingContext: ASBatchContext?
 
     init(_ post: Post) {
@@ -98,9 +98,9 @@ extension ItemDetailsViewController: ASTableDataSource {
             }
         }
 
-        let response = diffCalculator.value(atIndexPath: indexPath)
+        let comment = diffCalculator.value(atIndexPath: indexPath)
         return {
-            let node = CommentCellNode(response.comment, depth: response.depth)
+            let node = CommentCellNode(comment)
             node.selectionStyle = .none
             return node
         }

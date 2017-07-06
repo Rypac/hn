@@ -54,3 +54,26 @@ extension Reference {
         }
     }
 }
+
+extension Reference where T == Item {
+    var id: Id {
+        switch self {
+        case .id(let id): return id
+        case .value(let item): return item.id
+        }
+    }
+}
+
+extension Item {
+    func extractPostAndComments() -> (Post, [Comment])? {
+        func flattenResponses(_ kid: Reference<Item>, depth: Int) -> [Comment] {
+            return kid.bindValue { item in
+                guard let comment = Comment(fromItem: item, depth: depth) else {
+                    return []
+                }
+                return [comment] + item.kids.flatMap { flattenResponses($0, depth: depth + 1) }
+            } ?? []
+        }
+        return Post(fromItem: self).map { ($0, kids.flatMap { flattenResponses($0, depth: 0) }) }
+    }
+}
