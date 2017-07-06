@@ -27,6 +27,8 @@ extension Post {
     }
 }
 
+// MARK: - ItemInitialisable
+
 extension Post: ItemInitialisable {
     init?(fromItem item: Item) {
         guard let details = Content<Details>(fromItem: item) else {
@@ -59,11 +61,22 @@ extension Post.Details: ItemInitialisable {
     }
 }
 
+// MARK: - Equatable
+
 extension Post: Equatable {
     static func == (_ lhs: Post, _ rhs: Post) -> Bool {
         return lhs.id == rhs.id &&
+            lhs.content == rhs.content &&
             lhs.actions == rhs.actions &&
             lhs.comments == rhs.comments
+    }
+}
+
+extension Post.Details: Equatable {
+    static func == (_ lhs: Post.Details, _ rhs: Post.Details) -> Bool {
+        return lhs.title == rhs.title &&
+            lhs.text == rhs.text &&
+            lhs.url == rhs.url
     }
 }
 

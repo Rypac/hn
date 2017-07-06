@@ -30,3 +30,16 @@ extension Content where T: ItemInitialisable {
         }
     }
 }
+
+extension Content where T: Equatable {
+    static func == (_ lhs: Content, _ rhs: Content) -> Bool {
+        switch (lhs, rhs) {
+        case (.dead, .dead), (.deleted, .deleted):
+            return true
+        case let (.details(lhs), .details(rhs)):
+            return lhs == rhs
+        case (.dead, _), (.deleted, _), (.details, _):
+            return false
+        }
+    }
+}

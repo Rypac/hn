@@ -7,11 +7,6 @@ protocol ItemInitialisable {
     init?(fromItem item: Item)
 }
 
-enum Reference<T> {
-    case id(Int)
-    case value(T)
-}
-
 struct Item {
     enum PostType {
         case story, comment, job, poll, pollOption
@@ -37,6 +32,11 @@ struct Item {
         copy.kids = kids.map(Reference.value)
         return copy
     }
+}
+
+enum Reference<T> {
+    case id(Int)
+    case value(T)
 }
 
 extension Reference {
