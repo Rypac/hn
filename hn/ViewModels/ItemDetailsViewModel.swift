@@ -13,24 +13,15 @@ struct ItemDetailsViewModel {
     init(details: ItemDetails) {
         let descendants = details.post.descendants
         let allComments = details.comments
-        let visibleComments = allComments.filter { !$0.isOrphaned }
-
-        func collapseAll(_ comment: Comment) -> [Id] {
-            return [comment.id] + visibleComments.filter { comment.responses.contains($0.id) }.flatMap(collapseAll)
-        }
-        func collectCollapsed(_ comment: Comment) -> [Id] {
-            let collapsed = comment.actions.collapsed ? collapseAll : collectCollapsed
-            return visibleComments.filter { comment.responses.contains($0.id) }.flatMap(collapsed)
-        }
-
-        let collapsedIds = visibleComments.flatMap(collectCollapsed)
-        let finalComment = visibleComments.filter { !collapsedIds.contains($0.id) }
-        let commentCount = allComments.isEmpty ? descendants : finalComment.count
+        let visibleComments = allComments
+            .filter { !$0.isOrphaned }
+            .dropResponses(when: { $0.actions.collapsed })
+        let commentCount = allComments.isEmpty ? descendants : visibleComments.count
 
         title = "\(commentCount) Comments"
         parent = details.post
         fetching = details.fetching
-        comments = finalComment
+        comments = visibleComments
         hasMoreComments = details.fetching == .none ||
             details.fetching == .finished && descendants > allComments.count
     }
@@ -42,5 +33,24 @@ extension ItemDetailsViewModel: Equatable {
             lhs.hasMoreComments == rhs.hasMoreComments &&
             lhs.parent == rhs.parent &&
             lhs.comments == rhs.comments
+    }
+}
+
+extension Array where Iterator.Element == Comment {
+    func dropResponses(when shouldDrop: (Comment) -> Bool) -> Array {
+        return Array(sliced.dropResponses(when: shouldDrop))
+    }
+}
+
+extension ArraySlice where Iterator.Element == Comment {
+    func dropResponses(when shouldDrop: (Comment) -> Bool) -> ArraySlice {
+        guard let comment = first else {
+            return self
+        }
+        let tail = dropFirst()
+        let remainder = shouldDrop(comment)
+            ? tail.drop(while: { $0.depth > comment.depth })
+            : tail
+        return prefix(upTo: tail.startIndex) + remainder.dropResponses(when: shouldDrop)
     }
 }
