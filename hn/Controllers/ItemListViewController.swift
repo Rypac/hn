@@ -1,5 +1,5 @@
 import AsyncDisplayKit
-import Dwifft
+import IGListKit
 import ReSwift
 import SafariServices
 import UIKit
@@ -17,7 +17,6 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
     let itemType: ItemType
     var state = ItemListViewModel()
-    var diffCalculator = ASTableNodeDiffCalculator<ItemListViewModel.Section, Post>()
     var fetchingContext: ASBatchContext?
 
     init(_ storyType: ItemType) {
@@ -25,7 +24,6 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
-        diffCalculator.tableNode = tableNode
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -73,7 +71,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
             return
         }
 
-        let story = state.posts[index.row]
+        let story = state.posts[index.row].post
         tableNode.selectRow(at: index, animated: false, scrollPosition: .none)
         routeTo(original: story, from: self)
     }
@@ -81,6 +79,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
 extension ItemListViewController: StoreSubscriber {
     func newState(state newState: ItemListViewModel) {
+        let oldPosts = state.posts
         state = newState
 
         switch newState.fetching {
@@ -93,7 +92,22 @@ extension ItemListViewController: StoreSubscriber {
             break
         }
 
-        diffCalculator.sectionedValues = SectionedValues([(.items, newState.posts)])
+        let diff = ListDiffPaths(
+            fromSection: 0,
+            toSection: 0,
+            oldArray: oldPosts,
+            newArray: state.posts,
+            option: .equality)
+        if diff.hasChanges {
+            tableNode.performBatchUpdates({
+                tableNode.deleteRows(at: diff.deletes, with: .none)
+                tableNode.insertRows(at: diff.inserts, with: .none)
+                tableNode.reloadRows(at: diff.updates, with: .automatic)
+                for move in diff.moves {
+                    tableNode.moveRow(at: move.from, to: move.to)
+                }
+            })
+        }
 
         if case .none = newState.selectedItem, let index = tableNode.indexPathForSelectedRow {
             tableNode.deselectRow(at: index, animated: true)
@@ -103,15 +117,15 @@ extension ItemListViewController: StoreSubscriber {
 
 extension ItemListViewController: ASTableDataSource {
     func numberOfSections(in tableNode: ASTableNode) -> Int {
-        return diffCalculator.numberOfSections()
+        return 1
     }
 
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-        return diffCalculator.numberOfObjects(inSection: section)
+        return state.posts.count
     }
 
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        let item = diffCalculator.value(atIndexPath: indexPath)
+        let item = state.posts[indexPath.row].post
         return { ItemCellNode(item) }
     }
 }
@@ -127,7 +141,7 @@ extension ItemListViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-        let story = state.posts[indexPath.row]
+        let story = state.posts[indexPath.row].post
         routeTo(story, from: self)
     }
 }

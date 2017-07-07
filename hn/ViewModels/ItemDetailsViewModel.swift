@@ -1,3 +1,32 @@
+import IGListKit
+
+class CommentViewModel {
+    let comment: Comment
+
+    init(_ comment: Comment) {
+        self.comment = comment
+    }
+}
+
+extension CommentViewModel: ListDiffable {
+    func diffIdentifier() -> NSObjectProtocol {
+        return NSNumber(value: comment.id)
+    }
+
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        guard self !== object else {
+            return true
+        }
+        guard let object = object as? CommentViewModel else {
+            return false
+        }
+
+        return comment.depth == object.comment.depth &&
+            comment.actions == object.comment.actions &&
+            comment.content == object.comment.content
+    }
+}
+
 class ItemDetailsViewModel {
     enum Section: Int {
         case parent = 0
@@ -11,8 +40,11 @@ class ItemDetailsViewModel {
 
     lazy var title: String =
         "\(self.allComments.isEmpty ? self.parent.descendants : self.comments.count) Comments"
-    lazy var comments: [Comment] =
-        self.allComments.lazy.filter { !$0.isOrphaned }.dropResponses(where: { $0.actions.collapsed })
+    lazy var comments: [CommentViewModel] =
+        self.allComments.lazy
+            .filter { !$0.isOrphaned }
+            .dropResponses(where: { $0.actions.collapsed })
+            .map(CommentViewModel.init)
 
     init(details: ItemDetails) {
         parent = details.post

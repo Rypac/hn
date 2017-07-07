@@ -1,5 +1,5 @@
 import AsyncDisplayKit
-import Dwifft
+import IGListKit
 import ReSwift
 import UIKit
 
@@ -15,7 +15,6 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }()
 
     var state: ItemDetailsViewModel
-    var diffCalculator = ASTableNodeDiffCalculator<ItemDetailsViewModel.Section, Comment>()
     var fetchingContext: ASBatchContext?
 
     init(_ post: Post) {
@@ -23,7 +22,6 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
-        diffCalculator.tableNode = tableNode
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -63,6 +61,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
 
 extension ItemDetailsViewController: StoreSubscriber {
     func newState(state newState: ItemDetailsViewModel) {
+        let oldComments = state.comments
         state = newState
         title = newState.title
 
@@ -71,20 +70,33 @@ extension ItemDetailsViewController: StoreSubscriber {
             fetchingContext?.completeBatchFetching(true)
         }
 
-        diffCalculator.sectionedValues = SectionedValues([
-            (.parent, []),
-            (.comments, newState.comments)])
+        let diff = ListDiffPaths(
+            fromSection: 1,
+            toSection: 1,
+            oldArray: oldComments,
+            newArray: state.comments,
+            option: .equality)
+        if diff.hasChanges {
+            tableNode.performBatchUpdates({
+                tableNode.deleteRows(at: diff.deletes, with: .bottom)
+                tableNode.insertRows(at: diff.inserts, with: .bottom)
+                tableNode.reloadRows(at: diff.updates, with: .automatic)
+                for move in diff.moves {
+                    tableNode.moveRow(at: move.from, to: move.to)
+                }
+            })
+        }
     }
 }
 
 extension ItemDetailsViewController: ASTableDataSource {
     func numberOfSections(in tableNode: ASTableNode) -> Int {
-        return diffCalculator.numberOfSections()
+        return 2
     }
 
     func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
         return section == ItemDetailsViewModel.Section.comments.rawValue
-            ? diffCalculator.numberOfObjects(inSection: section)
+            ? state.comments.count
             : 1
     }
 
@@ -98,7 +110,7 @@ extension ItemDetailsViewController: ASTableDataSource {
             }
         }
 
-        let comment = diffCalculator.value(atIndexPath: indexPath)
+        let comment = state.comments[indexPath.row].comment
         return {
             let node = CommentCellNode(comment)
             node.selectionStyle = .none
@@ -122,7 +134,7 @@ extension ItemDetailsViewController: ASTableDelegate {
         case .parent?:
             routeTo(original: state.parent, from: self)
         case .comments?:
-            let comment = diffCalculator.value(atIndexPath: indexPath)
+            let comment = state.comments[indexPath.row].comment
             store.dispatch(CommentItemAction.collapse(comment))
         default:
             break

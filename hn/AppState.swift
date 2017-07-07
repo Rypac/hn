@@ -64,3 +64,16 @@ struct User {
     let about: String?
     let delay: Int?
 }
+
+extension ContainerFetchState: Equatable {
+    static func == (_ lhs: ContainerFetchState, _ rhs: ContainerFetchState) -> Bool {
+        switch (lhs, rhs) {
+        case let (.list(lhs), .list(rhs)):
+            return lhs == rhs
+        case let (.items(lhs), .items(rhs)):
+            return lhs == rhs
+        case (.list, .items), (.items, .list):
+            return false
+        }
+    }
+}

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		487A42603799E2F9AC261E74 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A49183E506D24DF83F3F7 /* AppState.swift */; };
 		487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A478D038053F823807284 /* AppReducer.swift */; };
+		81149CD31F10437500291F40 /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81149CD21F10437500291F40 /* IGListKit.framework */; };
 		811683C21EF92F4600680511 /* ItemCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C11EF92F4600680511 /* ItemCellNode.swift */; };
 		811683C51EF9346300680511 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C41EF9346300680511 /* Date.swift */; };
 		8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAB1EF504F800934BA4 /* ItemListAction.swift */; };
@@ -47,9 +48,7 @@
 		81EABE881F0C956400648566 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EABE871F0C956400648566 /* Comment.swift */; };
 		81EABE8A1F0CBBD400648566 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EABE891F0CBBD400648566 /* Content.swift */; };
 		9450BC8B1F0E654E00F203E2 /* Array.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9450BC8A1F0E654E00F203E2 /* Array.swift */; };
-		9481B23C1F088BD900765EDB /* Dwifft.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481B23B1F088BD900765EDB /* Dwifft.swift */; };
 		9481B23E1F088E2900765EDB /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481B23D1F088E2900765EDB /* Item.swift */; };
-		948BDCB01F0877DC00D10013 /* Dwifft.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 948BDCAF1F0877DC00D10013 /* Dwifft.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -79,6 +78,7 @@
 /* Begin PBXFileReference section */
 		487A478D038053F823807284 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppReducer.swift; path = Reducers/AppReducer.swift; sourceTree = "<group>"; };
 		487A49183E506D24DF83F3F7 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
+		81149CD21F10437500291F40 /* IGListKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IGListKit.framework; path = Carthage/Build/iOS/IGListKit.framework; sourceTree = "<group>"; };
 		811683C11EF92F4600680511 /* ItemCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemCellNode.swift; path = Views/ItemCellNode.swift; sourceTree = "<group>"; };
 		811683C41EF9346300680511 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = Extensions/Date.swift; sourceTree = "<group>"; };
 		8118DBA81EF5004200934BA4 /* ReSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReSwift.framework; path = Carthage/Build/iOS/ReSwift.framework; sourceTree = "<group>"; };
@@ -119,7 +119,6 @@
 		81EABE871F0C956400648566 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Comment.swift; path = Models/Comment.swift; sourceTree = "<group>"; };
 		81EABE891F0CBBD400648566 /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Content.swift; path = Models/Content.swift; sourceTree = "<group>"; };
 		9450BC8A1F0E654E00F203E2 /* Array.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Array.swift; path = Extensions/Array.swift; sourceTree = "<group>"; };
-		9481B23B1F088BD900765EDB /* Dwifft.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Dwifft.swift; path = Extensions/Dwifft.swift; sourceTree = "<group>"; };
 		9481B23D1F088E2900765EDB /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Item.swift; path = Models/Item.swift; sourceTree = "<group>"; };
 		948BDCAF1F0877DC00D10013 /* Dwifft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Dwifft.framework; path = Carthage/Build/iOS/Dwifft.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -132,7 +131,7 @@
 				811D4E141EFF2C3700B49F38 /* Alamofire.framework in Frameworks */,
 				811D4E151EFF2C3700B49F38 /* AlamofireNetworkActivityIndicator.framework in Frameworks */,
 				811D4E161EFF2C3700B49F38 /* AsyncDisplayKit.framework in Frameworks */,
-				948BDCB01F0877DC00D10013 /* Dwifft.framework in Frameworks */,
+				81149CD31F10437500291F40 /* IGListKit.framework in Frameworks */,
 				811F6E0D1F04ABD2000C5EE2 /* PromiseKit.framework in Frameworks */,
 				811D4E171EFF2C3700B49F38 /* ReSwift.framework in Frameworks */,
 			);
@@ -203,7 +202,6 @@
 				9450BC8A1F0E654E00F203E2 /* Array.swift */,
 				81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */,
 				811683C41EF9346300680511 /* Date.swift */,
-				9481B23B1F088BD900765EDB /* Dwifft.swift */,
 				811D4E181EFF3CFF00B49F38 /* String.swift */,
 				81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */,
 				8165DF0B1EFBF4980019E801 /* UIKit.swift */,
@@ -215,6 +213,7 @@
 		812126721EC7081800A4B61F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				81149CD21F10437500291F40 /* IGListKit.framework */,
 				948BDCAF1F0877DC00D10013 /* Dwifft.framework */,
 				811F6E0C1F04ABD2000C5EE2 /* PromiseKit.framework */,
 				817CF3AE1EFF64A600B69DF4 /* Nimble.framework */,
@@ -432,7 +431,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AlamofireNetworkActivityIndicator.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AsyncDisplayKit.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Dwifft.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/IGListKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/ReSwift.framework",
 			);
@@ -441,7 +440,7 @@
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AlamofireNetworkActivityIndicator.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AsyncDisplayKit.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Dwifft.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/IGListKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/PromiseKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ReSwift.framework",
 			);
@@ -493,7 +492,6 @@
 				811683C51EF9346300680511 /* Date.swift in Sources */,
 				487A42603799E2F9AC261E74 /* AppState.swift in Sources */,
 				8118DBB01EF5133600934BA4 /* LoadingCellNode.swift in Sources */,
-				9481B23C1F088BD900765EDB /* Dwifft.swift in Sources */,
 				812C83651F00D42500DFC70E /* UIFont.swift in Sources */,
 				81820D511EFFB2B700FB460F /* String+HtmlParsing.swift in Sources */,
 				81EABE841F0C8B9600648566 /* Post.swift in Sources */,

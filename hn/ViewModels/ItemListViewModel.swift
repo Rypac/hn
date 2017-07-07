@@ -1,17 +1,53 @@
-struct ItemListViewModel {
-    enum Section: Int {
-        case items = 0
+import IGListKit
+
+class PostViewModel {
+    let post: Post
+
+    init(_ post: Post) {
+        self.post = post
+    }
+}
+
+extension PostViewModel: ListDiffable {
+    func diffIdentifier() -> NSObjectProtocol {
+        return NSNumber(value: post.id)
     }
 
-    let posts: [Post]
+    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
+        guard self !== object else {
+            return true
+        }
+        guard let object = object as? PostViewModel else {
+            return false
+        }
+
+        return post.actions == object.post.actions &&
+            post.content == object.post.content &&
+            post.descendants == object.post.descendants
+    }
+}
+
+class ItemListViewModel {
     let fetching: ContainerFetchState?
     let hasMoreItems: Bool
     let selectedItem: ItemDetails?
+    fileprivate let allPosts: [Post]
+
+    lazy var posts: [PostViewModel] = self.allPosts.map(PostViewModel.init)
 
     init(list: ItemList = ItemList(), details: ItemDetails? = .none) {
         fetching = list.fetching
-        posts = list.posts
+        allPosts = list.posts
         hasMoreItems = list.ids.isEmpty || list.posts.count < list.ids.count
         selectedItem = details
+    }
+}
+
+extension ItemListViewModel: Equatable {
+    static func == (_ lhs: ItemListViewModel, _ rhs: ItemListViewModel) -> Bool {
+        return lhs.fetching == rhs.fetching &&
+            lhs.hasMoreItems == rhs.hasMoreItems &&
+            lhs.allPosts == rhs.allPosts &&
+            (lhs.selectedItem != nil && rhs.selectedItem != nil)
     }
 }
