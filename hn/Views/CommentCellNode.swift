@@ -23,7 +23,7 @@ final class CommentCellNode: ASCellNode {
         self.text.attributedText = text?.strippingHtmlElements().attributedText
         self.details.attributedText = NSAttributedString(
             string: details,
-            attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
+            attributes: [NSFontAttributeName: Font.sanFransisco.footnote])
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

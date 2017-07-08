@@ -1,6 +1,10 @@
 import UIKit
 
 extension UIFont {
+    convenience init?(name: String, textStyle: UIFontTextStyle) {
+        self.init(name: name, size: UIFont.preferredFont(forTextStyle: textStyle).pointSize)
+    }
+
     var italicVariant: UIFont? {
         return variantWith(trait: .traitItalic)
     }

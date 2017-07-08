@@ -16,7 +16,7 @@ enum Formatting {
 
 extension FormattedString {
     var attributedText: NSAttributedString {
-        let font = UIFont.preferredFont(forTextStyle: .body)
+        let font = Font.sanFransisco.body
         let formatted = NSMutableAttributedString(
             string: text,
             attributes: [NSFontAttributeName: font])
@@ -33,9 +33,7 @@ extension FormattedString {
                     formatted.addAttributes([NSFontAttributeName: italic], range: nsRange)
                 }
             case .code:
-                if let monospace = font.monospaceVariant {
-                    formatted.addAttributes([NSFontAttributeName: monospace], range: nsRange)
-                }
+                formatted.addAttributes([NSFontAttributeName: Font.menlo.body], range: nsRange)
             case .url:
                 formatted.addAttributes([NSLinkAttributeName: text], range: nsRange)
             default:
