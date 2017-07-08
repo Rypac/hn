@@ -13,6 +13,7 @@ enum CommentListNavigationAction: Action {
 
 enum CommentItemAction: Action {
     case collapse(Comment)
+    case expand(Comment)
 }
 
 func fetchComments(forPost post: Post) -> Action {
