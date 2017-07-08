@@ -20,13 +20,13 @@ final class ItemCellNode: ASCellNode {
 
         text.attributedText = NSAttributedString(
             string: content.title,
-            attributes: [NSFontAttributeName: Font.sanFransisco.body])
+            attributes: [NSFontAttributeName: Font.avenirNext.body])
         details.attributedText = NSAttributedString(
             string: [author, score, time].joined(separator: " "),
-            attributes: [NSFontAttributeName: Font.sanFransisco.footnote])
+            attributes: [NSFontAttributeName: Font.avenirNext.footnote])
         comments.attributedText = NSAttributedString(
             string: "\(post.descendants)",
-            attributes: [NSFontAttributeName: Font.sanFransisco.title3])
+            attributes: [NSFontAttributeName: Font.avenirNext.title3])
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

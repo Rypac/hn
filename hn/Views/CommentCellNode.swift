@@ -20,10 +20,12 @@ final class CommentCellNode: ASCellNode {
         let comment = viewModel.comment
         let (text, details) = comment.cellText()
 
-        self.text.attributedText = text?.strippingHtmlElements().attributedText
+        self.text.attributedText = text?
+            .strippingHtmlElements()
+            .attributedText(withFont: Font.avenirNext)
         self.details.attributedText = NSAttributedString(
             string: details,
-            attributes: [NSFontAttributeName: Font.sanFransisco.footnote])
+            attributes: [NSFontAttributeName: Font.avenirNext.footnote])
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
