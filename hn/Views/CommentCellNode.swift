@@ -4,29 +4,42 @@ import UIKit
 final class CommentCellNode: ASCellNode {
     let text = ASTextNode()
     let details = ASTextNode()
-    let depth: CGFloat
+    var model: CommentViewModel {
+        didSet {
+            if model.comment.actions.collapsed != oldValue.comment.actions.collapsed {
+                setNeedsLayout()
+            }
+        }
+    }
 
-    init(_ comment: Comment) {
-        self.depth = CGFloat(comment.depth)
+    init(_ viewModel: CommentViewModel) {
+        model = viewModel
         super.init()
         automaticallyManagesSubnodes = true
 
+        let comment = viewModel.comment
         let (text, details) = comment.cellText()
 
-        self.text.attributedText = (comment.actions.collapsed ? "..." : text)?.strippingHtmlElements().attributedText
+        self.text.attributedText = text?.strippingHtmlElements().attributedText
         self.details.attributedText = NSAttributedString(
             string: details,
             attributes: [NSFontAttributeName: UIFont.preferredFont(forTextStyle: .footnote)])
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        let depth = min(CGFloat(model.comment.depth), 12)
+        let children = model.comment.actions.collapsed ? [details] : [details, text]
         return ASInsetLayoutSpec(
-            insets: UIEdgeInsets(top: 8, left: 8 + 10 * depth, bottom: 8, right: 8),
+            insets: UIEdgeInsets(
+                top: UIEdgeInsets.Default.vertical,
+                left: UIEdgeInsets.Default.horizontal + 10 * depth,
+                bottom: UIEdgeInsets.Default.vertical,
+                right: UIEdgeInsets.Default.horizontal),
             child: ASStackLayoutSpec(
                 direction: .vertical,
                 spacing: 4,
                 flex: (shrink: 1.0, grow: 1.0),
-                children: [details, text]))
+                children: children))
     }
 }
 

@@ -31,7 +31,7 @@ final class ItemCellNode: ASCellNode {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         return ASInsetLayoutSpec(
-            insets: UIEdgeInsets(horizontal: 8, vertical: 6),
+            insets: UIEdgeInsets.Default.tableViewCell,
             child: ASStackLayoutSpec(
                 direction: .horizontal,
                 spacing: 20,

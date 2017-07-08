@@ -14,13 +14,9 @@ extension CommentViewModel: ListDiffable {
     }
 
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        guard self !== object else {
-            return true
-        }
         guard let object = object as? CommentViewModel else {
             return false
         }
-
         return comment.depth == object.comment.depth &&
             comment.actions == object.comment.actions &&
             comment.content == object.comment.content
@@ -33,20 +29,16 @@ class ItemDetailsViewModel {
         case comments = 1
     }
 
+    let title: String
     let parent: Post
     let fetching: FetchState?
     let hasMoreComments: Bool
     fileprivate let allComments: [Comment]
 
-    lazy var title: String =
-        "\(self.allComments.isEmpty ? self.parent.descendants : self.comments.count) Comments"
-    lazy var comments: [CommentViewModel] =
-        self.allComments.lazy
-            .filter { !$0.isOrphaned }
-            .dropResponses(where: { $0.actions.collapsed })
-            .map(CommentViewModel.init)
+    lazy var comments: [CommentViewModel] = self.allComments.transformVisible()
 
     init(details: ItemDetails) {
+        title = "\(max(details.post.descendants, details.comments.count)) Comments"
         parent = details.post
         fetching = details.fetching
         allComments = details.comments
@@ -65,20 +57,23 @@ extension ItemDetailsViewModel: Equatable {
 }
 
 extension Array where Iterator.Element == Comment {
-    func dropResponses(where shouldDrop: (Comment) -> Bool) -> Array {
-        return Array(sliced.dropResponses(when: shouldDrop))
-    }
-}
+    fileprivate func transformVisible() -> [CommentViewModel] {
+        var viewModels: [CommentViewModel] = []
 
-extension ArraySlice where Iterator.Element == Comment {
-    func dropResponses(when shouldDrop: (Comment) -> Bool) -> ArraySlice {
-        guard let comment = first else {
-            return self
+        var index = startIndex
+        while index < endIndex {
+            let comment = self[index]
+            index += 1
+            if !comment.isOrphaned {
+                viewModels.append(CommentViewModel(comment))
+                if comment.actions.collapsed {
+                    while index < endIndex && self[index].depth > comment.depth {
+                        index += 1
+                    }
+                }
+            }
         }
-        let tail = dropFirst()
-        let remaining = shouldDrop(comment)
-            ? tail.drop(while: { $0.depth > comment.depth })
-            : tail
-        return prefix(upTo: tail.startIndex) + remaining.dropResponses(when: shouldDrop)
+
+        return viewModels
     }
 }

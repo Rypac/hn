@@ -14,13 +14,9 @@ extension PostViewModel: ListDiffable {
     }
 
     func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        guard self !== object else {
-            return true
-        }
         guard let object = object as? PostViewModel else {
             return false
         }
-
         return post.actions == object.post.actions &&
             post.content == object.post.content &&
             post.descendants == object.post.descendants
@@ -47,7 +43,10 @@ extension ItemListViewModel: Equatable {
     static func == (_ lhs: ItemListViewModel, _ rhs: ItemListViewModel) -> Bool {
         return lhs.fetching == rhs.fetching &&
             lhs.hasMoreItems == rhs.hasMoreItems &&
-            lhs.allPosts == rhs.allPosts &&
-            (lhs.selectedItem != nil && rhs.selectedItem != nil)
+            (
+                (lhs.selectedItem == nil && rhs.selectedItem == nil) ||
+                (lhs.selectedItem != nil && rhs.selectedItem != nil)
+            ) &&
+            lhs.allPosts == rhs.allPosts
     }
 }

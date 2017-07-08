@@ -35,6 +35,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
         navigationController.navigationBar.isTranslucent = false
 
         window = UIWindow(frame: UIScreen.main.bounds)
+        window?.tintColor = UIColor.Apple.orange
         window?.rootViewController = navigationController
         window?.makeKeyAndVisible()
         return true

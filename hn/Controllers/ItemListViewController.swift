@@ -100,9 +100,9 @@ extension ItemListViewController: StoreSubscriber {
             option: .equality)
         if diff.hasChanges {
             tableNode.performBatchUpdates({
+                tableNode.reloadRows(at: diff.updates, with: .automatic)
                 tableNode.deleteRows(at: diff.deletes, with: .none)
                 tableNode.insertRows(at: diff.inserts, with: .none)
-                tableNode.reloadRows(at: diff.updates, with: .automatic)
                 for move in diff.moves {
                     tableNode.moveRow(at: move.from, to: move.to)
                 }

@@ -78,9 +78,14 @@ extension ItemDetailsViewController: StoreSubscriber {
             option: .equality)
         if diff.hasChanges {
             tableNode.performBatchUpdates({
-                tableNode.deleteRows(at: diff.deletes, with: .bottom)
-                tableNode.insertRows(at: diff.inserts, with: .bottom)
-                tableNode.reloadRows(at: diff.updates, with: .automatic)
+                for indexPath in diff.updates {
+                    if let node = tableNode.nodeForRow(at: indexPath) as? CommentCellNode {
+                        node.model = state.comments[indexPath.row]
+                        node.transitionLayout(withAnimation: true, shouldMeasureAsync: true)
+                    }
+                }
+                tableNode.deleteRows(at: diff.deletes, with: .fade)
+                tableNode.insertRows(at: diff.inserts, with: .fade)
                 for move in diff.moves {
                     tableNode.moveRow(at: move.from, to: move.to)
                 }
@@ -110,7 +115,7 @@ extension ItemDetailsViewController: ASTableDataSource {
             }
         }
 
-        let comment = state.comments[indexPath.row].comment
+        let comment = state.comments[indexPath.row]
         return {
             let node = CommentCellNode(comment)
             node.selectionStyle = .none

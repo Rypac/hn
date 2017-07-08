@@ -27,7 +27,7 @@ final class ItemDetailCellNode: ASCellNode {
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
         return ASInsetLayoutSpec(
-            insets: UIEdgeInsets(all: 8),
+            insets: UIEdgeInsets.Default.tableViewCell,
             child: ASStackLayoutSpec(
                 direction: .vertical,
                 spacing: 4,

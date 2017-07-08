@@ -14,6 +14,13 @@ extension UIEdgeInsets {
     init(horizontal: CGFloat, vertical: CGFloat) {
         self.init(top: vertical, left: horizontal, bottom: vertical, right: horizontal)
     }
+
+    struct Default {
+        static let vertical: CGFloat = 8
+        static let horizontal: CGFloat = 15
+
+        static let tableViewCell = UIEdgeInsets(horizontal: horizontal, vertical: vertical)
+    }
 }
 
 extension UIRefreshControl {
