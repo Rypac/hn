@@ -80,7 +80,7 @@ extension Algolia.Endpoint: URLConvertible {
     static let baseUrl = "http://hn.algolia.com/api/v1"
 
     func asURL() throws -> URL {
-        return try "\(Algolia.Endpoint.baseUrl)/\(path)".asURL()
+        return try "\(Algolia.Endpoint.baseUrl)\(path)".asURL()
     }
 
     var path: String {

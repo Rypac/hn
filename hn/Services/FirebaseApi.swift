@@ -87,7 +87,7 @@ extension Firebase.Endpoint: URLConvertible {
     static let baseUrl = "https://hacker-news.firebaseio.com/v0"
 
     func asURL() throws -> URL {
-        return try "\(Firebase.Endpoint.baseUrl)/\(path)".asURL()
+        return try "\(Firebase.Endpoint.baseUrl)\(path)".asURL()
     }
 
     var path: String {
