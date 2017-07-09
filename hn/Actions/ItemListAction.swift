@@ -74,27 +74,26 @@ func fetchNextItemBatch(_ type: ItemType) -> AsyncActionCreator<AppState, Void> 
     }
 }
 
-func routeTo(_ post: Post, from viewController: UIViewController?) {
-    guard let navigationController = viewController?.navigationController else {
-        return
+func routeTo(_ post: Post, from viewController: UIViewController) -> Action? {
+    guard let navigationController = viewController.navigationController else {
+        return .none
     }
 
     navigationController.pushViewController(ItemDetailsViewController(post), animated: true)
-    store.dispatch(ItemListNavigationAction.view(post))
+    return ItemListNavigationAction.view(post)
 }
 
-func routeTo(original post: Post, from viewController: UIViewController?) {
+func routeTo(original post: Post, from viewController: UIViewController) -> Action? {
     guard
-        let controller = viewController,
         let content = post.content.details,
         let urlString = content.url,
         let url = URL(string: urlString)
     else {
-        return
+        return .none
     }
 
     let safari = SFSafariViewController(url: url)
-    safari.delegate = controller as? SFSafariViewControllerDelegate
-    controller.present(safari, animated: true, completion: nil)
-    store.dispatch(ItemListNavigationAction.viewOriginal(post))
+    safari.delegate = viewController as? SFSafariViewControllerDelegate
+    viewController.present(safari, animated: true, completion: nil)
+    return ItemListNavigationAction.viewOriginal(post)
 }

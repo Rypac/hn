@@ -34,7 +34,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
         let longPressGesture = UILongPressGestureRecognizer(
             target: self,
             action: #selector(longPress(gesture:)))
-        longPressGesture.minimumPressDuration = 0.4
+        longPressGesture.minimumPressDuration = 0.35
         longPressGesture.delegate = self
         tableNode.view.addGestureRecognizer(longPressGesture)
     }
@@ -159,7 +159,9 @@ extension ItemDetailsViewController: ASTableDelegate {
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.as(ItemDetailsViewModel.Section.self) {
         case .parent?:
-            routeTo(original: state.parent, from: self)
+            if let viewOriginalAction = routeTo(original: state.parent, from: self) {
+                store.dispatch(viewOriginalAction)
+            }
         case .comments?:
             let comment = state.comments[indexPath.row].comment
             if comment.actions.collapsed {

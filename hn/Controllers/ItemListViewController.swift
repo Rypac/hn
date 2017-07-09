@@ -72,7 +72,9 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
         let story = state.posts[index.row].post
         tableNode.selectRow(at: index, animated: false, scrollPosition: .none)
-        routeTo(original: story, from: self)
+        if let viewOriginalAction = routeTo(original: story, from: self) {
+            store.dispatch(viewOriginalAction)
+        }
     }
 }
 
@@ -143,7 +145,9 @@ extension ItemListViewController: ASTableDelegate {
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         let story = state.posts[indexPath.row].post
-        routeTo(story, from: self)
+        if let viewStoryAction = routeTo(story, from: self) {
+            store.dispatch(viewStoryAction)
+        }
     }
 }
 
