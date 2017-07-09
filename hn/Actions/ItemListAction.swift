@@ -25,32 +25,24 @@ enum ItemListNavigationAction: Action {
     case dismissOriginal
 }
 
-func fetchItems(_ type: ItemType) -> AsyncActionCreator<AppState, Void> {
-    return { state, store in
-        guard let itemList = state.tabs[type] else {
-            return .none
-        }
-        let action = itemList.ids.isEmpty ? fetchItemList : fetchNextItemBatch
-        return action(type)(state, store)
-    }
-}
+typealias StoryListActionCreator = (ItemType) -> AsyncActionCreator<AppState, Void>
 
-func fetchItemList(_ type: ItemType) -> AsyncActionCreator<AppState, Void> {
-    return { _, store in
-        return firstly {
+func fetchItemList(_ request: @escaping (ItemType) -> Promise<[Id]>) -> StoryListActionCreator {
+    return { type in { _, store in
+        firstly {
             store.dispatch(ItemListFetchAction(type, .ids(.request)))
         }.then {
-            Firebase.fetch(stories: type)
+            request(type)
         }.then { ids in
             store.dispatch(ItemListFetchAction(type, .ids(.success(result: ids))))
         }.catch { error in
             store.dispatch(ItemListFetchAction(type, .ids(.error(error: error))))
-        }
+        } }
     }
 }
 
-func fetchNextItemBatch(_ type: ItemType) -> AsyncActionCreator<AppState, Void> {
-    return { state, store in
+func fetchNextItemBatch(_ request: @escaping (Id) -> Promise<Item>) -> StoryListActionCreator {
+    return { type in { state, store in
         guard
             let state = state.tabs[type],
             state.ids.count > state.posts.count
@@ -65,22 +57,26 @@ func fetchNextItemBatch(_ type: ItemType) -> AsyncActionCreator<AppState, Void> 
         return firstly {
             store.dispatch(ItemListFetchAction(type, .items(.request)))
         }.then {
-            when(fulfilled: ids.map(Firebase.fetch(item:)))
+            when(fulfilled: ids.map(request))
         }.then { items in
             store.dispatch(ItemListFetchAction(type, .items(.success(result: items))))
         }.catch { error in
             store.dispatch(ItemListFetchAction(type, .items(.error(error: error))))
         }
-    }
+    } }
 }
 
-func routeTo(_ post: Post, from viewController: UIViewController) -> Action? {
-    guard let navigationController = viewController.navigationController else {
-        return .none
-    }
+func routeTo(_ post: Post, from viewController: UIViewController) -> Store<AppState>.ActionCreator {
+    return { state, _ in
+        guard let navigationController = viewController.navigationController else {
+            return .none
+        }
 
-    navigationController.pushViewController(ItemDetailsViewController(post), animated: true)
-    return ItemListNavigationAction.view(post)
+        let controller = ItemDetailsViewController(
+            state: ItemDetailsViewModel(details: ItemDetails(post), repo: state.repository))
+        navigationController.pushViewController(controller, animated: true)
+        return ItemListNavigationAction.view(post)
+    }
 }
 
 func routeTo(original post: Post, from viewController: UIViewController) -> Action? {

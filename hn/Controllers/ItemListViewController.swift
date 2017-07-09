@@ -15,11 +15,10 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
         return refresh
     }()
 
-    let itemType: ItemType
-    var state = ItemListViewModel()
+    var state: ItemListViewModel
 
-    init(_ storyType: ItemType) {
-        self.itemType = storyType
+    init(state: ItemListViewModel) {
+        self.state = state
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
@@ -44,11 +43,15 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        parent?.title = itemType.description
-        let type = itemType
+        let type = state.itemType
+        parent?.title = type.description
         store.subscribe(self) { subscription in
             subscription.select { state in
-                ItemListViewModel(list: state.tabs[type]!, details: state.selectedItem)
+                ItemListViewModel(
+                    type: type,
+                    list: state.tabs[type]!,
+                    details: state.selectedItem,
+                    repo: state.repository)
             }
         }
     }
@@ -59,7 +62,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
     }
 
     func refreshData(sender: UIRefreshControl) {
-        store.dispatch(fetchItemList(itemType))
+        store.dispatch(fetchItemList(state.repo.fetchItems)(state.itemType))
     }
 
     func longPress(gesture: UILongPressGestureRecognizer) {
@@ -87,7 +90,7 @@ extension ItemListViewController: StoreSubscriber {
         case .none:
             refreshControl.manuallyBeginRefreshing()
         case .list(.finished)?:
-            store.dispatch(fetchItems(itemType))
+            store.dispatch(fetchNextItemBatch(state.repo.fetchItem)(state.itemType))
         case .items(.finished)?:
             refreshControl.endRefreshing()
         default:
@@ -138,16 +141,14 @@ extension ItemListViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        store.dispatch(async: fetchItems(itemType)).regardless {
+        store.dispatch(async: fetchNextItemBatch(state.repo.fetchItem)(state.itemType)).regardless {
             context.completeBatchFetching(true)
         }
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         let story = state.posts[indexPath.row].post
-        if let viewStoryAction = routeTo(story, from: self) {
-            store.dispatch(viewStoryAction)
-        }
+        store.dispatch(routeTo(story, from: self))
     }
 }
 

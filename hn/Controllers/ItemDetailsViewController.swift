@@ -16,8 +16,8 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
 
     var state: ItemDetailsViewModel
 
-    init(_ post: Post) {
-        state = ItemDetailsViewModel(details: ItemDetails(post))
+    init(state: ItemDetailsViewModel) {
+        self.state = state
         super.init(node: ASTableNode())
         tableNode.delegate = self
         tableNode.dataSource = self
@@ -43,7 +43,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
         super.viewWillAppear(animated)
         store.subscribe(self) { subscription in
             subscription.select { state in
-                ItemDetailsViewModel(details: state.selectedItem!)
+                ItemDetailsViewModel(details: state.selectedItem!, repo: state.repository)
             }
         }
     }
@@ -61,7 +61,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }
 
     func refreshData(sender: UIRefreshControl) {
-        store.dispatch(fetchComments(forPost: state.parent.id))
+        store.dispatch(fetchComments(state.repo.fetchItem)(state.parent.id))
     }
 }
 
@@ -151,7 +151,7 @@ extension ItemDetailsViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        store.dispatch(async: fetchComments(forPost: state.parent.id)).regardless {
+        store.dispatch(async: fetchComments(state.repo.fetchItem)(state.parent.id)).regardless {
             context.completeBatchFetching(true)
         }
     }

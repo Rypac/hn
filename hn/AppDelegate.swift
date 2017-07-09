@@ -3,18 +3,21 @@ import AsyncDisplayKit
 import ReSwift
 import UIKit
 
-let store = Store<AppState>(
-    reducer: appReducer,
-    state: AppState(
-        tabs: [
-            .topStories: ItemList(),
-            .newStories: ItemList(),
-            .bestStories: ItemList(),
-            .askHN: ItemList(),
-            .showHN: ItemList()
-        ],
-        selectedTab: .none,
-        selectedItem: .none))
+let defaultAppState = AppState(
+    repository: Repository(
+        fetchItems: Firebase.fetch(stories:),
+        fetchItem: Firebase.fetch(item:)),
+    tabs: [
+        .topStories: ItemList(),
+        .newStories: ItemList(),
+        .bestStories: ItemList(),
+        .askHN: ItemList(),
+        .showHN: ItemList()
+    ],
+    selectedTab: .none,
+    selectedItem: .none)
+
+let store = Store<AppState>(reducer: appReducer, state: defaultAppState)
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDelegate {
@@ -44,7 +47,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
 
 func visibleTabs(_ tabs: [ItemType: ItemList]) -> [UIViewController] {
     return tabs.enumerated().map { (index, tab) in
-        let controller = ItemListViewController(tab.key)
+        let state = store.state!
+        let controller = ItemListViewController(
+            state: ItemListViewModel(type: tab.key, list: tab.value, details: .none, repo: state.repository))
         controller.tabBarItem = UITabBarItem(title: tab.key.description, image: tab.key.image, tag: index)
         return controller
     }

@@ -19,18 +19,18 @@ enum CommentItemAction: Action {
     case expand(Comment)
 }
 
-func fetchComments(forPost post: Id) -> AsyncActionCreator<AppState, Void> {
-    return { _, store in
-        return firstly {
+func fetchComments(_ request: @escaping (Id) -> Promise<Item>) -> (Id) -> AsyncActionCreator<AppState, Void> {
+    return { id in { _, store in
+        firstly {
             store.dispatch(CommentListFetchAction(.request))
         }.then {
-            fetchSiblingsForId(with: Algolia.fetch(item:))(post)
+            fetchSiblingsForId(with: request)(id)
         }.then { item in
             store.dispatch(CommentListFetchAction(.success(result: item)))
         }.catch { error in
             store.dispatch(CommentListFetchAction(.error(error: error)))
         }
-    }
+    } }
 }
 
 func fetchSiblingsForId(with request: @escaping (Id) -> Promise<Item>) -> (Id) -> Promise<Item> {

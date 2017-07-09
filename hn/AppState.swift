@@ -1,9 +1,16 @@
+import PromiseKit
 import ReSwift
 
 struct AppState: StateType {
+    var repository: Repository
     var tabs = [ItemType: ItemList]()
     var selectedTab: ItemType?
     var selectedItem: ItemDetails?
+}
+
+struct Repository {
+    var fetchItems: (ItemType) -> Promise<[Id]>
+    var fetchItem: (Id) -> Promise<Item>
 }
 
 struct ItemList {

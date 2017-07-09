@@ -2,7 +2,7 @@
 import ReSwift
 
 func appReducer(action: Action, state: AppState?) -> AppState {
-    var state = state ?? AppState()
+    var state = state ?? defaultAppState
 
     switch action {
     case let action as ItemListFetchAction:
@@ -45,8 +45,10 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         switch action {
         case let .view(post):
             state.selectedItem = ItemDetails(post)
+            state.repository.fetchItem = Algolia.fetch(item:)
         case .dismiss:
             state.selectedItem = .none
+            state.repository.fetchItem = Firebase.fetch(item:)
         default:
             break
         }
