@@ -27,7 +27,7 @@ func fetchComments(_ request: @escaping (Id) -> Promise<Item>) -> (Id) -> AsyncA
             fetchSiblingsForId(with: request)(id)
         }.then { item in
             store.dispatch(CommentListFetchAction(.success(result: item)))
-        }.catch { error in
+        }.recover { error in
             store.dispatch(CommentListFetchAction(.error(error: error)))
         }
     } }

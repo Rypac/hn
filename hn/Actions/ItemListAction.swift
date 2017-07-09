@@ -35,7 +35,7 @@ func fetchItemList(_ request: @escaping (ItemType) -> Promise<[Id]>) -> StoryLis
             request(type)
         }.then { ids in
             store.dispatch(ItemListFetchAction(type, .ids(.success(result: ids))))
-        }.catch { error in
+        }.recover { error in
             store.dispatch(ItemListFetchAction(type, .ids(.error(error: error))))
         } }
     }
@@ -60,7 +60,7 @@ func fetchNextItemBatch(_ request: @escaping (Id) -> Promise<Item>) -> StoryList
             when(fulfilled: ids.map(request))
         }.then { items in
             store.dispatch(ItemListFetchAction(type, .items(.success(result: items))))
-        }.catch { error in
+        }.recover { error in
             store.dispatch(ItemListFetchAction(type, .items(.error(error: error))))
         }
     } }
