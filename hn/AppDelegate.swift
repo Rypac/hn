@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
 func visibleTabs(_ tabs: [ItemType: ItemList]) -> [UIViewController] {
     return tabs.enumerated().map { (index, tab) in
         let controller = ItemListViewController(tab.key)
-        controller.tabBarItem = UITabBarItem(title: tab.key.description, image: .none, tag: index)
+        controller.tabBarItem = UITabBarItem(title: tab.key.description, image: tab.key.image, tag: index)
         return controller
     }
 }
