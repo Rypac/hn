@@ -30,13 +30,6 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     override func viewDidLoad() {
         super.viewDidLoad()
         tableNode.view.refreshControl = refreshControl
-
-        let longPressGesture = UILongPressGestureRecognizer(
-            target: self,
-            action: #selector(longPress(gesture:)))
-        longPressGesture.minimumPressDuration = 0.35
-        longPressGesture.delegate = self
-        tableNode.view.addGestureRecognizer(longPressGesture)
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -62,23 +55,6 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
 
     func refreshData(sender: UIRefreshControl) {
         store.dispatch(fetchComments(state.repo.fetchItem)(state.parent.id))
-    }
-}
-
-extension ItemDetailsViewController: UIGestureRecognizerDelegate {
-    func longPress(gesture: UILongPressGestureRecognizer) {
-        guard
-            gesture.state == UIGestureRecognizerState.began,
-            let index = tableNode.indexPathForRow(at: gesture.location(in: tableNode.view)),
-            index.as(ItemDetailsViewModel.Section.self) == .comments
-        else {
-            return
-        }
-
-        let comment = state.comments[index.row].comment
-        if !comment.actions.collapsed {
-            store.dispatch(CommentItemAction.collapse(comment))
-        }
     }
 }
 
@@ -165,9 +141,10 @@ extension ItemDetailsViewController: ASTableDelegate {
             }
         case .comments?:
             let comment = state.comments[indexPath.row].comment
-            if comment.actions.collapsed {
-                store.dispatch(CommentItemAction.expand(comment))
-            }
+            let action = comment.actions.collapsed
+                ? CommentItemAction.expand
+                : CommentItemAction.collapse
+            store.dispatch(action(comment))
         default:
             break
         }

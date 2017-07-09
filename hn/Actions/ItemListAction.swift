@@ -44,15 +44,15 @@ func fetchItemList(_ request: @escaping (ItemType) -> Promise<[Id]>) -> StoryLis
 func fetchNextItemBatch(_ request: @escaping (Id) -> Promise<Item>) -> StoryListActionCreator {
     return { type in { state, store in
         guard
-            let state = state.tabs[type],
-            state.ids.count > state.posts.count
+            let itemList = state.tabs[type],
+            itemList.ids.count > itemList.posts.count
         else {
             return .none
         }
 
-        let start = state.posts.count
-        let end = start + min(16, state.ids.count - state.posts.count)
-        let ids = Array(state.ids[start..<end])
+        let start = itemList.posts.count
+        let end = start + min(16, itemList.ids.count - itemList.posts.count)
+        let ids = itemList.ids[start..<end]
 
         return firstly {
             store.dispatch(ItemListFetchAction(type, .items(.request)))
