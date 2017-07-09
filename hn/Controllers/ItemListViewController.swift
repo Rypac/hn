@@ -17,7 +17,6 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
     let itemType: ItemType
     var state = ItemListViewModel()
-    var fetchingContext: ASBatchContext?
 
     init(_ storyType: ItemType) {
         self.itemType = storyType
@@ -87,7 +86,6 @@ extension ItemListViewController: StoreSubscriber {
             refreshControl.manuallyBeginRefreshing(inView: tableNode.view)
         case .items(.finished)?:
             refreshControl.endRefreshing()
-            fetchingContext?.completeBatchFetching(true)
         default:
             break
         }
@@ -136,8 +134,9 @@ extension ItemListViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        fetchingContext = context
-        store.dispatch(fetchItems(itemType))
+        store.dispatch(async: fetchItems(itemType)).regardless {
+            context.completeBatchFetching(true)
+        }
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {

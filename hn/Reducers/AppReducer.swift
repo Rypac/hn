@@ -28,12 +28,10 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         switch action {
         case let .view(post):
             state.selectedItem = ItemDetails(post)
-        case let .viewOriginal(post):
-            state.selectedItem = ItemDetails(post)
         case .dismiss:
             state.selectedItem = .none
-        case .dismissOriginal:
-            state.selectedItem = .none
+        default:
+            break
         }
     case let action as CommentListFetchAction:
         switch action {

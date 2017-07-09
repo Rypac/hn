@@ -36,6 +36,8 @@
 		8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165DF0B1EFBF4980019E801 /* UIKit.swift */; };
 		817773E51F11BCBC00755E6C /* BindableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817773E41F11BCBC00755E6C /* BindableView.swift */; };
 		817773E71F11CBCF00755E6C /* ItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817773E61F11CBCF00755E6C /* ItemType.swift */; };
+		8178ACDE1F12053200811FD8 /* ReSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178ACDD1F12053200811FD8 /* ReSwift.swift */; };
+		8178ACE01F12131E00811FD8 /* PromiseKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178ACDF1F12131E00811FD8 /* PromiseKit.swift */; };
 		817CF3C31EFF65F600B69DF4 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AE1EFF64A600B69DF4 /* Nimble.framework */; };
 		817CF3C41EFF65F600B69DF4 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AF1EFF64A600B69DF4 /* Quick.framework */; };
 		817CF3C61EFF660B00B69DF4 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 817CF3AE1EFF64A600B69DF4 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -109,6 +111,8 @@
 		8165DF0B1EFBF4980019E801 /* UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIKit.swift; path = Extensions/UIKit.swift; sourceTree = "<group>"; };
 		817773E41F11BCBC00755E6C /* BindableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BindableView.swift; path = Views/BindableView.swift; sourceTree = "<group>"; };
 		817773E61F11CBCF00755E6C /* ItemType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemType.swift; path = Models/ItemType.swift; sourceTree = "<group>"; };
+		8178ACDD1F12053200811FD8 /* ReSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReSwift.swift; path = Extensions/ReSwift.swift; sourceTree = "<group>"; };
+		8178ACDF1F12131E00811FD8 /* PromiseKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PromiseKit.swift; path = Extensions/PromiseKit.swift; sourceTree = "<group>"; };
 		817CF3AE1EFF64A600B69DF4 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		817CF3AF1EFF64A600B69DF4 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		817CF3B61EFF656100B69DF4 /* hnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -210,6 +214,8 @@
 				815739981EFE897300EB5CF3 /* Alamofire.swift */,
 				81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */,
 				811683C41EF9346300680511 /* Date.swift */,
+				8178ACDF1F12131E00811FD8 /* PromiseKit.swift */,
+				8178ACDD1F12053200811FD8 /* ReSwift.swift */,
 				811D4E181EFF3CFF00B49F38 /* String.swift */,
 				81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */,
 				814AD7A61F10EB19003316CA /* UIColor.swift */,
@@ -496,6 +502,7 @@
 				8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */,
 				812126771EC7088D00A4B61F /* FirebaseApi.swift in Sources */,
 				814AD7A71F10EB19003316CA /* UIColor.swift in Sources */,
+				8178ACE01F12131E00811FD8 /* PromiseKit.swift in Sources */,
 				8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */,
 				9481B23E1F088E2900765EDB /* Item.swift in Sources */,
 				81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */,
@@ -510,6 +517,7 @@
 				814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */,
 				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,
 				947778A61F11A869002BA05E /* Image.swift in Sources */,
+				8178ACDE1F12053200811FD8 /* ReSwift.swift in Sources */,
 				81EABE8A1F0CBBD400648566 /* Content.swift in Sources */,
 				81E2A5601EF7DC40004045FF /* ItemDetailsViewController.swift in Sources */,
 				811683C51EF9346300680511 /* Date.swift in Sources */,

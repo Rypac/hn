@@ -22,7 +22,7 @@ enum ItemListNavigationAction: Action {
     case dismissOriginal
 }
 
-func fetchItems(_ type: ItemType) -> Store<AppState>.ActionCreator {
+func fetchItems(_ type: ItemType) -> AsyncActionCreator<AppState, Void> {
     return { state, store in
         guard let itemList = state.tabs[type] else {
             return .none
@@ -33,20 +33,21 @@ func fetchItems(_ type: ItemType) -> Store<AppState>.ActionCreator {
     }
 }
 
-func fetchItemList(_ type: ItemType) -> Action {
-    firstly {
+func fetchItemList(_ type: ItemType) -> Promise<Void> {
+    return firstly {
+        store.dispatch(ItemListFetchAction(itemType: type, action: .fetch))
+    }.then {
         Firebase.fetch(stories: type)
     }.then { ids in
         store.dispatch(ItemListFetchAction(itemType: type, action: .fetchedIds(ids)))
     }.then {
         store.dispatch(fetchNextItemBatch(type))
-    }.catch { error in
+    }.recover { error in
         print("Failed to fetch \(type) list: \(error)")
     }
-    return ItemListFetchAction(itemType: type, action: .fetch)
 }
 
-func fetchNextItemBatch(_ type: ItemType) -> Store<AppState>.ActionCreator {
+func fetchNextItemBatch(_ type: ItemType) -> AsyncActionCreator<AppState, Void> {
     return { state, store in
         guard
             let state = state.tabs[type],
@@ -59,14 +60,15 @@ func fetchNextItemBatch(_ type: ItemType) -> Store<AppState>.ActionCreator {
         let end = start + min(16, state.ids.count - state.posts.count)
         let ids = Array(state.ids[start..<end])
 
-        firstly {
+        return firstly {
+            store.dispatch(ItemListFetchAction(itemType: type, action: .fetchItems(ids: ids)))
+        }.then {
             when(fulfilled: ids.map(Firebase.fetch(item:)))
         }.then { items in
             store.dispatch(ItemListFetchAction(itemType: type, action: .fetchedItems(items)))
-        }.catch { error in
+        }.recover { error in
             print("Failed to fetch items: \(error)")
         }
-        return ItemListFetchAction(itemType: type, action: .fetchItems(ids: ids))
     }
 }
 

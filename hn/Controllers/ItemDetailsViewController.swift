@@ -15,7 +15,6 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }()
 
     var state: ItemDetailsViewModel
-    var fetchingContext: ASBatchContext?
 
     init(_ post: Post) {
         state = ItemDetailsViewModel(details: ItemDetails(post))
@@ -90,7 +89,6 @@ extension ItemDetailsViewController: StoreSubscriber {
 
         if newState.fetching == .finished {
             refreshControl.endRefreshing()
-            fetchingContext?.completeBatchFetching(true)
         }
 
         let diff = ListDiffPaths(
@@ -153,8 +151,9 @@ extension ItemDetailsViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        fetchingContext = context
-        store.dispatch(fetchComments(forPost: state.parent))
+        store.dispatch(async: fetchComments(forPost: state.parent)).always {
+            context.completeBatchFetching(true)
+        }
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
