@@ -82,8 +82,10 @@ extension ItemListViewController: StoreSubscriber {
         state = newState
 
         switch newState.fetching {
-        case .none:
+        case .list(.started)?:
             refreshControl.manuallyBeginRefreshing(inView: tableNode.view)
+        case .list(.finished)?:
+            store.dispatch(fetchItems(itemType))
         case .items(.finished)?:
             refreshControl.endRefreshing()
         default:

@@ -9,21 +9,38 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         guard var itemList = state.tabs[action.itemType] else {
             return state
         }
-        switch action.action {
-        case .fetch:
-            itemList.ids = []
-            itemList.fetching = .list(.started)
-        case let .fetchedIds(ids):
-            itemList.ids = ids
-            itemList.posts = []
-            itemList.fetching = .list(.finished)
-        case .fetchItems:
-            itemList.fetching = .items(.started)
-        case let .fetchedItems(items):
-            itemList.posts += items.flatMap(Post.init(fromItem:))
-            itemList.fetching = .items(.finished)
+        switch action.state {
+        case let .ids(fetchState):
+            switch fetchState {
+            case .request:
+                itemList.ids = []
+                itemList.fetching = .list(.started)
+            case let .success(result: ids):
+                itemList.ids = ids
+                itemList.posts = []
+                itemList.fetching = .list(.finished)
+            case let .error(error: error):
+                print("Error fetching item ids: \(error)")
+                itemList.fetching = .list(.finished)
+            default:
+                break
+            }
+        case let .items(fetchState):
+            switch fetchState {
+            case .request:
+                itemList.fetching = .items(.started)
+            case let .success(result: items):
+                itemList.posts += items.flatMap(Post.init(fromItem:))
+                itemList.fetching = .items(.finished)
+            case let .error(error: error):
+                print("Error fetching items: \(error)")
+                itemList.fetching = .items(.finished)
+            default:
+                break
+            }
         }
         state.tabs[action.itemType] = itemList
+
     case let action as ItemListNavigationAction:
         switch action {
         case let .view(post):
@@ -33,17 +50,24 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         default:
             break
         }
+
     case let action as CommentListFetchAction:
-        switch action {
-        case .fetch:
+        switch action.state {
+        case .request:
             state.selectedItem?.fetching = .started
-        case let .fetched(item: item):
+        case let .success(result: item):
             if let (post, comments) = item.extractPostAndComments() {
                 state.selectedItem?.post = post
                 state.selectedItem?.comments = comments
             }
             state.selectedItem?.fetching = .finished
+        case let .error(error: error):
+            print("Error fetching item: \(error)")
+            state.selectedItem?.fetching = .finished
+        default:
+            break
         }
+
     case let action as CommentItemAction:
         let indexOf = { (comment: Comment) in
             state.selectedItem?.comments.index(where: { $0.id == comment.id })
@@ -58,6 +82,7 @@ func appReducer(action: Action, state: AppState?) -> AppState {
                 state.selectedItem?.comments[index].actions.collapsed = false
             }
         }
+
     default:
         break
     }

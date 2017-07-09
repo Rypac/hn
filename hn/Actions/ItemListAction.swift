@@ -5,14 +5,17 @@ import UIKit
 
 struct ItemListFetchAction: Action {
     let itemType: ItemType
-    let action: ItemFetchState
+    let state: ItemFetchState
+
+    init(_ itemType: ItemType, _ state: ItemFetchState) {
+        self.itemType = itemType
+        self.state = state
+    }
 }
 
 enum ItemFetchState {
-    case fetch
-    case fetchedIds([Int])
-    case fetchItems(ids: [Int])
-    case fetchedItems([Item])
+    case ids(AsyncRequestState<[Id]>)
+    case items(AsyncRequestState<[Item]>)
 }
 
 enum ItemListNavigationAction: Action {
@@ -27,23 +30,22 @@ func fetchItems(_ type: ItemType) -> AsyncActionCreator<AppState, Void> {
         guard let itemList = state.tabs[type] else {
             return .none
         }
-        return itemList.ids.isEmpty
-            ? fetchItemList(type)
-            : fetchNextItemBatch(type)(state, store)
+        let action = itemList.ids.isEmpty ? fetchItemList : fetchNextItemBatch
+        return action(type)(state, store)
     }
 }
 
-func fetchItemList(_ type: ItemType) -> Promise<Void> {
-    return firstly {
-        store.dispatch(ItemListFetchAction(itemType: type, action: .fetch))
-    }.then {
-        Firebase.fetch(stories: type)
-    }.then { ids in
-        store.dispatch(ItemListFetchAction(itemType: type, action: .fetchedIds(ids)))
-    }.then {
-        store.dispatch(fetchNextItemBatch(type))
-    }.recover { error in
-        print("Failed to fetch \(type) list: \(error)")
+func fetchItemList(_ type: ItemType) -> AsyncActionCreator<AppState, Void> {
+    return { _, store in
+        return firstly {
+            store.dispatch(ItemListFetchAction(type, .ids(.request)))
+        }.then {
+            Firebase.fetch(stories: type)
+        }.then { ids in
+            store.dispatch(ItemListFetchAction(type, .ids(.success(result: ids))))
+        }.catch { error in
+            store.dispatch(ItemListFetchAction(type, .ids(.error(error: error))))
+        }
     }
 }
 
@@ -61,13 +63,13 @@ func fetchNextItemBatch(_ type: ItemType) -> AsyncActionCreator<AppState, Void> 
         let ids = Array(state.ids[start..<end])
 
         return firstly {
-            store.dispatch(ItemListFetchAction(itemType: type, action: .fetchItems(ids: ids)))
+            store.dispatch(ItemListFetchAction(type, .items(.request)))
         }.then {
             when(fulfilled: ids.map(Firebase.fetch(item:)))
         }.then { items in
-            store.dispatch(ItemListFetchAction(itemType: type, action: .fetchedItems(items)))
-        }.recover { error in
-            print("Failed to fetch items: \(error)")
+            store.dispatch(ItemListFetchAction(type, .items(.success(result: items))))
+        }.catch { error in
+            store.dispatch(ItemListFetchAction(type, .items(.error(error: error))))
         }
     }
 }

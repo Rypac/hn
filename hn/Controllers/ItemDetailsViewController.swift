@@ -61,7 +61,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }
 
     func refreshData(sender: UIRefreshControl) {
-        store.dispatch(fetchComments(forPost: state.parent))
+        store.dispatch(fetchComments(forPost: state.parent.id))
     }
 }
 
@@ -151,7 +151,7 @@ extension ItemDetailsViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        store.dispatch(async: fetchComments(forPost: state.parent)).always {
+        store.dispatch(async: fetchComments(forPost: state.parent.id)).regardless {
             context.completeBatchFetching(true)
         }
     }

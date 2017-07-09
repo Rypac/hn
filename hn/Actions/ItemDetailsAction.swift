@@ -1,9 +1,12 @@
 import PromiseKit
 import ReSwift
 
-enum CommentListFetchAction: Action {
-    case fetch(post: Post)
-    case fetched(item: Item)
+struct CommentListFetchAction: Action {
+    let state: AsyncRequestState<Item>
+
+    init(_ state: AsyncRequestState<Item>) {
+        self.state = state
+    }
 }
 
 enum CommentListNavigationAction: Action {
@@ -16,19 +19,21 @@ enum CommentItemAction: Action {
     case expand(Comment)
 }
 
-func fetchComments(forPost post: Post) -> Promise<Void> {
-    return firstly {
-        store.dispatch(CommentListFetchAction.fetch(post: post))
-    }.then {
-        fetchSiblingsForId(with: Algolia.fetch(item:))(post.id)
-    }.then { item in
-        store.dispatch(CommentListFetchAction.fetched(item: item))
-    }.recover { error in
-        print("Failed to fetch comments for item \(post.id): \(error)")
+func fetchComments(forPost post: Id) -> AsyncActionCreator<AppState, Void> {
+    return { _, store in
+        return firstly {
+            store.dispatch(CommentListFetchAction(.request))
+        }.then {
+            fetchSiblingsForId(with: Algolia.fetch(item:))(post)
+        }.then { item in
+            store.dispatch(CommentListFetchAction(.success(result: item)))
+        }.catch { error in
+            store.dispatch(CommentListFetchAction(.error(error: error)))
+        }
     }
 }
 
-func fetchSiblingsForId(with request: @escaping (Int) -> Promise<Item>) -> (Int) -> Promise<Item> {
+func fetchSiblingsForId(with request: @escaping (Id) -> Promise<Item>) -> (Id) -> Promise<Item> {
     let resolveChild = { (item: Reference<Item>) -> Promise<Item> in
         switch item {
         case let .id(id): return fetchSiblingsForId(with: request)(id)

@@ -38,6 +38,7 @@
 		817773E71F11CBCF00755E6C /* ItemType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817773E61F11CBCF00755E6C /* ItemType.swift */; };
 		8178ACDE1F12053200811FD8 /* ReSwift.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178ACDD1F12053200811FD8 /* ReSwift.swift */; };
 		8178ACE01F12131E00811FD8 /* PromiseKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178ACDF1F12131E00811FD8 /* PromiseKit.swift */; };
+		8178ACE21F122E4E00811FD8 /* AsyncRequestState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8178ACE11F122E4E00811FD8 /* AsyncRequestState.swift */; };
 		817CF3C31EFF65F600B69DF4 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AE1EFF64A600B69DF4 /* Nimble.framework */; };
 		817CF3C41EFF65F600B69DF4 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AF1EFF64A600B69DF4 /* Quick.framework */; };
 		817CF3C61EFF660B00B69DF4 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 817CF3AE1EFF64A600B69DF4 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -113,6 +114,7 @@
 		817773E61F11CBCF00755E6C /* ItemType.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemType.swift; path = Models/ItemType.swift; sourceTree = "<group>"; };
 		8178ACDD1F12053200811FD8 /* ReSwift.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ReSwift.swift; path = Extensions/ReSwift.swift; sourceTree = "<group>"; };
 		8178ACDF1F12131E00811FD8 /* PromiseKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PromiseKit.swift; path = Extensions/PromiseKit.swift; sourceTree = "<group>"; };
+		8178ACE11F122E4E00811FD8 /* AsyncRequestState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AsyncRequestState.swift; path = Actions/AsyncRequestState.swift; sourceTree = "<group>"; };
 		817CF3AE1EFF64A600B69DF4 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		817CF3AF1EFF64A600B69DF4 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		817CF3B61EFF656100B69DF4 /* hnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -202,6 +204,7 @@
 		8100428E1EF89174001E2B42 /* Actions */ = {
 			isa = PBXGroup;
 			children = (
+				8178ACE11F122E4E00811FD8 /* AsyncRequestState.swift */,
 				8118DBAB1EF504F800934BA4 /* ItemListAction.swift */,
 				81E2A5611EF7F263004045FF /* ItemDetailsAction.swift */,
 			);
@@ -525,6 +528,7 @@
 				8118DBB01EF5133600934BA4 /* LoadingCellNode.swift in Sources */,
 				812C83651F00D42500DFC70E /* UIFont.swift in Sources */,
 				817773E71F11CBCF00755E6C /* ItemType.swift in Sources */,
+				8178ACE21F122E4E00811FD8 /* AsyncRequestState.swift in Sources */,
 				817773E51F11BCBC00755E6C /* BindableView.swift in Sources */,
 				81820D511EFFB2B700FB460F /* String+HtmlParsing.swift in Sources */,
 				81EABE841F0C8B9600648566 /* Post.swift in Sources */,
