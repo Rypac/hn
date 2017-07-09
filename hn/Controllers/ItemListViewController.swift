@@ -74,8 +74,8 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
         }
 
         let story = state.posts[index.row].post
-        tableNode.selectRow(at: index, animated: false, scrollPosition: .none)
         if let viewOriginalAction = routeTo(original: story, from: self) {
+            tableNode.selectRow(at: index, animated: true, scrollPosition: .none)
             store.dispatch(viewOriginalAction)
         }
     }

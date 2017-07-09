@@ -69,7 +69,8 @@ extension ItemDetailsViewController: UIGestureRecognizerDelegate {
     func longPress(gesture: UILongPressGestureRecognizer) {
         guard
             gesture.state == UIGestureRecognizerState.began,
-            let index = tableNode.indexPathForRow(at: gesture.location(in: tableNode.view))
+            let index = tableNode.indexPathForRow(at: gesture.location(in: tableNode.view)),
+            index.as(ItemDetailsViewModel.Section.self) == .comments
         else {
             return
         }
