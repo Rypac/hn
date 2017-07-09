@@ -34,8 +34,9 @@ class ItemListViewModel {
     init(list: ItemList = ItemList(), details: ItemDetails? = .none) {
         fetching = list.fetching
         allPosts = list.posts
-        hasMoreItems = list.ids.isEmpty || list.posts.count < list.ids.count
         selectedItem = details
+        hasMoreItems = list.fetching == .none ||
+            list.fetching == .items(.finished) && list.posts.count < list.ids.count
     }
 }
 
