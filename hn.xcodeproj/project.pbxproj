@@ -34,6 +34,7 @@
 		815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815B42771EC6ED8C00487C99 /* AppDelegate.swift */; };
 		815B427F1EC6ED8C00487C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 815B427E1EC6ED8C00487C99 /* Assets.xcassets */; };
 		8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165DF0B1EFBF4980019E801 /* UIKit.swift */; };
+		817773E51F11BCBC00755E6C /* BindableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 817773E41F11BCBC00755E6C /* BindableView.swift */; };
 		817CF3C31EFF65F600B69DF4 /* Nimble.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AE1EFF64A600B69DF4 /* Nimble.framework */; };
 		817CF3C41EFF65F600B69DF4 /* Quick.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 817CF3AF1EFF64A600B69DF4 /* Quick.framework */; };
 		817CF3C61EFF660B00B69DF4 /* Nimble.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 817CF3AE1EFF64A600B69DF4 /* Nimble.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -104,6 +105,7 @@
 		815B427E1EC6ED8C00487C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		815B42831EC6ED8C00487C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8165DF0B1EFBF4980019E801 /* UIKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIKit.swift; path = Extensions/UIKit.swift; sourceTree = "<group>"; };
+		817773E41F11BCBC00755E6C /* BindableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BindableView.swift; path = Views/BindableView.swift; sourceTree = "<group>"; };
 		817CF3AE1EFF64A600B69DF4 /* Nimble.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nimble.framework; path = Carthage/Build/iOS/Nimble.framework; sourceTree = "<group>"; };
 		817CF3AF1EFF64A600B69DF4 /* Quick.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Quick.framework; path = Carthage/Build/iOS/Quick.framework; sourceTree = "<group>"; };
 		817CF3B61EFF656100B69DF4 /* hnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -172,6 +174,7 @@
 		8100428C1EF8916B001E2B42 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				817773E41F11BCBC00755E6C /* BindableView.swift */,
 				8118DBAF1EF5133600934BA4 /* LoadingCellNode.swift */,
 				811683C11EF92F4600680511 /* ItemCellNode.swift */,
 				81CDCD1F1EFE6B510044D1DF /* ItemDetailsCellNode.swift */,
@@ -506,6 +509,7 @@
 				487A42603799E2F9AC261E74 /* AppState.swift in Sources */,
 				8118DBB01EF5133600934BA4 /* LoadingCellNode.swift in Sources */,
 				812C83651F00D42500DFC70E /* UIFont.swift in Sources */,
+				817773E51F11BCBC00755E6C /* BindableView.swift in Sources */,
 				81820D511EFFB2B700FB460F /* String+HtmlParsing.swift in Sources */,
 				81EABE841F0C8B9600648566 /* Post.swift in Sources */,
 				814DF7E01EFB3A9300C0A886 /* CommentCellNode.swift in Sources */,

@@ -1,10 +1,12 @@
 import AsyncDisplayKit
 import UIKit
 
-final class CommentCellNode: ASCellNode {
+final class CommentCellNode: ASCellNode, BindableView {
+    typealias ViewModel = CommentViewModel
+
     let text = ASTextNode()
     let details = ASTextNode()
-    var model: CommentViewModel {
+    private var model: CommentViewModel {
         didSet {
             if model.comment.actions.collapsed != oldValue.comment.actions.collapsed {
                 setNeedsLayout()
@@ -12,20 +14,24 @@ final class CommentCellNode: ASCellNode {
         }
     }
 
-    init(_ viewModel: CommentViewModel) {
+    init(viewModel: CommentViewModel) {
         model = viewModel
         super.init()
         automaticallyManagesSubnodes = true
+        bind(viewModel: viewModel)
+    }
 
-        let comment = viewModel.comment
-        let (text, details) = comment.cellText()
+    func bind(viewModel: ViewModel) {
+        let (text, details) = viewModel.comment.cellText()
 
         self.text.attributedText = text?
             .strippingHtmlElements()
-            .attributedText(withFont: Font.avenirNext)
+            .attributedText(withFont: Font.avenirNext.body)
         self.details.attributedText = NSAttributedString(
             string: details,
             attributes: [NSFontAttributeName: Font.avenirNext.footnote])
+
+        model = viewModel
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {

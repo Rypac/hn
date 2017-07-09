@@ -1,15 +1,14 @@
 import AsyncDisplayKit
 import UIKit
 
-final class ItemCellNode: ASCellNode {
+final class ItemCellNode: ASCellNode, BindableView {
+    typealias ViewModel = Post
+
     let text = ASTextNode()
     let details = ASTextNode()
     let comments = ASTextNode()
 
-    init(_ post: Post) {
-        super.init()
-        automaticallyManagesSubnodes = true
-
+    func bind(viewModel post: Post) {
         guard let content = post.content.details else {
             return
         }
@@ -22,7 +21,7 @@ final class ItemCellNode: ASCellNode {
             string: content.title,
             attributes: [NSFontAttributeName: Font.avenirNext.body])
         details.attributedText = NSAttributedString(
-            string: [author, score, time].joined(separator: " "),
+            string: [score, author, time].joined(separator: " "),
             attributes: [NSFontAttributeName: Font.avenirNext.footnote])
         comments.attributedText = NSAttributedString(
             string: "\(post.descendants)",

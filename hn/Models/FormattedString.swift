@@ -15,8 +15,7 @@ enum Formatting {
 }
 
 extension FormattedString {
-    func attributedText(withFont font: Font) -> NSAttributedString {
-        let font = font.body
+    func attributedText(withFont font: UIFont) -> NSAttributedString {
         let formatted = NSMutableAttributedString(
             string: text,
             attributes: [NSFontAttributeName: font])

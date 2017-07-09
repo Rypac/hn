@@ -126,7 +126,7 @@ extension ItemListViewController: ASTableDataSource {
 
     func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
         let item = state.posts[indexPath.row].post
-        return { ItemCellNode(item) }
+        return { ItemCellNode(viewModel: item) }
     }
 }
 

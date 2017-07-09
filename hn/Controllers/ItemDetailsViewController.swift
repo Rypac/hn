@@ -103,7 +103,7 @@ extension ItemDetailsViewController: StoreSubscriber {
             tableNode.performBatchUpdates({
                 for indexPath in diff.updates {
                     if let node = tableNode.nodeForRow(at: indexPath) as? CommentCellNode {
-                        node.model = state.comments[indexPath.row]
+                        node.bind(viewModel: state.comments[indexPath.row])
                         node.transitionLayout(withAnimation: true, shouldMeasureAsync: true)
                     }
                 }
@@ -132,7 +132,7 @@ extension ItemDetailsViewController: ASTableDataSource {
         if indexPath.as(ItemDetailsViewModel.Section.self) == .parent {
             let parent = state.parent
             return {
-                let node = ItemDetailCellNode(parent)
+                let node = ItemDetailCellNode(viewModel: parent)
                 node.selectionStyle = .none
                 return node
             }
@@ -140,7 +140,7 @@ extension ItemDetailsViewController: ASTableDataSource {
 
         let comment = state.comments[indexPath.row]
         return {
-            let node = CommentCellNode(comment)
+            let node = CommentCellNode(viewModel: comment)
             node.selectionStyle = .none
             return node
         }
