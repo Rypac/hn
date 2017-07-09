@@ -24,17 +24,17 @@ extension UIEdgeInsets {
 }
 
 extension UIRefreshControl {
-    func manuallyBeginRefreshing(inView view: UIScrollView) {
-        beginRefreshing()
+    func manuallyBeginRefreshing() {
+        guard !isRefreshing else {
+            return
+        }
 
-        weak var weakView = view
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now(), execute: { [weak self] in
-            guard let strongSelf = self, let view = weakView else {
-                return
-            }
-            view.setContentOffset(
-                CGPoint(x: 0, y: view.contentOffset.y - strongSelf.frame.size.height),
+        beginRefreshing()
+        if let parent = superview as? UIScrollView {
+            parent.setContentOffset(
+                CGPoint(x: 0, y: parent.contentOffset.y - frame.size.height),
                 animated: true)
-        })
+        }
+        sendActions(for: .valueChanged)
     }
 }
