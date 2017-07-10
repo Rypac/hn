@@ -53,6 +53,8 @@
 		81EABE841F0C8B9600648566 /* Post.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EABE831F0C8B9600648566 /* Post.swift */; };
 		81EABE881F0C956400648566 /* Comment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EABE871F0C956400648566 /* Comment.swift */; };
 		81EABE8A1F0CBBD400648566 /* Content.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81EABE891F0CBBD400648566 /* Content.swift */; };
+		81F1E3C41F13916D003190F8 /* HtmlTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F1E3C31F13916D003190F8 /* HtmlTokenizer.swift */; };
+		81F1E3C61F139183003190F8 /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81F1E3C51F139183003190F8 /* Tokenizer.swift */; };
 		81FC4B9B1F110DF800DFF070 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FC4B9A1F110DF800DFF070 /* Font.swift */; };
 		947778A61F11A869002BA05E /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947778A51F11A869002BA05E /* Image.swift */; };
 		9481B23E1F088E2900765EDB /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481B23D1F088E2900765EDB /* Item.swift */; };
@@ -131,6 +133,8 @@
 		81EABE831F0C8B9600648566 /* Post.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Post.swift; path = Models/Post.swift; sourceTree = "<group>"; };
 		81EABE871F0C956400648566 /* Comment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Comment.swift; path = Models/Comment.swift; sourceTree = "<group>"; };
 		81EABE891F0CBBD400648566 /* Content.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Content.swift; path = Models/Content.swift; sourceTree = "<group>"; };
+		81F1E3C31F13916D003190F8 /* HtmlTokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HtmlTokenizer.swift; path = Library/HtmlTokenizer.swift; sourceTree = "<group>"; };
+		81F1E3C51F139183003190F8 /* Tokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Tokenizer.swift; path = Library/Tokenizer.swift; sourceTree = "<group>"; };
 		81FC4B9A1F110DF800DFF070 /* Font.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Font.swift; path = UI/Font.swift; sourceTree = "<group>"; };
 		947778A51F11A869002BA05E /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Image.swift; path = UI/Image.swift; sourceTree = "<group>"; };
 		9481B23D1F088E2900765EDB /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Item.swift; path = Models/Item.swift; sourceTree = "<group>"; };
@@ -294,6 +298,7 @@
 				8100428E1EF89174001E2B42 /* Actions */,
 				8100428B1EF89164001E2B42 /* Controllers */,
 				811683C31EF9345400680511 /* Extensions */,
+				81F1E3C21F13914F003190F8 /* Library */,
 				81E44CAA1F073DE9008BF854 /* Models */,
 				8100428D1EF8916F001E2B42 /* Reducers */,
 				8100428A1EF8915F001E2B42 /* Services */,
@@ -332,12 +337,21 @@
 			children = (
 				81EABE871F0C956400648566 /* Comment.swift */,
 				81EABE891F0CBBD400648566 /* Content.swift */,
-				81E44CAB1F073E03008BF854 /* FormattedString.swift */,
 				9481B23D1F088E2900765EDB /* Item.swift */,
 				817773E61F11CBCF00755E6C /* ItemType.swift */,
 				81EABE831F0C8B9600648566 /* Post.swift */,
 			);
 			name = Models;
+			sourceTree = "<group>";
+		};
+		81F1E3C21F13914F003190F8 /* Library */ = {
+			isa = PBXGroup;
+			children = (
+				81E44CAB1F073E03008BF854 /* FormattedString.swift */,
+				81F1E3C31F13916D003190F8 /* HtmlTokenizer.swift */,
+				81F1E3C51F139183003190F8 /* Tokenizer.swift */,
+			);
+			name = Library;
 			sourceTree = "<group>";
 		};
 		81FC4B991F110DDE00DFF070 /* UI */ = {
@@ -513,12 +527,14 @@
 				8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */,
 				81EABE881F0C956400648566 /* Comment.swift in Sources */,
 				811683C21EF92F4600680511 /* ItemCellNode.swift in Sources */,
+				81F1E3C41F13916D003190F8 /* HtmlTokenizer.swift in Sources */,
 				815739991EFE897300EB5CF3 /* Alamofire.swift in Sources */,
 				814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */,
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
 				81367DB91F025396004AF6C6 /* AsyncDisplayKit.swift in Sources */,
 				814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */,
 				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,
+				81F1E3C61F139183003190F8 /* Tokenizer.swift in Sources */,
 				947778A61F11A869002BA05E /* Image.swift in Sources */,
 				8178ACDE1F12053200811FD8 /* ReSwift.swift in Sources */,
 				81EABE8A1F0CBBD400648566 /* Content.swift in Sources */,
