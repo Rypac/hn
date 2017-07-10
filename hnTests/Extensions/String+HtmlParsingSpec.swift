@@ -100,6 +100,23 @@ class StringHtmlParsingSpec: QuickSpec {
                 }
             }
 
+            context("when the string contains <br> tags") {
+                let original = "This<br>is an interesting<br>string."
+
+                it("returns a string without the <br> tags") {
+                    let result = original.strippingHtmlElements()
+                    expect(result.text).to(equal("This\nis an interesting\nstring."))
+                }
+
+                it("returns linbreak formatting elements applied to the appropriate ranges") {
+                    let result = original.strippingHtmlElements()
+
+                    expect(result.formatting).to(haveCount(2))
+                    expect(result.formatting[0].0).to(equal(Formatting.linebreak))
+                    expect(result.formatting[1].0).to(equal(Formatting.linebreak))
+                }
+            }
+
             context("when the string contains a pair of <i> tags") {
                 let original = "This is an <i>interesting</i> string."
 
@@ -139,6 +156,27 @@ class StringHtmlParsingSpec: QuickSpec {
                     expect(result.formatting).to(haveCount(1))
                     expect(type).to(equal(Formatting.bold))
                     expect(range).to(equal(result.text.range(of: "string")))
+                }
+            }
+
+            context("when the string contains a pair of <u> tags") {
+                let original = "This is an <u>interesting</u> string."
+
+                it("returns a string without the <u> tags") {
+                    let result = original.strippingHtmlElements()
+                    expect(result.text).to(equal("This is an interesting string."))
+                }
+
+                it("returns an underline formatting element applied to the appropriate range") {
+                    let result = original.strippingHtmlElements()
+                    guard let (type, range) = result.formatting.first else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
+
+                    expect(result.formatting).to(haveCount(1))
+                    expect(type).to(equal(Formatting.underline))
+                    expect(range).to(equal(result.text.range(of: "interesting")))
                 }
             }
 

@@ -10,8 +10,10 @@ enum Formatting {
     case url
     case italic
     case bold
+    case underline
     case code
     case preformatted
+    case linebreak
 }
 
 extension FormattedString {
@@ -31,6 +33,10 @@ extension FormattedString {
                 if let italic = font.italicVariant {
                     formatted.addAttributes([NSFontAttributeName: italic], range: nsRange)
                 }
+            case .underline:
+                formatted.addAttributes(
+                    [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue],
+                    range: nsRange)
             case .code:
                 formatted.addAttributes([NSFontAttributeName: Font.menlo.body], range: nsRange)
             case .url:

@@ -1,20 +1,17 @@
-// swiftlint:disable function_body_length
+// swiftlint:disable cyclomatic_complexity function_body_length
 import Foundation
 
-enum Tag {
-    case open(Formatting?)
-    case close(Formatting?)
-}
-
-extension HtmlTag {
-    var formatting: Formatting {
-        switch self {
-        case .a: return .url
-        case .b: return .bold
-        case .i: return .italic
-        case .p: return .paragraph
-        case .pre: return .preformatted
-        case .code: return .code
+extension Formatting {
+    init?(from tag: HtmlTag) {
+        switch tag {
+        case .a: self = .url
+        case .b: self = .bold
+        case .i: self = .italic
+        case .u: self = .underline
+        case .p: self = .paragraph
+        case .pre: self = .preformatted
+        case .code: self = .code
+        case .br: self = .linebreak
         }
     }
 }
@@ -23,35 +20,35 @@ extension String {
     func strippingHtmlElements() -> FormattedString {
         var result = ""
         var points = [(Formatting, Range<Index>)]()
-        var tags = [Formatting: [Range<Index>]]()
+        var tags = [HtmlTag: [Range<Index>]]()
 
-        func push(tag: Formatting) {
+        func push(_ tag: HtmlTag) {
             let tagRange = result.endIndex..<result.endIndex
             var stack = tags[tag] ?? []
             stack.append(tagRange)
             tags[tag] = stack
         }
 
-        func pop(tag: Formatting) {
-            if let parsed = tags[tag]?.popLast() {
+        func pop(_ tag: HtmlTag) {
+            if let parsed = tags[tag]?.popLast(), let formatting = Formatting(from: tag) {
                 let tagStart = parsed.lowerBound
-                points.append((tag, tagStart..<result.endIndex))
+                points.append((formatting, tagStart..<result.endIndex))
             }
         }
 
-        var startedWithOpenParagraphTag = false
+        var dealtWithOpeningTag = false
         func handleOpenParagraphTag() {
-            if result.isEmpty {
-                startedWithOpenParagraphTag = true
-            } else if let lastTag = tags[.paragraph]?.popLast() {
+            if let lastTag = tags[.p]?.popLast() {
                 let openTagEnd = result.endIndex
                 result.append("\n\n")
                 points.append((.paragraph, lastTag.upperBound..<openTagEnd))
-            } else if !startedWithOpenParagraphTag {
-                startedWithOpenParagraphTag = true
-                let openTagEnd = result.endIndex
-                result.append("\n\n")
-                points.append((.paragraph, result.startIndex..<openTagEnd))
+            } else if !dealtWithOpeningTag {
+                if !result.isEmpty {
+                    let openTagEnd = result.endIndex
+                    result.append("\n\n")
+                    points.append((.paragraph, result.startIndex..<openTagEnd))
+                }
+                dealtWithOpeningTag = true
             } else {
                 result.append("\n\n")
             }
@@ -59,30 +56,36 @@ extension String {
 
         var tokenizer = HtmlTokenizer(text: self)
 
-        parser: while let token = tokenizer.nextToken() {
+        while let token = tokenizer.nextToken() {
             switch token {
             case let .success(tag):
                 switch tag {
-                case let .open(tag?, _):
-                    if tag == .p {
+                case let .open(tag, _):
+                    switch tag {
+                    case .p:
                         handleOpenParagraphTag()
+                        push(tag)
+                    case .br:
+                        let tagEnd = result.endIndex
+                        result.append("\n")
+                        points.append((.linebreak, result.startIndex..<tagEnd))
+                    default:
+                        push(tag)
                     }
-                    push(tag: tag.formatting)
-                case let .close(tag?):
-                    pop(tag: tag.formatting)
-                case let .text(char):
+                case let .close(tag):
+                    pop(tag)
+                case let .entity(char), let .text(char):
                     result.append(char)
-                default:
-                    break
                 }
-            case let .error(error):
-                print(error)
-                break parser
+            case let .error(error) where error != .unknownTag:
+                return FormattedString(text: self, formatting: [])
+            default:
+                break
             }
         }
 
-        if let unbalancedFinalTag = tags[.paragraph]?.popLast() {
-            points.append((.paragraph, unbalancedFinalTag.upperBound..<result.endIndex))
+        if let unbalancedParagraphTag = tags[.p]?.popLast() {
+            points.append((.paragraph, unbalancedParagraphTag.upperBound..<result.endIndex))
         }
 
         return FormattedString(text: result, formatting: points)

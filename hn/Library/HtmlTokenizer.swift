@@ -1,19 +1,22 @@
 import Foundation
 
-enum HtmlTokenError: Error {
-    case invalidTag
+enum HtmlTag: String {
+    case p, a, b, i, u, br, pre, code
 }
 
 typealias HtmlAttributes = [String]
 
 enum HtmlToken: Token {
-    case open(HtmlTag?, HtmlAttributes)
-    case close(HtmlTag?)
+    case open(HtmlTag, HtmlAttributes)
+    case close(HtmlTag)
+    case entity(Character)
     case text(Character)
 }
 
-enum HtmlTag: String {
-    case p, a, b, i, pre, code
+enum HtmlTokenError: Error {
+    case unknownTag
+    case invalidTag
+    case invalidEntity
 }
 
 private struct HtmlTagId {
@@ -53,31 +56,21 @@ struct HtmlTokenizer: Tokenizer {
         while let ch = nextCharacter() {
             switch ch {
             case HtmlTagId.start:
-                return run(parseTag())
+                return parseTag()
             case HtmlEntityId.start:
-                return run(parseEntity())
+                return parseEntity()
             default:
-                return run(.text(Character(ch)))
+                return .success(.text(Character(ch)))
             }
         }
         return .none
     }
 
-    private mutating func run(_ parser: @autoclosure () -> HtmlToken?) -> TokenResult<Value, Error> {
-        guard let result = parser() else {
-            return .error(HtmlTokenError.invalidTag)
-        }
-        return .success(result)
-    }
-
     private mutating func nextCharacter() -> UnicodeScalar? {
-        guard let char = iterator.next() else {
-            return .none
-        }
-        return char
+        return iterator.next()
     }
 
-    private mutating func parseTag() -> HtmlToken? {
+    private mutating func parseTag() -> TokenResult<Value, Error> {
         var tag: String? = .none
         var text = String()
         var attributes = HtmlAttributes()
@@ -103,19 +96,18 @@ struct HtmlTokenizer: Tokenizer {
                 isCloseTag = true
             case HtmlTagId.end:
                 pushToken()
-                guard let tag = tag else {
-                    return .none
+                guard let tag = tag.flatMap(HtmlTag.init(rawValue:)) else {
+                    return .error(.unknownTag)
                 }
-                let token = HtmlTag(rawValue: tag)
-                return isCloseTag ? .close(token) : .open(token, attributes)
+                return .success(isCloseTag ? .close(tag) : .open(tag, attributes))
             default:
                 text.unicodeScalars.append(char)
             }
         }
-        return .none
+        return .error(.invalidTag)
     }
 
-    private mutating func parseEntity() -> HtmlToken? {
+    private mutating func parseEntity() -> TokenResult<Value, Error> {
         var char = nextCharacter()
         guard char == HtmlEntityId.number else {
             var entityName = String()
@@ -123,7 +115,10 @@ struct HtmlTokenizer: Tokenizer {
                 entityName.unicodeScalars.append(letter)
                 char = nextCharacter()
             }
-            return HtmlEntityId.encodings[entityName].map(HtmlToken.text)
+            guard let entity = HtmlEntityId.encodings[entityName].map(HtmlToken.entity) else {
+                return .error(.invalidEntity)
+            }
+            return .success(entity)
         }
 
         let radix: Int
@@ -140,9 +135,14 @@ struct HtmlTokenizer: Tokenizer {
             number.unicodeScalars.append(digit)
             char = nextCharacter()
         }
-        return UInt32(number, radix: radix)
+
+        guard let entity = UInt32(number, radix: radix)
             .flatMap(UnicodeScalar.init)
             .flatMap(Character.init)
-            .flatMap(HtmlToken.text)
+            .flatMap(HtmlToken.entity)
+        else {
+            return .error(.invalidEntity)
+        }
+        return .success(entity)
     }
 }
