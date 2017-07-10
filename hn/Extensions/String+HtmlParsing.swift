@@ -50,12 +50,12 @@ extension String {
             let character = self[position]
             switch character {
             case "<":
-                guard let (tag, range) = parseTagStart(after: position) else {
+                guard let (tag, range) = parseTag(after: position) else {
                     break parser
                 }
 
                 switch tag {
-                case let .open(.some(innerTag)):
+                case let .open(innerTag?):
                     if innerTag == .paragraph {
                         if range.lowerBound == startIndex {
                             balancedStartParagraphTag = true
@@ -70,7 +70,7 @@ extension String {
                         }
                     }
                     push(tag: innerTag)
-                case let .close(.some(innerTag)):
+                case let .close(innerTag?):
                     pop(tag: innerTag)
                     if innerTag == .paragraph && range.upperBound < index(before: endIndex) {
                         result.append("\n\n")
@@ -108,7 +108,7 @@ extension String {
         return FormattedString(text: result, formatting: points)
     }
 
-    private func parseTagStart(after tagStart: Index) -> (Tag, Range<Index>)? {
+    private func parseTag(after tagStart: Index) -> (Tag, Range<Index>)? {
         let next = index(after: tagStart)
         guard next < endIndex else {
             return .none
@@ -116,33 +116,24 @@ extension String {
 
         switch self[next] {
         case " ":
-            return parseTagStart(after: next)
+            return parseTag(after: next)
         case "/":
             let closeTag = index(after: next)
             guard closeTag < endIndex else {
                 return .none
             }
-            if let (option, end) = parseInnerTag(from: closeTag) {
-                return (.close(option), tagStart..<end)
-            } else {
-                return .none
-            }
+            return parseInnerTag(from: closeTag).map { tag, end in (.close(tag), tagStart..<end) }
         default:
-            if let (option, end) = parseInnerTag(from: next) {
-                return (.open(option), tagStart..<end)
-            } else {
-                return .none
-            }
+            return parseInnerTag(from: next).map { tag, end in (.open(tag), tagStart..<end) }
         }
     }
 
     private func parseInnerTag(from start: Index) -> (Formatting?, Index)? {
-        let next = index(after: start)
-        guard let close = range(of: ">", range: next..<endIndex)?.lowerBound else {
+        guard let close = range(of: ">", range: start..<endIndex)?.lowerBound else {
             return .none
         }
 
-        let end = range(of: " ", range: next..<close)?.lowerBound ?? close
+        let end = range(of: " ", range: start..<close)?.lowerBound ?? close
         let tag = self[start..<end]
         return (htmlTags[tag], close)
     }
@@ -160,12 +151,8 @@ extension String {
     }
 
     private func decode(base: Int) -> Character? {
-        guard
-            let code = UInt32(self, radix: base),
-            let unicode = UnicodeScalar(code)
-        else {
-            return .none
-        }
-        return Character(unicode)
+        return UInt32(self, radix: base)
+            .flatMap(UnicodeScalar.init)
+            .flatMap(Character.init)
     }
 }
