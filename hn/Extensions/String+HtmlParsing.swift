@@ -1,16 +1,10 @@
 // swiftlint:disable cyclomatic_complexity function_body_length
 import Foundation
 
-extension Sequence where Iterator.Element == String {
-    func extract(attribute: String) -> String? {
-        return lazy.flatMap { $0.slice(from: "\(attribute)=\"", to: "\"") }.first
-    }
-}
-
 extension Formatting {
-    init?(from tag: HtmlTag, attributes: HtmlAttributes) {
+    init?(from tag: HtmlTag) {
         switch tag {
-        case .a: self = .url(attributes.extract(attribute: "href")?.decodingHtmlEntities())
+        case .a: self = .url
         case .b: self = .bold
         case .i: self = .italic
         case .u: self = .underline
@@ -49,8 +43,8 @@ extension String {
         var result = String()
         result.reserveCapacity(utf8.count)
 
-        var points = [(Formatting, Range<Index>)]()
-        var tags = [HtmlTag: [(HtmlAttributes, Range<Index>)]]()
+        var points: [FormattingOptions] = []
+        var tags: [HtmlTag: [(HtmlAttributes, Range<Index>)]] = [:]
 
         func push(_ tag: HtmlTag, _ attributes: HtmlAttributes) {
             let tagRange = result.endIndex..<result.endIndex
@@ -60,9 +54,12 @@ extension String {
         }
 
         func pop(_ tag: HtmlTag) {
-            if let parsed = tags[tag]?.popLast(), let formatting = Formatting(from: tag, attributes: parsed.0) {
-                let tagStart = parsed.1.lowerBound
-                points.append((formatting, tagStart..<result.endIndex))
+            if let (attibutes, range) = tags[tag]?.popLast(), let type = Formatting(from: tag) {
+                points.append(
+                    FormattingOptions(
+                        type,
+                        range: range.lowerBound..<result.endIndex,
+                        attributes: Attributes(attibutes)))
             }
         }
 
@@ -72,13 +69,13 @@ extension String {
                 let openTagEnd = result.endIndex
                 result.unicodeScalars.append(newline)
                 result.unicodeScalars.append(newline)
-                points.append((.paragraph, lastTag.upperBound..<openTagEnd))
+                points.append(FormattingOptions(.paragraph, range: lastTag.upperBound..<openTagEnd))
             } else if !dealtWithOpeningTag {
                 if !result.isEmpty {
                     let openTagEnd = result.endIndex
                     result.unicodeScalars.append(newline)
                     result.unicodeScalars.append(newline)
-                    points.append((.paragraph, result.startIndex..<openTagEnd))
+                    points.append(FormattingOptions(.paragraph, range: result.startIndex..<openTagEnd))
                 }
                 dealtWithOpeningTag = true
             } else {
@@ -101,7 +98,7 @@ extension String {
                     case .br:
                         let tagEnd = result.endIndex
                         result.unicodeScalars.append(newline)
-                        points.append((.linebreak, result.startIndex..<tagEnd))
+                        points.append(FormattingOptions(.linebreak, range: result.startIndex..<tagEnd))
                     default:
                         push(tag, attributes)
                     }
@@ -117,8 +114,8 @@ extension String {
             }
         }
 
-        if let (_, unbalancedParagraphTag) = tags[.p]?.popLast() {
-            points.append((.paragraph, unbalancedParagraphTag.upperBound..<result.endIndex))
+        if let (_, unbalancedTag) = tags[.p]?.last {
+            points.append(FormattingOptions(.paragraph, range: unbalancedTag.upperBound..<result.endIndex))
         }
 
         return FormattedString(text: result, formatting: points)

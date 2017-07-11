@@ -49,10 +49,10 @@ class StringHtmlParsingSpec: QuickSpec {
                     }
 
                     expect(result.formatting).to(haveCount(2))
-                    expect(result.formatting[0].0).to(equal(Formatting.paragraph))
-                    expect(result.formatting[0].1).to(equal(result.text.range(of: "This is a string.")))
-                    expect(result.formatting[1].0).to(equal(Formatting.paragraph))
-                    expect(result.formatting[1].1).to(equal(result.text.range(of: "This is another string.")))
+                    expect(result.formatting[0].type).to(equal(Formatting.paragraph))
+                    expect(result.formatting[0].range).to(equal(result.text.range(of: "This is a string.")))
+                    expect(result.formatting[1].type).to(equal(Formatting.paragraph))
+                    expect(result.formatting[1].range).to(equal(result.text.range(of: "This is another string.")))
                 }
             }
 
@@ -72,8 +72,8 @@ class StringHtmlParsingSpec: QuickSpec {
                     }
 
                     expect(result.formatting).to(haveCount(1))
-                    expect(result.formatting[0].0).to(equal(Formatting.paragraph))
-                    expect(result.formatting[0].1).to(equal(result.text.startIndex..<result.text.endIndex))
+                    expect(result.formatting[0].type).to(equal(Formatting.paragraph))
+                    expect(result.formatting[0].range).to(equal(result.text.startIndex..<result.text.endIndex))
                 }
             }
 
@@ -93,10 +93,10 @@ class StringHtmlParsingSpec: QuickSpec {
                     }
 
                     expect(result.formatting).to(haveCount(2))
-                    expect(result.formatting[0].0).to(equal(Formatting.paragraph))
-                    expect(result.formatting[0].1).to(equal(result.text.range(of: "This is a string.")))
-                    expect(result.formatting[1].0).to(equal(Formatting.paragraph))
-                    expect(result.formatting[1].1).to(equal(result.text.range(of: "This is another string.")))
+                    expect(result.formatting[0].type).to(equal(Formatting.paragraph))
+                    expect(result.formatting[0].range).to(equal(result.text.range(of: "This is a string.")))
+                    expect(result.formatting[1].type).to(equal(Formatting.paragraph))
+                    expect(result.formatting[1].range).to(equal(result.text.range(of: "This is another string.")))
                 }
             }
 
@@ -112,8 +112,8 @@ class StringHtmlParsingSpec: QuickSpec {
                     let result = original.strippingHtmlElements()
 
                     expect(result.formatting).to(haveCount(2))
-                    expect(result.formatting[0].0).to(equal(Formatting.linebreak))
-                    expect(result.formatting[1].0).to(equal(Formatting.linebreak))
+                    expect(result.formatting[0].type).to(equal(Formatting.linebreak))
+                    expect(result.formatting[1].type).to(equal(Formatting.linebreak))
                 }
             }
 
@@ -127,14 +127,14 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns an italic formatting element applied to the appropriate range") {
                     let result = original.strippingHtmlElements()
-                    guard let (type, range) = result.formatting.first else {
+                    guard let formatting = result.formatting.first else {
                         fail("Should contain formatting elements")
                         return
                     }
 
                     expect(result.formatting).to(haveCount(1))
-                    expect(type).to(equal(Formatting.italic))
-                    expect(range).to(equal(result.text.range(of: "interesting")))
+                    expect(formatting.type).to(equal(Formatting.italic))
+                    expect(formatting.range).to(equal(result.text.range(of: "interesting")))
                 }
             }
 
@@ -148,14 +148,14 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns a bold formatting element applied to the appropriate range") {
                     let result = original.strippingHtmlElements()
-                    guard let (type, range) = result.formatting.first else {
+                    guard let formatting = result.formatting.first else {
                         fail("Should contain formatting elements")
                         return
                     }
 
                     expect(result.formatting).to(haveCount(1))
-                    expect(type).to(equal(Formatting.bold))
-                    expect(range).to(equal(result.text.range(of: "string")))
+                    expect(formatting.type).to(equal(Formatting.bold))
+                    expect(formatting.range).to(equal(result.text.range(of: "string")))
                 }
             }
 
@@ -169,14 +169,14 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns an underline formatting element applied to the appropriate range") {
                     let result = original.strippingHtmlElements()
-                    guard let (type, range) = result.formatting.first else {
+                    guard let formatting = result.formatting.first else {
                         fail("Should contain formatting elements")
                         return
                     }
 
                     expect(result.formatting).to(haveCount(1))
-                    expect(type).to(equal(Formatting.underline))
-                    expect(range).to(equal(result.text.range(of: "interesting")))
+                    expect(formatting.type).to(equal(Formatting.underline))
+                    expect(formatting.range).to(equal(result.text.range(of: "interesting")))
                 }
             }
 
@@ -190,14 +190,15 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns a url formatting element applied to the appropriate range and no link") {
                     let result = original.strippingHtmlElements()
-                    guard let (type, range) = result.formatting.first else {
+                    guard let formatting = result.formatting.first else {
                         fail("Should contain formatting elements")
                         return
                     }
 
                     expect(result.formatting).to(haveCount(1))
-                    expect(type).to(equal(Formatting.url(.none)))
-                    expect(range).to(equal(result.text.range(of: "this search engine")))
+                    expect(formatting.type).to(equal(Formatting.url))
+                    expect(formatting.range).to(equal(result.text.range(of: "this search engine")))
+                    expect(formatting.attributes.find("href")).to(beNil())
                 }
             }
 
@@ -211,14 +212,15 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns a url formatting element applied to the appropriate range and link from the href") {
                     let result = original.strippingHtmlElements()
-                    guard let (type, range) = result.formatting.first else {
+                    guard let formatting = result.formatting.first else {
                         fail("Should contain formatting elements")
                         return
                     }
 
                     expect(result.formatting).to(haveCount(1))
-                    expect(type).to(equal(Formatting.url("https://www.google.com")))
-                    expect(range).to(equal(result.text.range(of: "this search engine")))
+                    expect(formatting.type).to(equal(Formatting.url))
+                    expect(formatting.range).to(equal(result.text.range(of: "this search engine")))
+                    expect(formatting.attributes.find("href")).to(equal("https://www.google.com"))
                 }
             }
 
@@ -232,14 +234,14 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns a preformatted formatting element applied to the appropriate range") {
                     let result = original.strippingHtmlElements()
-                    guard let (type, range) = result.formatting.first else {
+                    guard let formatting = result.formatting.first else {
                         fail("Should contain formatting elements")
                         return
                     }
 
                     expect(result.formatting).to(haveCount(1))
-                    expect(type).to(equal(Formatting.preformatted))
-                    expect(range).to(equal(result.text.range(of: "  really critical  ")))
+                    expect(formatting.type).to(equal(Formatting.preformatted))
+                    expect(formatting.range).to(equal(result.text.range(of: "  really critical  ")))
                 }
             }
 
@@ -253,14 +255,14 @@ class StringHtmlParsingSpec: QuickSpec {
 
                 it("returns a preformatted formatting element applied to the appropriate range") {
                     let result = original.strippingHtmlElements()
-                    guard let (type, range) = result.formatting.first else {
+                    guard let formatting = result.formatting.first else {
                         fail("Should contain formatting elements")
                         return
                     }
 
                     expect(result.formatting).to(haveCount(1))
-                    expect(type).to(equal(Formatting.code))
-                    expect(range).to(equal(result.text.range(of: "++")))
+                    expect(formatting.type).to(equal(Formatting.code))
+                    expect(formatting.range).to(equal(result.text.range(of: "++")))
                 }
             }
 
@@ -290,20 +292,20 @@ class StringHtmlParsingSpec: QuickSpec {
                     let result = original.strippingHtmlElements()
 
                     expect(result.formatting).to(haveCount(7))
-                    expect(result.formatting[0].0).to(equal(Formatting.paragraph))
-                    expect(result.formatting[0].1).to(equal(result.text.range(of: "This")))
-                    expect(result.formatting[1].0).to(equal(Formatting.bold))
-                    expect(result.formatting[1].1).to(equal(result.text.range(of: "contains")))
-                    expect(result.formatting[2].0).to(equal(Formatting.bold))
-                    expect(result.formatting[2].1).to(equal(result.text.range(of: "some")))
-                    expect(result.formatting[3].0).to(equal(Formatting.italic))
-                    expect(result.formatting[3].1).to(equal(result.text.range(of: "Also")))
-                    expect(result.formatting[4].0).to(equal(Formatting.paragraph))
-                    expect(result.formatting[4].1).to(equal(result.text.range(of: "contains some strings.Also is")))
-                    expect(result.formatting[5].0).to(equal(Formatting.italic))
-                    expect(result.formatting[5].1).to(equal(result.text.range(of: "another string")))
-                    expect(result.formatting[6].0).to(equal(Formatting.paragraph))
-                    expect(result.formatting[6].1).to(equal(result.text.range(of: "another string.")))
+                    expect(result.formatting[0].type).to(equal(Formatting.paragraph))
+                    expect(result.formatting[0].range).to(equal(result.text.range(of: "This")))
+                    expect(result.formatting[1].type).to(equal(Formatting.bold))
+                    expect(result.formatting[1].range).to(equal(result.text.range(of: "contains")))
+                    expect(result.formatting[2].type).to(equal(Formatting.bold))
+                    expect(result.formatting[2].range).to(equal(result.text.range(of: "some")))
+                    expect(result.formatting[3].type).to(equal(Formatting.italic))
+                    expect(result.formatting[3].range).to(equal(result.text.range(of: "Also")))
+                    expect(result.formatting[4].type).to(equal(Formatting.paragraph))
+                    expect(result.formatting[4].range).to(equal(result.text.range(of: "contains some strings.Also is")))
+                    expect(result.formatting[5].type).to(equal(Formatting.italic))
+                    expect(result.formatting[5].range).to(equal(result.text.range(of: "another string")))
+                    expect(result.formatting[6].type).to(equal(Formatting.paragraph))
+                    expect(result.formatting[6].range).to(equal(result.text.range(of: "another string.")))
                 }
             }
 
@@ -323,10 +325,10 @@ class StringHtmlParsingSpec: QuickSpec {
                     }
 
                     expect(result.formatting).to(haveCount(2))
-                    expect(result.formatting[0].0).to(equal(Formatting.bold))
-                    expect(result.formatting[0].1).to(equal(result.text.range(of: "has")))
-                    expect(result.formatting[1].0).to(equal(Formatting.italic))
-                    expect(result.formatting[1].1).to(equal(result.text.range(of: "string has to be really")))
+                    expect(result.formatting[0].type).to(equal(Formatting.bold))
+                    expect(result.formatting[0].range).to(equal(result.text.range(of: "has")))
+                    expect(result.formatting[1].type).to(equal(Formatting.italic))
+                    expect(result.formatting[1].range).to(equal(result.text.range(of: "string has to be really")))
                 }
             }
 

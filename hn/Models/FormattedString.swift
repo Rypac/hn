@@ -2,12 +2,36 @@ import UIKit
 
 struct FormattedString {
     let text: String
-    let formatting: [(Formatting, Range<String.Index>)]
+    let formatting: [FormattingOptions]
+}
+
+struct FormattingOptions {
+    let type: Formatting
+    let attributes: Attributes
+    let range: Range<String.Index>
+
+    init(_ type: Formatting, range: Range<String.Index>, attributes: Attributes = Attributes()) {
+        self.type = type
+        self.range = range
+        self.attributes = attributes
+    }
+}
+
+struct Attributes {
+    private let attributes: [String]
+
+    init(_ attributes: [String] = []) {
+        self.attributes = attributes
+    }
+
+    func find(_ attribute: String) -> String? {
+        return attributes.lazy.flatMap { $0.slice(from: "\(attribute)=\"", to: "\"") }.first
+    }
 }
 
 enum Formatting {
     case paragraph
-    case url(String?)
+    case url
     case italic
     case bold
     case underline
@@ -22,9 +46,9 @@ extension FormattedString {
             string: text,
             attributes: [NSFontAttributeName: font])
 
-        for (type, range) in formatting {
-            let nsRange = text.nsRange(from: range)
-            switch type {
+        for option in formatting {
+            let nsRange = text.nsRange(from: option.range)
+            switch option.type {
             case .bold:
                 if let bold = font.boldVariant {
                     formatted.addAttributes([NSFontAttributeName: bold], range: nsRange)
