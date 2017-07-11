@@ -25,7 +25,10 @@ struct Attributes {
     }
 
     func find(_ attribute: String) -> String? {
-        return attributes.lazy.flatMap { $0.slice(from: "\(attribute)=\"", to: "\"") }.first
+        return attributes.lazy
+            .flatMap { $0.slice(from: "\(attribute)=\"", to: "\"") }
+            .first?
+            .decodingHtmlEntities()
     }
 }
 
