@@ -20,7 +20,9 @@ extension String {
     func strippingHtmlElements() -> FormattedString {
         let newline: UnicodeScalar = "\n"
 
-        var result = ""
+        var result = String()
+        result.reserveCapacity(utf8.count)
+
         var points = [(Formatting, Range<Index>)]()
         var tags = [HtmlTag: [Range<Index>]]()
 
