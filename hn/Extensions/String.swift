@@ -9,4 +9,12 @@ extension String {
             location: stringView.distance(from: stringView.startIndex, to: lower),
             length: stringView.distance(from: lower, to: upper))
     }
+
+    func slice(from: String, to: String) -> String? {
+        return range(of: from).flatMap { start in
+            range(of: to, range: start.upperBound..<endIndex).map { end in
+                substring(with: start.upperBound..<end.lowerBound)
+            }
+        }
+    }
 }

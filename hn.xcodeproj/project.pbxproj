@@ -45,6 +45,7 @@
 		817CF3C71EFF660B00B69DF4 /* Quick.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 817CF3AF1EFF64A600B69DF4 /* Quick.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		81820D511EFFB2B700FB460F /* String+HtmlParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */; };
 		81820D531EFFB4B600FB460F /* String+HtmlParsingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81820D521EFFB4B600FB460F /* String+HtmlParsingSpec.swift */; };
+		81A092011F14D5B4008013CF /* Formatting.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81A092001F14D5B4008013CF /* Formatting.swift */; };
 		81CDCD201EFE6B510044D1DF /* ItemDetailsCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CDCD1F1EFE6B510044D1DF /* ItemDetailsCellNode.swift */; };
 		81E2A5601EF7DC40004045FF /* ItemDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2A55F1EF7DC40004045FF /* ItemDetailsViewController.swift */; };
 		81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2A5611EF7F263004045FF /* ItemDetailsAction.swift */; };
@@ -123,6 +124,7 @@
 		817CF3BA1EFF656100B69DF4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+HtmlParsing.swift"; path = "Extensions/String+HtmlParsing.swift"; sourceTree = "<group>"; };
 		81820D521EFFB4B600FB460F /* String+HtmlParsingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+HtmlParsingSpec.swift"; path = "Extensions/String+HtmlParsingSpec.swift"; sourceTree = "<group>"; };
+		81A092001F14D5B4008013CF /* Formatting.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Formatting.swift; path = TestSetup/Formatting.swift; sourceTree = "<group>"; };
 		81CDCD1F1EFE6B510044D1DF /* ItemDetailsCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsCellNode.swift; path = Views/ItemDetailsCellNode.swift; sourceTree = "<group>"; };
 		81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AsyncDisplayKit.framework; path = Carthage/Build/iOS/AsyncDisplayKit.framework; sourceTree = "<group>"; };
 		81E2A55C1EF7CC70004045FF /* AlamofireNetworkActivityIndicator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireNetworkActivityIndicator.framework; path = Carthage/Build/iOS/AlamofireNetworkActivityIndicator.framework; sourceTree = "<group>"; };
@@ -260,6 +262,7 @@
 			isa = PBXGroup;
 			children = (
 				81367DBE1F028C11004AF6C6 /* Item.swift */,
+				81A092001F14D5B4008013CF /* Formatting.swift */,
 			);
 			name = TestSetup;
 			sourceTree = "<group>";
@@ -559,6 +562,7 @@
 			files = (
 				81367DBC1F027B63004AF6C6 /* ItemDetailsActionSpec.swift in Sources */,
 				81367DBF1F028C11004AF6C6 /* Item.swift in Sources */,
+				81A092011F14D5B4008013CF /* Formatting.swift in Sources */,
 				81820D531EFFB4B600FB460F /* String+HtmlParsingSpec.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

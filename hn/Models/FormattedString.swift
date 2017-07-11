@@ -7,7 +7,7 @@ struct FormattedString {
 
 enum Formatting {
     case paragraph
-    case url
+    case url(String?)
     case italic
     case bold
     case underline

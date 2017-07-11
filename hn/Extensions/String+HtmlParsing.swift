@@ -1,10 +1,16 @@
 // swiftlint:disable cyclomatic_complexity function_body_length
 import Foundation
 
+extension Sequence where Iterator.Element == String {
+    func extract(attribute: String) -> String? {
+        return lazy.flatMap { $0.slice(from: "\(attribute)=\"", to: "\"") }.first
+    }
+}
+
 extension Formatting {
-    init?(from tag: HtmlTag) {
+    init?(from tag: HtmlTag, attributes: HtmlAttributes) {
         switch tag {
-        case .a: self = .url
+        case .a: self = .url(attributes.extract(attribute: "href")?.decodingHtmlEntities())
         case .b: self = .bold
         case .i: self = .italic
         case .u: self = .underline
@@ -17,6 +23,26 @@ extension Formatting {
 }
 
 extension String {
+    func decodingHtmlEntities() -> String {
+        var result = String()
+        result.reserveCapacity(utf8.count)
+
+        var tokenizer = HtmlTokenizer(text: self)
+
+        while let token = tokenizer.nextToken() {
+            switch token {
+            case let .success(.entity(char)), let .success(.text(char)):
+                result.unicodeScalars.append(char)
+            case let .error(error) where error != .unknownTag:
+                return self
+            default:
+                break
+            }
+        }
+
+        return result
+    }
+
     func strippingHtmlElements() -> FormattedString {
         let newline: UnicodeScalar = "\n"
 
@@ -24,25 +50,25 @@ extension String {
         result.reserveCapacity(utf8.count)
 
         var points = [(Formatting, Range<Index>)]()
-        var tags = [HtmlTag: [Range<Index>]]()
+        var tags = [HtmlTag: [(HtmlAttributes, Range<Index>)]]()
 
-        func push(_ tag: HtmlTag) {
+        func push(_ tag: HtmlTag, _ attributes: HtmlAttributes) {
             let tagRange = result.endIndex..<result.endIndex
             var stack = tags[tag] ?? []
-            stack.append(tagRange)
+            stack.append(attributes, tagRange)
             tags[tag] = stack
         }
 
         func pop(_ tag: HtmlTag) {
-            if let parsed = tags[tag]?.popLast(), let formatting = Formatting(from: tag) {
-                let tagStart = parsed.lowerBound
+            if let parsed = tags[tag]?.popLast(), let formatting = Formatting(from: tag, attributes: parsed.0) {
+                let tagStart = parsed.1.lowerBound
                 points.append((formatting, tagStart..<result.endIndex))
             }
         }
 
         var dealtWithOpeningTag = false
         func handleOpenParagraphTag() {
-            if let lastTag = tags[.p]?.popLast() {
+            if let (_, lastTag) = tags[.p]?.popLast() {
                 let openTagEnd = result.endIndex
                 result.unicodeScalars.append(newline)
                 result.unicodeScalars.append(newline)
@@ -67,17 +93,17 @@ extension String {
             switch token {
             case let .success(tag):
                 switch tag {
-                case let .open(tag, _):
+                case let .open(tag, attributes):
                     switch tag {
                     case .p:
                         handleOpenParagraphTag()
-                        push(tag)
+                        push(tag, attributes)
                     case .br:
                         let tagEnd = result.endIndex
                         result.unicodeScalars.append(newline)
                         points.append((.linebreak, result.startIndex..<tagEnd))
                     default:
-                        push(tag)
+                        push(tag, attributes)
                     }
                 case let .close(tag):
                     pop(tag)
@@ -91,7 +117,7 @@ extension String {
             }
         }
 
-        if let unbalancedParagraphTag = tags[.p]?.popLast() {
+        if let (_, unbalancedParagraphTag) = tags[.p]?.popLast() {
             points.append((.paragraph, unbalancedParagraphTag.upperBound..<result.endIndex))
         }
 

@@ -180,15 +180,15 @@ class StringHtmlParsingSpec: QuickSpec {
                 }
             }
 
-            context("when the string contains a pair of <a> tags") {
-                let original = "I find <a href=\"https://www.google.com\">this search engine</a> to be helpful."
+            context("when the string contains a pair of <a> tags with no embedded href") {
+                let original = "I find <a>this search engine</a> to be helpful."
 
                 it("returns a string without the <a> tags") {
                     let result = original.strippingHtmlElements()
                     expect(result.text).to(equal("I find this search engine to be helpful."))
                 }
 
-                it("returns a url formatting element applied to the appropriate range") {
+                it("returns a url formatting element applied to the appropriate range and no link") {
                     let result = original.strippingHtmlElements()
                     guard let (type, range) = result.formatting.first else {
                         fail("Should contain formatting elements")
@@ -196,7 +196,28 @@ class StringHtmlParsingSpec: QuickSpec {
                     }
 
                     expect(result.formatting).to(haveCount(1))
-                    expect(type).to(equal(Formatting.url))
+                    expect(type).to(equal(Formatting.url(.none)))
+                    expect(range).to(equal(result.text.range(of: "this search engine")))
+                }
+            }
+
+            context("when the string contains a pair of <a> tags with an embedded href") {
+                let original = "I find <a href=\"https://www.google.com\">this search engine</a> to be helpful."
+
+                it("returns a string without the <a> tags") {
+                    let result = original.strippingHtmlElements()
+                    expect(result.text).to(equal("I find this search engine to be helpful."))
+                }
+
+                it("returns a url formatting element applied to the appropriate range and link from the href") {
+                    let result = original.strippingHtmlElements()
+                    guard let (type, range) = result.formatting.first else {
+                        fail("Should contain formatting elements")
+                        return
+                    }
+
+                    expect(result.formatting).to(haveCount(1))
+                    expect(type).to(equal(Formatting.url("https://www.google.com")))
                     expect(range).to(equal(result.text.range(of: "this search engine")))
                 }
             }
@@ -323,7 +344,7 @@ class StringHtmlParsingSpec: QuickSpec {
                 itBehavesLike("a html encoded entity") {[ "e": "&#x2F;", "d": "/" ]}
 
                 itBehavesLike("a html encoded entity") {[ "e": "&#X2F;", "d": "/" ]}
-                
+
                 itBehavesLike("a html encoded entity") {[ "e": "&#47;",  "d": "/" ]}
             }
         }
