@@ -18,6 +18,8 @@ extension Formatting {
 
 extension String {
     func strippingHtmlElements() -> FormattedString {
+        let newline: UnicodeScalar = "\n"
+
         var result = ""
         var points = [(Formatting, Range<Index>)]()
         var tags = [HtmlTag: [Range<Index>]]()
@@ -40,17 +42,20 @@ extension String {
         func handleOpenParagraphTag() {
             if let lastTag = tags[.p]?.popLast() {
                 let openTagEnd = result.endIndex
-                result.append("\n\n")
+                result.unicodeScalars.append(newline)
+                result.unicodeScalars.append(newline)
                 points.append((.paragraph, lastTag.upperBound..<openTagEnd))
             } else if !dealtWithOpeningTag {
                 if !result.isEmpty {
                     let openTagEnd = result.endIndex
-                    result.append("\n\n")
+                    result.unicodeScalars.append(newline)
+                    result.unicodeScalars.append(newline)
                     points.append((.paragraph, result.startIndex..<openTagEnd))
                 }
                 dealtWithOpeningTag = true
             } else {
-                result.append("\n\n")
+                result.unicodeScalars.append(newline)
+                result.unicodeScalars.append(newline)
             }
         }
 
@@ -67,7 +72,7 @@ extension String {
                         push(tag)
                     case .br:
                         let tagEnd = result.endIndex
-                        result.append("\n")
+                        result.unicodeScalars.append(newline)
                         points.append((.linebreak, result.startIndex..<tagEnd))
                     default:
                         push(tag)
@@ -75,7 +80,7 @@ extension String {
                 case let .close(tag):
                     pop(tag)
                 case let .entity(char), let .text(char):
-                    result.append(char)
+                    result.unicodeScalars.append(char)
                 }
             case let .error(error) where error != .unknownTag:
                 return FormattedString(text: self, formatting: [])

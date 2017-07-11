@@ -9,36 +9,14 @@ typealias HtmlAttributes = [String]
 enum HtmlToken: Token {
     case open(HtmlTag, HtmlAttributes)
     case close(HtmlTag)
-    case entity(Character)
-    case text(Character)
+    case entity(UnicodeScalar)
+    case text(UnicodeScalar)
 }
 
 enum HtmlTokenError: Error {
     case unknownTag
     case invalidTag
     case invalidEntity
-}
-
-private struct HtmlTagId {
-    static let start: UnicodeScalar = "<"
-    static let end: UnicodeScalar = ">"
-    static let close: UnicodeScalar = "/"
-    static let separator: UnicodeScalar = " "
-}
-
-private struct HtmlEntityId {
-    static let start: UnicodeScalar = "&"
-    static let end: UnicodeScalar = ";"
-    static let number: UnicodeScalar = "#"
-    static let hexLower: UnicodeScalar = "x"
-    static let hexUpper: UnicodeScalar = "X"
-    static let encodings: [String: Character] = [
-        "quot": "\"",
-        "apos": "'",
-        "amp": "&",
-        "lt": "<",
-        "gt": ">"
-    ]
 }
 
 struct HtmlTokenizer: Tokenizer {
@@ -53,14 +31,14 @@ struct HtmlTokenizer: Tokenizer {
     }
 
     mutating func nextToken() -> TokenResult<Value, Error>? {
-        while let ch = nextCharacter() {
-            switch ch {
+        while let char = nextCharacter() {
+            switch char {
             case HtmlTagId.start:
                 return parseTag()
-            case HtmlEntityId.start:
+            case HtmlEntity.start:
                 return parseEntity()
             default:
-                return .success(.text(Character(ch)))
+                return .success(.text(char))
             }
         }
         return .none
@@ -109,13 +87,13 @@ struct HtmlTokenizer: Tokenizer {
 
     private mutating func parseEntity() -> TokenResult<Value, Error> {
         var char = nextCharacter()
-        guard char == HtmlEntityId.number else {
+        guard char == HtmlEntity.number else {
             var entityName = String()
-            while let letter = char, letter != HtmlEntityId.end {
-                entityName.unicodeScalars.append(letter)
+            while let ch = char, ch != HtmlEntity.end {
+                entityName.unicodeScalars.append(ch)
                 char = nextCharacter()
             }
-            guard let entity = HtmlEntityId.encodings[entityName].map(HtmlToken.entity) else {
+            guard let entity = HtmlEntity.decode(entityName).map(HtmlToken.entity) else {
                 return .error(.invalidEntity)
             }
             return .success(entity)
@@ -123,7 +101,7 @@ struct HtmlTokenizer: Tokenizer {
 
         let radix: Int
         char = nextCharacter()
-        if char == HtmlEntityId.hexLower || char == HtmlEntityId.hexUpper {
+        if char == HtmlEntity.hexLower || char == HtmlEntity.hexUpper {
             radix = 16
             char = nextCharacter()
         } else {
@@ -131,18 +109,49 @@ struct HtmlTokenizer: Tokenizer {
         }
 
         var number = String()
-        while let digit = char, digit != HtmlEntityId.end {
+        while let digit = char, digit != HtmlEntity.end {
             number.unicodeScalars.append(digit)
             char = nextCharacter()
         }
 
         guard let entity = UInt32(number, radix: radix)
             .flatMap(UnicodeScalar.init)
-            .flatMap(Character.init)
             .flatMap(HtmlToken.entity)
         else {
             return .error(.invalidEntity)
         }
         return .success(entity)
+    }
+}
+
+private struct HtmlTagId {
+    static let start: UnicodeScalar = "<"
+    static let end: UnicodeScalar = ">"
+    static let close: UnicodeScalar = "/"
+    static let separator: UnicodeScalar = " "
+}
+
+private struct HtmlEntity {
+    static let start: UnicodeScalar = "&"
+    static let end: UnicodeScalar = ";"
+    static let number: UnicodeScalar = "#"
+    static let hexLower: UnicodeScalar = "x"
+    static let hexUpper: UnicodeScalar = "X"
+
+    private static let quote = "quot"
+    private static let apos = "apos"
+    private static let amp = "amp"
+    private static let lt = "lt"
+    private static let gt = "gt"
+
+    static func decode(_ entity: String) -> UnicodeScalar? {
+        switch entity {
+        case quote: return "\""
+        case apos: return "'"
+        case amp: return "&"
+        case lt: return "<"
+        case gt: return ">"
+        default: return nil
+        }
     }
 }
