@@ -13,6 +13,8 @@
 		8114FA431F160D2000F5F395 /* HtmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8114FA421F160D2000F5F395 /* HtmlParser.swift */; };
 		811683C21EF92F4600680511 /* ItemCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C11EF92F4600680511 /* ItemCellNode.swift */; };
 		811683C51EF9346300680511 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C41EF9346300680511 /* Date.swift */; };
+		811850331F1638BF00CF31AE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811850321F1638BF00CF31AE /* URL.swift */; };
+		811850351F1638F600CF31AE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811850341F1638F600CF31AE /* URL.swift */; };
 		8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAB1EF504F800934BA4 /* ItemListAction.swift */; };
 		8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAD1EF50DF100934BA4 /* ItemListViewController.swift */; };
 		8118DBB01EF5133600934BA4 /* LoadingCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAF1EF5133600934BA4 /* LoadingCellNode.swift */; };
@@ -92,6 +94,8 @@
 		8114FA421F160D2000F5F395 /* HtmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HtmlParser.swift; path = Library/HtmlParser.swift; sourceTree = "<group>"; };
 		811683C11EF92F4600680511 /* ItemCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemCellNode.swift; path = Views/ItemCellNode.swift; sourceTree = "<group>"; };
 		811683C41EF9346300680511 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = Extensions/Date.swift; sourceTree = "<group>"; };
+		811850321F1638BF00CF31AE /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URL.swift; path = Extensions/URL.swift; sourceTree = "<group>"; };
+		811850341F1638F600CF31AE /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URL.swift; path = Extensions/URL.swift; sourceTree = "<group>"; };
 		8118DBA81EF5004200934BA4 /* ReSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReSwift.framework; path = Carthage/Build/iOS/ReSwift.framework; sourceTree = "<group>"; };
 		8118DBAB1EF504F800934BA4 /* ItemListAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListAction.swift; path = Actions/ItemListAction.swift; sourceTree = "<group>"; };
 		8118DBAD1EF50DF100934BA4 /* ItemListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewController.swift; path = Controllers/ItemListViewController.swift; sourceTree = "<group>"; };
@@ -230,6 +234,7 @@
 				814AD7A61F10EB19003316CA /* UIColor.swift */,
 				812C83641F00D42500DFC70E /* UIFont.swift */,
 				8165DF0B1EFBF4980019E801 /* UIKit.swift */,
+				811850321F1638BF00CF31AE /* URL.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -330,6 +335,7 @@
 			isa = PBXGroup;
 			children = (
 				81820D521EFFB4B600FB460F /* String+HtmlParsingSpec.swift */,
+				811850341F1638F600CF31AE /* URL.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -521,6 +527,7 @@
 				81FC4B9B1F110DF800DFF070 /* Font.swift in Sources */,
 				8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */,
 				812126771EC7088D00A4B61F /* FirebaseApi.swift in Sources */,
+				811850331F1638BF00CF31AE /* URL.swift in Sources */,
 				814AD7A71F10EB19003316CA /* UIColor.swift in Sources */,
 				8178ACE01F12131E00811FD8 /* PromiseKit.swift in Sources */,
 				8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */,
@@ -564,6 +571,7 @@
 				81367DBC1F027B63004AF6C6 /* ItemDetailsActionSpec.swift in Sources */,
 				81367DBF1F028C11004AF6C6 /* Item.swift in Sources */,
 				81820D531EFFB4B600FB460F /* String+HtmlParsingSpec.swift in Sources */,
+				811850351F1638F600CF31AE /* URL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
