@@ -10,6 +10,7 @@
 		487A42603799E2F9AC261E74 /* AppState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A49183E506D24DF83F3F7 /* AppState.swift */; };
 		487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 487A478D038053F823807284 /* AppReducer.swift */; };
 		81149CD31F10437500291F40 /* IGListKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81149CD21F10437500291F40 /* IGListKit.framework */; };
+		8114FA431F160D2000F5F395 /* HtmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8114FA421F160D2000F5F395 /* HtmlParser.swift */; };
 		811683C21EF92F4600680511 /* ItemCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C11EF92F4600680511 /* ItemCellNode.swift */; };
 		811683C51EF9346300680511 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C41EF9346300680511 /* Date.swift */; };
 		8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAB1EF504F800934BA4 /* ItemListAction.swift */; };
@@ -88,6 +89,7 @@
 		487A478D038053F823807284 /* AppReducer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AppReducer.swift; path = Reducers/AppReducer.swift; sourceTree = "<group>"; };
 		487A49183E506D24DF83F3F7 /* AppState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppState.swift; sourceTree = "<group>"; };
 		81149CD21F10437500291F40 /* IGListKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = IGListKit.framework; path = Carthage/Build/iOS/IGListKit.framework; sourceTree = "<group>"; };
+		8114FA421F160D2000F5F395 /* HtmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = HtmlParser.swift; path = Library/HtmlParser.swift; sourceTree = "<group>"; };
 		811683C11EF92F4600680511 /* ItemCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemCellNode.swift; path = Views/ItemCellNode.swift; sourceTree = "<group>"; };
 		811683C41EF9346300680511 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = Extensions/Date.swift; sourceTree = "<group>"; };
 		8118DBA81EF5004200934BA4 /* ReSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReSwift.framework; path = Carthage/Build/iOS/ReSwift.framework; sourceTree = "<group>"; };
@@ -348,6 +350,7 @@
 			isa = PBXGroup;
 			children = (
 				81E44CAB1F073E03008BF854 /* FormattedString.swift */,
+				8114FA421F160D2000F5F395 /* HtmlParser.swift */,
 				81F1E3C31F13916D003190F8 /* HtmlTokenizer.swift */,
 				81F1E3C51F139183003190F8 /* Tokenizer.swift */,
 			);
@@ -547,6 +550,7 @@
 				8178ACE21F122E4E00811FD8 /* AsyncRequestState.swift in Sources */,
 				817773E51F11BCBC00755E6C /* BindableView.swift in Sources */,
 				81820D511EFFB2B700FB460F /* String+HtmlParsing.swift in Sources */,
+				8114FA431F160D2000F5F395 /* HtmlParser.swift in Sources */,
 				81EABE841F0C8B9600648566 /* Post.swift in Sources */,
 				814DF7E01EFB3A9300C0A886 /* CommentCellNode.swift in Sources */,
 				81CDCD201EFE6B510044D1DF /* ItemDetailsCellNode.swift in Sources */,
