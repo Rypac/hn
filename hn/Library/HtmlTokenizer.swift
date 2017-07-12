@@ -54,26 +54,25 @@ struct HtmlTokenizer: Tokenizer {
         var attributes = HtmlAttributes()
         var isCloseTag = false
 
-        let pushToken = {
-            guard !text.isEmpty else {
-                return
-            }
+        let pushTag = {
             if tag == .none {
                 tag = text
             } else {
                 attributes.append(text)
             }
-            text = ""
         }
 
         while let char = nextCharacter() {
             switch char {
             case HtmlTagId.separator:
-                pushToken()
+                if !text.isEmpty {
+                    pushTag()
+                    text = ""
+                }
             case HtmlTagId.close where tag == .none:
                 isCloseTag = true
             case HtmlTagId.end:
-                pushToken()
+                pushTag()
                 guard let tag = tag.flatMap(HtmlTag.init(rawValue:)) else {
                     return .error(.unknownTag)
                 }
