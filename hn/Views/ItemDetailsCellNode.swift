@@ -12,16 +12,8 @@ final class ItemDetailCellNode: ASCellNode, BindableView {
             return
         }
 
-        let author = "by \(content.author)"
-        let score = "\(content.score) points"
-        let time = Date(timeIntervalSince1970: TimeInterval(content.time)).relative(to: Date())
-
-        title.attributedText = NSAttributedString(
-            string: content.title,
-            attributes: [NSFontAttributeName: Font.avenirNext.headline])
-        details.attributedText = NSAttributedString(
-            string: [score, author, time].joined(separator: " "),
-            attributes: [NSFontAttributeName: Font.avenirNext.footnote])
+        title.attributedText = content.attributedTitle()
+        details.attributedText = content.attributedDetails()
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
@@ -32,5 +24,30 @@ final class ItemDetailCellNode: ASCellNode, BindableView {
                 spacing: 4,
                 flex: (shrink: 1.0, grow: 1.0),
                 children: [title, details]))
+    }
+}
+
+extension Post.Details {
+    fileprivate func attributedTitle() -> NSAttributedString {
+        let text = NSAttributedString(
+            string: title,
+            attributes: [NSFontAttributeName: Font.avenirNext.headline])
+
+        guard let url = url, let link = URL(string: url)?.prettyHost else {
+            return text
+        }
+
+        return text + NSAttributedString(
+            string: "  (\(link))",
+            attributes: [NSFontAttributeName: Font.avenirNext.caption1])
+    }
+
+    fileprivate func attributedDetails() -> NSAttributedString {
+        let score = "\(self.score) points"
+        let author = "by \(self.author)"
+        let time = Date(timeIntervalSince1970: TimeInterval(self.time)).relative(to: Date())
+        return NSAttributedString(
+            string: [score, author, time].joined(separator: " "),
+            attributes: [NSFontAttributeName: Font.avenirNext.footnote])
     }
 }

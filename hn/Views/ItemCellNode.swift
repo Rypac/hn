@@ -13,16 +13,8 @@ final class ItemCellNode: ASCellNode, BindableView {
             return
         }
 
-        let author = "by \(content.author)"
-        let score = "\(content.score) points"
-        let time = Date(timeIntervalSince1970: TimeInterval(content.time)).relative(to: Date())
-
-        text.attributedText = NSAttributedString(
-            string: content.title,
-            attributes: [NSFontAttributeName: Font.avenirNext.body])
-        details.attributedText = NSAttributedString(
-            string: [score, author, time].joined(separator: " "),
-            attributes: [NSFontAttributeName: Font.avenirNext.footnote])
+        text.attributedText = content.attributedTitle()
+        details.attributedText = content.attributedDetails()
         comments.attributedText = NSAttributedString(
             string: "\(post.descendants)",
             attributes: [NSFontAttributeName: Font.avenirNext.title3])
@@ -44,5 +36,30 @@ final class ItemCellNode: ASCellNode, BindableView {
                         children: [text, details]),
                     comments
                 ]))
+    }
+}
+
+extension Post.Details {
+    fileprivate func attributedTitle() -> NSAttributedString {
+        let text = NSAttributedString(
+            string: title,
+            attributes: [NSFontAttributeName: Font.avenirNext.body])
+
+        guard let url = url, let link = URL(string: url)?.prettyHost else {
+            return text
+        }
+
+        return text + NSAttributedString(
+            string: "  (\(link))",
+            attributes: [NSFontAttributeName: Font.avenirNext.caption1])
+    }
+
+    fileprivate func attributedDetails() -> NSAttributedString {
+        let score = "\(self.score) points"
+        let author = "by \(self.author)"
+        let time = Date(timeIntervalSince1970: TimeInterval(self.time)).relative(to: Date())
+        return NSAttributedString(
+            string: [score, author, time].joined(separator: " "),
+            attributes: [NSFontAttributeName: Font.avenirNext.footnote])
     }
 }

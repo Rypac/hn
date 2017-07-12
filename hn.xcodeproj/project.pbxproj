@@ -15,6 +15,7 @@
 		811683C51EF9346300680511 /* Date.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811683C41EF9346300680511 /* Date.swift */; };
 		811850331F1638BF00CF31AE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811850321F1638BF00CF31AE /* URL.swift */; };
 		811850351F1638F600CF31AE /* URL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811850341F1638F600CF31AE /* URL.swift */; };
+		811850371F16407000CF31AE /* NSAttributedString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811850361F16407000CF31AE /* NSAttributedString.swift */; };
 		8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAB1EF504F800934BA4 /* ItemListAction.swift */; };
 		8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAD1EF50DF100934BA4 /* ItemListViewController.swift */; };
 		8118DBB01EF5133600934BA4 /* LoadingCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAF1EF5133600934BA4 /* LoadingCellNode.swift */; };
@@ -96,6 +97,7 @@
 		811683C41EF9346300680511 /* Date.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Date.swift; path = Extensions/Date.swift; sourceTree = "<group>"; };
 		811850321F1638BF00CF31AE /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URL.swift; path = Extensions/URL.swift; sourceTree = "<group>"; };
 		811850341F1638F600CF31AE /* URL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = URL.swift; path = Extensions/URL.swift; sourceTree = "<group>"; };
+		811850361F16407000CF31AE /* NSAttributedString.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSAttributedString.swift; path = Extensions/NSAttributedString.swift; sourceTree = "<group>"; };
 		8118DBA81EF5004200934BA4 /* ReSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReSwift.framework; path = Carthage/Build/iOS/ReSwift.framework; sourceTree = "<group>"; };
 		8118DBAB1EF504F800934BA4 /* ItemListAction.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListAction.swift; path = Actions/ItemListAction.swift; sourceTree = "<group>"; };
 		8118DBAD1EF50DF100934BA4 /* ItemListViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewController.swift; path = Controllers/ItemListViewController.swift; sourceTree = "<group>"; };
@@ -227,6 +229,7 @@
 				815739981EFE897300EB5CF3 /* Alamofire.swift */,
 				81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */,
 				811683C41EF9346300680511 /* Date.swift */,
+				811850361F16407000CF31AE /* NSAttributedString.swift */,
 				8178ACDF1F12131E00811FD8 /* PromiseKit.swift */,
 				8178ACDD1F12053200811FD8 /* ReSwift.swift */,
 				811D4E181EFF3CFF00B49F38 /* String.swift */,
@@ -549,6 +552,7 @@
 				8178ACDE1F12053200811FD8 /* ReSwift.swift in Sources */,
 				81EABE8A1F0CBBD400648566 /* Content.swift in Sources */,
 				81E2A5601EF7DC40004045FF /* ItemDetailsViewController.swift in Sources */,
+				811850371F16407000CF31AE /* NSAttributedString.swift in Sources */,
 				811683C51EF9346300680511 /* Date.swift in Sources */,
 				487A42603799E2F9AC261E74 /* AppState.swift in Sources */,
 				8118DBB01EF5133600934BA4 /* LoadingCellNode.swift in Sources */,
