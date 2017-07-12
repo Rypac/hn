@@ -51,7 +51,10 @@ extension Post.Details {
 
         return text + NSAttributedString(
             string: "  (\(link))",
-            attributes: [NSFontAttributeName: Font.avenirNext.caption1])
+            attributes: [
+                NSFontAttributeName: Font.avenirNext.caption1,
+                NSForegroundColorAttributeName: UIColor.darkGray
+            ])
     }
 
     fileprivate func attributedDetails() -> NSAttributedString {
@@ -60,6 +63,9 @@ extension Post.Details {
         let time = Date(timeIntervalSince1970: TimeInterval(self.time)).relative(to: Date())
         return NSAttributedString(
             string: [score, author, time].joined(separator: " "),
-            attributes: [NSFontAttributeName: Font.avenirNext.footnote])
+            attributes: [
+                NSFontAttributeName: Font.avenirNext.footnote,
+                NSForegroundColorAttributeName: UIColor.darkGray
+            ])
     }
 }

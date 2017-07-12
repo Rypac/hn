@@ -21,15 +21,24 @@ final class CommentCellNode: ASCellNode, BindableView {
         bind(viewModel: viewModel)
     }
 
+    override func didLoad() {
+        super.didLoad()
+        layer.as_allowsHighlightDrawing = true
+    }
+
     func bind(viewModel: ViewModel) {
         let (text, details) = viewModel.comment.cellText()
 
         self.text.attributedText = text?
             .strippingHtmlElements()
             .attributedText(withFont: Font.avenirNext.body)
+        self.text.linkAttributeNames = [kFormattingAttributes]
         self.details.attributedText = NSAttributedString(
             string: details,
-            attributes: [NSFontAttributeName: Font.avenirNext.footnote])
+            attributes: [
+                NSFontAttributeName: Font.avenirNext.footnote,
+                NSForegroundColorAttributeName: UIColor.darkGray
+            ])
 
         model = viewModel
     }

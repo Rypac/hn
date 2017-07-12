@@ -1,6 +1,7 @@
 import AsyncDisplayKit
 import IGListKit
 import ReSwift
+import SafariServices
 import UIKit
 
 final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
@@ -117,6 +118,8 @@ extension ItemDetailsViewController: ASTableDataSource {
         return {
             let node = CommentCellNode(viewModel: comment)
             node.selectionStyle = .none
+            node.text.delegate = self
+            node.text.isUserInteractionEnabled = true
             return node
         }
     }
@@ -148,5 +151,34 @@ extension ItemDetailsViewController: ASTableDelegate {
         default:
             break
         }
+    }
+}
+
+extension ItemDetailsViewController: ASTextNodeDelegate {
+    func textNode(
+        _ textNode: ASTextNode,
+        tappedLinkAttribute attribute: String,
+        value: Any,
+        at point: CGPoint,
+        textRange: NSRange
+    ) {
+        guard
+            let attributes = value as? Attributes,
+            let link = attributes.find("href"),
+            let url = URL(string: link)
+        else {
+            return
+        }
+
+        present(SFSafariViewController(url: url), animated: true, completion: nil)
+    }
+
+    func textNode(
+        _ textNode: ASTextNode,
+        shouldHighlightLinkAttribute attribute: String,
+        value: Any,
+        at point: CGPoint
+    ) -> Bool {
+        return true
     }
 }

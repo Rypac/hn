@@ -1,5 +1,7 @@
 import UIKit
 
+let kFormattingAttributes = "FormattingAttributes"
+
 struct FormattedString {
     let text: String
     let formatting: [FormattingOptions]
@@ -67,7 +69,12 @@ extension FormattedString {
             case .code:
                 formatted.addAttributes([NSFontAttributeName: Font.menlo.body], range: nsRange)
             case .url:
-                formatted.addAttributes([NSLinkAttributeName: text], range: nsRange)
+                formatted.addAttributes(
+                    [
+                        kFormattingAttributes: option.attributes,
+                        NSForegroundColorAttributeName: UIColor.Apple.blue
+                    ],
+                    range: nsRange)
             default:
                 break
             }
