@@ -3,7 +3,7 @@ import Foundation
 struct Post {
     struct Details {
         let title: String
-        let text: String?
+        let text: FormattedString?
         let author: String
         let time: UnixTimestamp
         let url: String?
@@ -50,7 +50,7 @@ extension Post.Details: ItemInitialisable {
         self.author = author
         self.time = time
         self.score = score
-        text = item.text
+        text = item.text?.strippingHtmlElements()
         url = item.url
     }
 }

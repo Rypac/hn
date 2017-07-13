@@ -57,11 +57,9 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         switch action.state {
         case .request:
             state.selectedItem?.fetching = .started
-        case let .success(result: item):
-            if let (post, comments) = item.extractPostAndComments() {
-                state.selectedItem?.post = post
-                state.selectedItem?.comments = comments
-            }
+        case let .success(result: (post, comments)):
+            state.selectedItem?.post = post
+            state.selectedItem?.comments = comments
             state.selectedItem?.fetching = .finished
         case let .error(error: error):
             print("Error fetching item: \(error)")

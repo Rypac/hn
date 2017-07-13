@@ -29,9 +29,7 @@ final class CommentCellNode: ASCellNode, BindableView {
     func bind(viewModel: ViewModel) {
         let (text, details) = viewModel.comment.cellText()
 
-        self.text.attributedText = text?
-            .strippingHtmlElements()
-            .attributedText(withFont: Font.avenirNext.body)
+        self.text.attributedText = text?.attributedText(withFont: Font.avenirNext.body)
         self.text.linkAttributeNames = [kFormattingAttributes]
         self.details.attributedText = NSAttributedString(
             string: details,
@@ -61,7 +59,7 @@ final class CommentCellNode: ASCellNode, BindableView {
 }
 
 extension Comment {
-     fileprivate func cellText() -> (String?, String) {
+     fileprivate func cellText() -> (FormattedString?, String) {
         switch content {
         case .details(let content):
             let time = Date(timeIntervalSince1970: TimeInterval(content.time)).relative(to: Date())

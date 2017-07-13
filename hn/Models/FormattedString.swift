@@ -2,6 +2,17 @@ import UIKit
 
 let kFormattingAttributes = "FormattingAttributes"
 
+enum Formatting {
+    case paragraph
+    case url
+    case italic
+    case bold
+    case underline
+    case code
+    case preformatted
+    case linebreak
+}
+
 struct FormattedString {
     let text: String
     let formatting: [FormattingOptions]
@@ -20,7 +31,7 @@ struct FormattingOptions {
 }
 
 struct Attributes {
-    private let attributes: [String]
+    fileprivate let attributes: [String]
 
     init(_ attributes: [String] = []) {
         self.attributes = attributes
@@ -32,17 +43,6 @@ struct Attributes {
             .first?
             .decodingHtmlEntities()
     }
-}
-
-enum Formatting {
-    case paragraph
-    case url
-    case italic
-    case bold
-    case underline
-    case code
-    case preformatted
-    case linebreak
 }
 
 extension FormattedString {
@@ -80,5 +80,27 @@ extension FormattedString {
             }
         }
         return formatted
+    }
+}
+
+// MARK: - Equatable
+
+extension FormattedString: Equatable {
+    static func == (_ lhs: FormattedString, _ rhs: FormattedString) -> Bool {
+        return lhs.text == rhs.text && lhs.formatting == rhs.formatting
+    }
+}
+
+extension FormattingOptions: Equatable {
+    static func == (_ lhs: FormattingOptions, _ rhs: FormattingOptions) -> Bool {
+        return lhs.type == rhs.type &&
+            lhs.range == rhs.range &&
+            lhs.attributes == rhs.attributes
+    }
+}
+
+extension Attributes: Equatable {
+    static func == (_ lhs: Attributes, _ rhs: Attributes) -> Bool {
+        return lhs.attributes == rhs.attributes
     }
 }

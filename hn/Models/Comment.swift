@@ -2,7 +2,7 @@ import Foundation
 
 struct Comment {
     struct Details {
-        let text: String
+        let text: FormattedString
         let author: String
         let time: UnixTimestamp
         let parent: Id
@@ -57,7 +57,7 @@ extension Comment.Details: ItemInitialisable {
         else {
             return nil
         }
-        self.text = text
+        self.text = text.strippingHtmlElements()
         self.author = author
         self.time = time
         self.parent = item.parent ?? 0

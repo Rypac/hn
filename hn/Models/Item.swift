@@ -66,12 +66,15 @@ extension Reference where T == Item {
 
 extension Item {
     func extractPostAndComments() -> (Post, [Comment])? {
-        func flattenResponses(_ kid: Reference<Item>, depth: Int) -> [Comment] {
+        return flatten().map { post, comments in
+            (post, comments.concurrentMap { Comment(fromItem: $0, depth: $1) }.flatMap { $0 })
+        }
+    }
+
+    func flatten() -> (Post, [(Item, Int)])? {
+        func flattenResponses(_ kid: Reference<Item>, depth: Int) -> [(Item, Int)] {
             return kid.bindValue { item in
-                guard let comment = Comment(fromItem: item, depth: depth) else {
-                    return []
-                }
-                return [comment] + item.kids.flatMap { flattenResponses($0, depth: depth + 1) }
+                [(item, depth)] + item.kids.flatMap { flattenResponses($0, depth: depth + 1) }
             } ?? []
         }
         return Post(fromItem: self).map { ($0, kids.flatMap { flattenResponses($0, depth: 0) }) }

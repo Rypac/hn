@@ -2,9 +2,9 @@ import PromiseKit
 import ReSwift
 
 struct CommentListFetchAction: Action {
-    let state: AsyncRequestState<Item>
+    let state: AsyncRequestState<(Post, [Comment])>
 
-    init(_ state: AsyncRequestState<Item>) {
+    init(_ state: AsyncRequestState<(Post, [Comment])>) {
         self.state = state
     }
 }
@@ -25,8 +25,10 @@ func fetchComments(_ request: @escaping (Id) -> Promise<Item>) -> (Id) -> AsyncA
             store.dispatch(CommentListFetchAction(.request))
         }.then {
             fetchSiblingsForId(with: request)(id)
-        }.then { item in
-            store.dispatch(CommentListFetchAction(.success(result: item)))
+        }.then(on: DispatchQueue.global(qos: .userInitiated)) { item in
+            try item.extractPostAndComments().or(throw: "Invalid post and comments")
+        }.then { result in
+            store.dispatch(CommentListFetchAction(.success(result: result)))
         }.recover { error in
             store.dispatch(CommentListFetchAction(.error(error: error)))
         }
