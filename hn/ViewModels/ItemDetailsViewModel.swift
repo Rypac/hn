@@ -1,29 +1,6 @@
-import IGListKit
+import Foundation
 
-class CommentViewModel {
-    let comment: Comment
-
-    init(_ comment: Comment) {
-        self.comment = comment
-    }
-}
-
-extension CommentViewModel: ListDiffable {
-    func diffIdentifier() -> NSObjectProtocol {
-        return NSNumber(value: comment.id)
-    }
-
-    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        guard let object = object as? CommentViewModel else {
-            return false
-        }
-        return comment.depth == object.comment.depth &&
-            comment.actions == object.comment.actions &&
-            comment.content == object.comment.content
-    }
-}
-
-class ItemDetailsViewModel {
+final class ItemDetailsViewModel {
     enum Section: Int {
         case parent = 0
         case comments = 1

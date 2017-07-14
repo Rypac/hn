@@ -52,6 +52,8 @@
 		81820D511EFFB2B700FB460F /* String+HtmlParsing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */; };
 		81820D531EFFB4B600FB460F /* String+HtmlParsingSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81820D521EFFB4B600FB460F /* String+HtmlParsingSpec.swift */; };
 		819AA3661F18B947002C05F9 /* ItemSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819AA3651F18B947002C05F9 /* ItemSpec.swift */; };
+		819AA3681F18C553002C05F9 /* CommentViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819AA3671F18C553002C05F9 /* CommentViewModel.swift */; };
+		819AA36A1F18C57D002C05F9 /* PostViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 819AA3691F18C57D002C05F9 /* PostViewModel.swift */; };
 		81CDCD201EFE6B510044D1DF /* ItemDetailsCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81CDCD1F1EFE6B510044D1DF /* ItemDetailsCellNode.swift */; };
 		81E2A5601EF7DC40004045FF /* ItemDetailsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2A55F1EF7DC40004045FF /* ItemDetailsViewController.swift */; };
 		81E2A5621EF7F263004045FF /* ItemDetailsAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2A5611EF7F263004045FF /* ItemDetailsAction.swift */; };
@@ -138,6 +140,8 @@
 		81820D501EFFB2B700FB460F /* String+HtmlParsing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+HtmlParsing.swift"; path = "Extensions/String+HtmlParsing.swift"; sourceTree = "<group>"; };
 		81820D521EFFB4B600FB460F /* String+HtmlParsingSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "String+HtmlParsingSpec.swift"; path = "Extensions/String+HtmlParsingSpec.swift"; sourceTree = "<group>"; };
 		819AA3651F18B947002C05F9 /* ItemSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemSpec.swift; path = Models/ItemSpec.swift; sourceTree = "<group>"; };
+		819AA3671F18C553002C05F9 /* CommentViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentViewModel.swift; path = ViewModels/Diffable/CommentViewModel.swift; sourceTree = "<group>"; };
+		819AA3691F18C57D002C05F9 /* PostViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PostViewModel.swift; path = ViewModels/Diffable/PostViewModel.swift; sourceTree = "<group>"; };
 		81CDCD1F1EFE6B510044D1DF /* ItemDetailsCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsCellNode.swift; path = Views/ItemDetailsCellNode.swift; sourceTree = "<group>"; };
 		81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AsyncDisplayKit.framework; path = Carthage/Build/iOS/AsyncDisplayKit.framework; sourceTree = "<group>"; };
 		81E2A55C1EF7CC70004045FF /* AlamofireNetworkActivityIndicator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AlamofireNetworkActivityIndicator.framework; path = Carthage/Build/iOS/AlamofireNetworkActivityIndicator.framework; sourceTree = "<group>"; };
@@ -287,6 +291,7 @@
 		814EF8731EFE235E004CB013 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
+				819AA36B1F18C5DB002C05F9 /* Diffable */,
 				814EF8741EFE2389004CB013 /* ItemListViewModel.swift */,
 				814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */,
 			);
@@ -352,6 +357,15 @@
 				811850341F1638F600CF31AE /* URLSpec.swift */,
 			);
 			name = Extensions;
+			sourceTree = "<group>";
+		};
+		819AA36B1F18C5DB002C05F9 /* Diffable */ = {
+			isa = PBXGroup;
+			children = (
+				819AA3671F18C553002C05F9 /* CommentViewModel.swift */,
+				819AA3691F18C57D002C05F9 /* PostViewModel.swift */,
+			);
+			name = Diffable;
 			sourceTree = "<group>";
 		};
 		81E44CAA1F073DE9008BF854 /* Models */ = {
@@ -560,7 +574,9 @@
 				81E44CAC1F073E03008BF854 /* FormattedString.swift in Sources */,
 				8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */,
 				81EABE881F0C956400648566 /* Comment.swift in Sources */,
+				819AA36A1F18C57D002C05F9 /* PostViewModel.swift in Sources */,
 				811683C21EF92F4600680511 /* ItemCellNode.swift in Sources */,
+				819AA3681F18C553002C05F9 /* CommentViewModel.swift in Sources */,
 				81F1E3C41F13916D003190F8 /* HtmlTokenizer.swift in Sources */,
 				815739991EFE897300EB5CF3 /* Alamofire.swift in Sources */,
 				817E92E41F17A2BD00593693 /* Optional.swift in Sources */,

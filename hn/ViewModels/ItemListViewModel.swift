@@ -1,29 +1,6 @@
-import IGListKit
+import Foundation
 
-class PostViewModel {
-    let post: Post
-
-    init(_ post: Post) {
-        self.post = post
-    }
-}
-
-extension PostViewModel: ListDiffable {
-    func diffIdentifier() -> NSObjectProtocol {
-        return NSNumber(value: post.id)
-    }
-
-    func isEqual(toDiffableObject object: ListDiffable?) -> Bool {
-        guard let object = object as? PostViewModel else {
-            return false
-        }
-        return post.actions == object.post.actions &&
-            post.content == object.post.content &&
-            post.descendants == object.post.descendants
-    }
-}
-
-class ItemListViewModel {
+final class ItemListViewModel {
     let itemType: ItemType
     let repo: Repository
     let fetching: ContainerFetchState?
