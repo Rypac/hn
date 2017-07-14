@@ -30,3 +30,23 @@ extension Reference where T == Item {
         }
     }
 }
+
+extension Item {
+    static func fake(_ type: Item.PostType, id: Id, kids: [Item] = []) -> Item {
+        return Item(
+            id: id,
+            type: type,
+            title: "Clickbait title",
+            text: "<p>A <b>really</b> long and <i>interesting</i> comment</p>",
+            score: 27,
+            author: "hunter2",
+            time: 1234,
+            url: "https://www.google.com",
+            parent: .none,
+            descendants: kids.count,
+            kids: kids.map(Reference.value),
+            parts: .none,
+            dead: false,
+            deleted: false)
+    }
+}
