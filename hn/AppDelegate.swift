@@ -49,7 +49,7 @@ func visibleTabs(_ tabs: [ItemType: ItemList]) -> [UIViewController] {
     return tabs.enumerated().map { (index, tab) in
         let state = store.state!
         let controller = ItemListViewController(
-            state: ItemListViewModel(type: tab.key, list: tab.value, details: .none, repo: state.repository))
+            state: ItemListViewModel(type: tab.key, list: tab.value, repo: state.repository))
         controller.tabBarItem = UITabBarItem(title: tab.key.description, image: tab.key.image, tag: index)
         return controller
     }

@@ -47,11 +47,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
         parent?.title = type.description
         store.subscribe(self) { subscription in
             subscription.select { state in
-                ItemListViewModel(
-                    type: type,
-                    list: state.tabs[type]!,
-                    details: state.selectedItem,
-                    repo: state.repository)
+                ItemListViewModel(type: type, list: state.tabs[type]!, repo: state.repository)
             }
         }
     }
@@ -62,7 +58,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
     }
 
     func refreshData(sender: UIRefreshControl) {
-        store.dispatch(fetchItemList(state.repo.fetchItems)(state.itemType))
+        store.dispatch(state.requestItemList)
     }
 
     func longPress(gesture: UILongPressGestureRecognizer) {
@@ -88,9 +84,9 @@ extension ItemListViewController: StoreSubscriber {
         switch newState.fetching {
         case .none:
             refreshControl.beginRefreshing()
-            store.dispatch(fetchItemList(state.repo.fetchItems)(state.itemType))
+            store.dispatch(state.requestItemList)
         case .list(.finished)?:
-            store.dispatch(fetchNextItemBatch(state.repo.fetchItem)(state.itemType))
+            store.dispatch(state.requestNextItemBatch)
         case .items(.finished)?:
             refreshControl.endRefreshing()
         default:
@@ -137,7 +133,7 @@ extension ItemListViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        store.dispatch(async: fetchNextItemBatch(state.repo.fetchItem)(state.itemType)).regardless {
+        store.dispatch(async: state.requestNextItemBatch).regardless {
             context.completeBatchFetching(true)
         }
     }

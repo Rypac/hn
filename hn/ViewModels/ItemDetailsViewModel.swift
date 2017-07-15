@@ -10,19 +10,21 @@ final class ItemDetailsViewModel {
     let parent: Post
     let fetching: FetchState?
     let hasMoreComments: Bool
-    let repo: Repository
+    let requestComments: AsyncActionCreator<AppState, Void>
+
     fileprivate let allComments: [Comment]
 
     lazy var comments: [CommentViewModel] = self.allComments.transformVisible()
 
     init(details: ItemDetails, repo: Repository) {
-        self.repo = repo
         title = "\(max(details.post.descendants, details.comments.count)) Comments"
         parent = details.post
         fetching = details.fetching
         allComments = details.comments
         hasMoreComments = details.fetching == .none ||
             details.fetching == .finished && details.post.descendants > details.comments.count
+
+        requestComments = fetchComments(repo.fetchItem)(details.post.id)
     }
 }
 
