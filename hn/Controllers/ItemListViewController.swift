@@ -75,7 +75,6 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
         let story = state.posts[index.row].post
         if let viewOriginalAction = routeTo(original: story, from: self) {
-            tableNode.selectRow(at: index, animated: true, scrollPosition: .none)
             store.dispatch(viewOriginalAction)
         }
     }
@@ -88,7 +87,8 @@ extension ItemListViewController: StoreSubscriber {
 
         switch newState.fetching {
         case .none:
-            refreshControl.manuallyBeginRefreshing()
+            refreshControl.beginRefreshing()
+            store.dispatch(fetchItemList(state.repo.fetchItems)(state.itemType))
         case .list(.finished)?:
             store.dispatch(fetchNextItemBatch(state.repo.fetchItem)(state.itemType))
         case .items(.finished)?:
@@ -112,10 +112,6 @@ extension ItemListViewController: StoreSubscriber {
                     tableNode.moveRow(at: move.from, to: move.to)
                 }
             })
-        }
-
-        if case .none = newState.selectedItem, let index = tableNode.indexPathForSelectedRow {
-            tableNode.deselectRow(at: index, animated: true)
         }
     }
 }
@@ -149,6 +145,7 @@ extension ItemListViewController: ASTableDelegate {
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
         let story = state.posts[indexPath.row].post
         store.dispatch(routeTo(story, from: self))
+        tableNode.deselectRow(at: indexPath, animated: true)
     }
 }
 

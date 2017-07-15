@@ -22,19 +22,3 @@ extension UIEdgeInsets {
         static let tableViewCell = UIEdgeInsets(horizontal: horizontal, vertical: vertical)
     }
 }
-
-extension UIRefreshControl {
-    func manuallyBeginRefreshing() {
-        guard !isRefreshing else {
-            return
-        }
-
-        beginRefreshing()
-        if let parent = superview as? UIScrollView {
-            parent.setContentOffset(
-                CGPoint(x: 0, y: parent.contentOffset.y - frame.size.height),
-                animated: true)
-        }
-        sendActions(for: .valueChanged)
-    }
-}
