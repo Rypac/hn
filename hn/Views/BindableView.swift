@@ -1,4 +1,4 @@
-import AsyncDisplayKit
+import UIKit
 
 protocol BindableView {
     associatedtype ViewModel
@@ -7,10 +7,9 @@ protocol BindableView {
     func bind(viewModel: ViewModel)
 }
 
-extension BindableView where Self: ASDisplayNode {
+extension BindableView where Self: UIView {
     init(viewModel: ViewModel) {
         self.init()
-        automaticallyManagesSubnodes = true
         bind(viewModel: viewModel)
     }
 }

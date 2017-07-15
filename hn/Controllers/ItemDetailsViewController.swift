@@ -1,27 +1,20 @@
-import AsyncDisplayKit
 import IGListKit
 import ReSwift
 import SafariServices
 import UIKit
 
-final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
-    var tableNode: ASTableNode {
-        return node as! ASTableNode // swiftlint:disable:this force_cast
+final class ItemDetailsViewController: UIViewController {
+    struct ReuseId {
+        static let postCell = "Post"
+        static let commentCell = "Comments"
     }
 
-    lazy var refreshControl: UIRefreshControl = {
-        let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
-        return refresh
-    }()
-
+    let tableView = UITableView()
     var state: ItemDetailsViewModel
 
     init(state: ItemDetailsViewModel) {
         self.state = state
-        super.init(node: ASTableNode())
-        tableNode.delegate = self
-        tableNode.dataSource = self
+        super.init(nibName: nil, bundle: nil)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,7 +23,23 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableNode.view.refreshControl = refreshControl
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ItemDetailCell.self, forCellReuseIdentifier: ReuseId.postCell)
+        tableView.register(CommentCell.self, forCellReuseIdentifier: ReuseId.commentCell)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 700.0
+
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
+
+        view.addSubview(tableView)
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -65,8 +74,14 @@ extension ItemDetailsViewController: StoreSubscriber {
         state = newState
         title = newState.title
 
-        if newState.fetching == .finished {
-            refreshControl.endRefreshing()
+        switch newState.fetching {
+        case .none:
+            tableView.refreshControl?.beginRefreshing()
+            store.dispatch(state.requestComments)
+        case .finished?:
+            tableView.refreshControl?.endRefreshing()
+        default:
+            break
         }
 
         let diff = ListDiffPaths(
@@ -76,109 +91,66 @@ extension ItemDetailsViewController: StoreSubscriber {
             newArray: state.comments,
             option: .equality)
         if diff.hasChanges {
-            tableNode.performBatchUpdates({
-                for indexPath in diff.updates {
-                    if let node = tableNode.nodeForRow(at: indexPath) as? CommentCellNode {
-                        node.bind(viewModel: state.comments[indexPath.row])
-                        node.transitionLayout(withAnimation: true, shouldMeasureAsync: true)
-                    }
+            tableView.beginUpdates()
+            for indexPath in diff.updates {
+                if let cell = tableView.cellForRow(at: indexPath) as? CommentCell {
+                    cell.bind(viewModel: state.comments[indexPath.row])
                 }
-                tableNode.deleteRows(at: diff.deletes, with: .fade)
-                tableNode.insertRows(at: diff.inserts, with: .fade)
-                for move in diff.moves {
-                    tableNode.moveRow(at: move.from, to: move.to)
-                }
-            })
+            }
+            tableView.deleteRows(at: diff.deletes, with: .fade)
+            tableView.insertRows(at: diff.inserts, with: .fade)
+            for move in diff.moves {
+                tableView.moveRow(at: move.from, to: move.to)
+            }
+            tableView.endUpdates()
         }
     }
 }
 
-extension ItemDetailsViewController: ASTableDataSource {
-    func numberOfSections(in tableNode: ASTableNode) -> Int {
+extension ItemDetailsViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 2
     }
 
-    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return section == ItemDetailsViewModel.Section.comments.rawValue
             ? state.comments.count
             : 1
     }
 
-    func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        if indexPath.as(ItemDetailsViewModel.Section.self) == .parent {
-            let parent = state.parent
-            return {
-                let node = ItemDetailCellNode(viewModel: parent)
-                node.selectionStyle = .none
-                return node
-            }
-        }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        switch indexPath.section {
+        case 0:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseId.postCell, for: indexPath)
 
-        let comment = state.comments[indexPath.row]
-        return {
-            let node = CommentCellNode(viewModel: comment)
-            node.selectionStyle = .none
-            node.text.delegate = self
-            node.text.isUserInteractionEnabled = true
-            return node
+            if let cell = cell as? ItemDetailCell {
+                cell.bind(viewModel: state.parent)
+            }
+
+            return cell
+        default:
+            let cell = tableView.dequeueReusableCell(withIdentifier: ReuseId.commentCell, for: indexPath)
+
+            if let cell = cell as? CommentCell {
+                let comment = state.comments[indexPath.row]
+                cell.bind(viewModel: comment)
+            }
+
+            return cell
         }
     }
 }
 
-extension ItemDetailsViewController: ASTableDelegate {
-    func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
-        return state.hasMoreComments
-    }
-
-    func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        store.dispatch(async: state.requestComments).regardless {
-            context.completeBatchFetching(true)
-        }
-    }
-
-    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+extension ItemDetailsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.as(ItemDetailsViewModel.Section.self) {
         case .parent?:
             if let viewOriginalAction = routeTo(original: state.parent, from: self) {
                 store.dispatch(viewOriginalAction)
             }
-        case .comments?:
-            let comment = state.comments[indexPath.row].comment
-            let action = comment.actions.collapsed
-                ? CommentItemAction.expand
-                : CommentItemAction.collapse
-            store.dispatch(action(comment))
         default:
             break
         }
-    }
-}
-
-extension ItemDetailsViewController: ASTextNodeDelegate {
-    func textNode(
-        _ textNode: ASTextNode,
-        tappedLinkAttribute attribute: String,
-        value: Any,
-        at point: CGPoint,
-        textRange: NSRange
-    ) {
-        guard
-            let attributes = value as? Attributes,
-            let link = attributes.find("href"),
-            let url = URL(string: link)
-        else {
-            return
-        }
-
-        present(SFSafariViewController(url: url), animated: true, completion: nil)
-    }
-
-    func textNode(
-        _ textNode: ASTextNode,
-        shouldHighlightLinkAttribute attribute: String,
-        value: Any,
-        at point: CGPoint
-    ) -> Bool {
-        return true
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }

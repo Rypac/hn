@@ -1,27 +1,19 @@
-import AsyncDisplayKit
 import IGListKit
 import ReSwift
 import SafariServices
 import UIKit
 
-final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRecognizerDelegate {
-    var tableNode: ASTableNode {
-        return node as! ASTableNode // swiftlint:disable:this force_cast
+final class ItemListViewController: UIViewController, UIGestureRecognizerDelegate {
+    struct ReuseId {
+        static let postCell = "Post"
     }
 
-    lazy var refreshControl: UIRefreshControl = {
-        let refresh = UIRefreshControl()
-        refresh.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
-        return refresh
-    }()
-
+    let tableView = UITableView()
     var state: ItemListViewModel
 
     init(state: ItemListViewModel) {
         self.state = state
-        super.init(node: ASTableNode())
-        tableNode.delegate = self
-        tableNode.dataSource = self
+        super.init(nibName: .none, bundle: .none)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -30,15 +22,29 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableNode.leadingScreensForBatching = 1
-        tableNode.view.refreshControl = refreshControl
+        tableView.dataSource = self
+        tableView.delegate = self
+        tableView.register(ItemCell.self, forCellReuseIdentifier: ReuseId.postCell)
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 60
+
+        tableView.refreshControl = UIRefreshControl()
+        tableView.refreshControl?.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
 
         let longPressGesture = UILongPressGestureRecognizer(
             target: self,
             action: #selector(longPress(gesture:)))
         longPressGesture.minimumPressDuration = 0.5
         longPressGesture.delegate = self
-        tableNode.view.addGestureRecognizer(longPressGesture)
+        tableView.addGestureRecognizer(longPressGesture)
+
+        view.addSubview(tableView)
+
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -64,7 +70,7 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
     func longPress(gesture: UILongPressGestureRecognizer) {
         guard
             gesture.state == UIGestureRecognizerState.began,
-            let index = tableNode.indexPathForRow(at: gesture.location(in: tableNode.view))
+            let index = tableView.indexPathForRow(at: gesture.location(in: tableView))
         else {
             return
         }
@@ -83,12 +89,12 @@ extension ItemListViewController: StoreSubscriber {
 
         switch newState.fetching {
         case .none:
-            refreshControl.beginRefreshing()
+            tableView.refreshControl?.beginRefreshing()
             store.dispatch(state.requestItemList)
         case .list(.finished)?:
             store.dispatch(state.requestNextItemBatch)
         case .items(.finished)?:
-            refreshControl.endRefreshing()
+            tableView.refreshControl?.endRefreshing()
         default:
             break
         }
@@ -100,48 +106,44 @@ extension ItemListViewController: StoreSubscriber {
             newArray: state.posts,
             option: .equality)
         if diff.hasChanges {
-            tableNode.performBatchUpdates({
-                tableNode.reloadRows(at: diff.updates, with: .automatic)
-                tableNode.deleteRows(at: diff.deletes, with: .none)
-                tableNode.insertRows(at: diff.inserts, with: .none)
-                for move in diff.moves {
-                    tableNode.moveRow(at: move.from, to: move.to)
-                }
-            })
+            tableView.beginUpdates()
+            tableView.deleteRows(at: diff.deletes, with: .none)
+            tableView.insertRows(at: diff.inserts, with: .none)
+            for move in diff.moves {
+                tableView.moveRow(at: move.from, to: move.to)
+            }
+            tableView.reloadRows(at: diff.updates, with: .automatic)
+            tableView.endUpdates()
         }
     }
 }
 
-extension ItemListViewController: ASTableDataSource {
-    func numberOfSections(in tableNode: ASTableNode) -> Int {
+extension ItemListViewController: UITableViewDataSource {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
 
-    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return state.posts.count
     }
 
-    func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        let item = state.posts[indexPath.row].post
-        return { ItemCellNode(viewModel: item) }
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: ReuseId.postCell, for: indexPath)
+
+        if let cell = cell as? ItemCell {
+            let post = state.posts[indexPath.row].post
+            cell.bind(viewModel: post)
+        }
+
+        return cell
     }
 }
 
-extension ItemListViewController: ASTableDelegate {
-    func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
-        return state.hasMoreItems
-    }
-
-    func tableNode(_ tableNode: ASTableNode, willBeginBatchFetchWith context: ASBatchContext) {
-        store.dispatch(async: state.requestNextItemBatch).regardless {
-            context.completeBatchFetching(true)
-        }
-    }
-
-    func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
+extension ItemListViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let story = state.posts[indexPath.row].post
         store.dispatch(routeTo(story, from: self))
-        tableNode.deselectRow(at: indexPath, animated: true)
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 }
 
