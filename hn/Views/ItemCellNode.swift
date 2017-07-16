@@ -1,12 +1,21 @@
 import AsyncDisplayKit
 import UIKit
 
-final class ItemCellNode: ASCellNode, BindableView {
+final class PostCellNode: ASCellNode, BindableView {
     typealias ViewModel = Post
 
     let text = ASTextNode()
     let details = ASTextNode()
     let comments = ASTextNode()
+
+    private var model: Post
+
+    init(viewModel: Post) {
+        model = viewModel
+        super.init()
+        automaticallyManagesSubnodes = true
+        bind(viewModel: viewModel)
+    }
 
     func bind(viewModel post: Post) {
         guard let content = post.content.details else {
@@ -21,6 +30,12 @@ final class ItemCellNode: ASCellNode, BindableView {
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
+        let postContent = ASStackLayoutSpec(
+            direction: .vertical,
+            spacing: 4,
+            flex: (shrink: 1.0, grow: 1.0),
+            children: [text, details])
+
         return ASInsetLayoutSpec(
             insets: UIEdgeInsets.Default.tableViewCell,
             child: ASStackLayoutSpec(
@@ -28,14 +43,7 @@ final class ItemCellNode: ASCellNode, BindableView {
                 spacing: 20,
                 justifyContent: .start,
                 alignItems: .center,
-                children: [
-                    ASStackLayoutSpec(
-                        direction: .vertical,
-                        spacing: 4,
-                        flex: (shrink: 1.0, grow: 1.0),
-                        children: [text, details]),
-                    comments
-                ]))
+                children: model.type == .job ? [postContent] : [postContent, comments]))
     }
 }
 

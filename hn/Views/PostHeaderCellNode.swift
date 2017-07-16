@@ -1,7 +1,7 @@
 import AsyncDisplayKit
 import UIKit
 
-final class ItemDetailCellNode: ASCellNode, BindableView {
+final class PostHeaderCellNode: ASCellNode, BindableView {
     typealias ViewModel = Post
 
     let title = ASTextNode()

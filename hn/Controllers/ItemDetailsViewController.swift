@@ -108,7 +108,7 @@ extension ItemDetailsViewController: ASTableDataSource {
         if indexPath.as(ItemDetailsViewModel.Section.self) == .parent {
             let parent = state.parent
             return {
-                let node = ItemDetailCellNode(viewModel: parent)
+                let node = PostHeaderCellNode(viewModel: parent)
                 node.selectionStyle = .none
                 return node
             }

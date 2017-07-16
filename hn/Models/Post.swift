@@ -1,6 +1,9 @@
 import Foundation
 
 struct Post {
+    enum Variant {
+        case story, job, poll
+    }
     struct Details {
         let title: String
         let text: FormattedString?
@@ -15,6 +18,7 @@ struct Post {
         var hidden: Bool
     }
     let id: Id
+    let type: Variant
     let content: Content<Details>
     let descendants: Int
     let comments: [Id]
@@ -25,14 +29,29 @@ struct Post {
 
 extension Post: ItemInitialisable {
     init?(fromItem item: Item) {
-        guard let details = Content<Details>(fromItem: item) else {
+        guard
+            let variant = Variant(fromItem: item),
+            let details = Content<Details>(fromItem: item)
+        else {
             return nil
         }
         id = item.id
+        type = variant
         content = details
         descendants = item.descendants ?? 0
         comments = item.kids.map { $0.id }
         actions = Actions(upvoted: false, saved: false, hidden: false)
+    }
+}
+
+extension Post.Variant: ItemInitialisable {
+    init?(fromItem item: Item) {
+        switch item.type {
+        case .story: self = .story
+        case .job: self = .job
+        case .poll: self = .poll
+        default: return nil
+        }
     }
 }
 
