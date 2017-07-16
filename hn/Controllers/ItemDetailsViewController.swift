@@ -12,6 +12,11 @@ final class ItemDetailsViewController: UIViewController {
     let tableView = UITableView()
     var state: ItemDetailsViewModel
 
+    var cachedHeights = [Int: CGFloat]()
+
+    fileprivate lazy var prototypeCommentCell: CommentCell =
+        self.tableView.dequeueReusableCell(withIdentifier: ReuseId.commentCell) as! CommentCell // swiftlint:disable:this force_cast
+
     init(state: ItemDetailsViewModel) {
         self.state = state
         super.init(nibName: nil, bundle: nil)
@@ -23,23 +28,16 @@ final class ItemDetailsViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tableView.frame = view.frame
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(ItemDetailCell.self, forCellReuseIdentifier: ReuseId.postCell)
         tableView.register(CommentCell.self, forCellReuseIdentifier: ReuseId.commentCell)
-        tableView.rowHeight = UITableViewAutomaticDimension
-        tableView.estimatedRowHeight = 700.0
 
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(refreshData(sender:)), for: .valueChanged)
 
         view.addSubview(tableView)
-
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-        tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-        tableView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-        tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
     }
 
     override func viewWillAppear(_ animated: Bool) {
@@ -118,6 +116,18 @@ extension ItemDetailsViewController: UITableViewDataSource {
             : 1
     }
 
+    func tableView(_ tableView: UITableView, estimatedHeightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.section == ItemDetailsViewModel.Section.comments.rawValue
+            ? heightForRow(withModel: state.comments[indexPath.row])
+            : 200
+    }
+
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return indexPath.section == ItemDetailsViewModel.Section.comments.rawValue
+            ? heightForRow(withModel: state.comments[indexPath.row])
+            : UITableViewAutomaticDimension
+    }
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
@@ -152,5 +162,29 @@ extension ItemDetailsViewController: UITableViewDelegate {
             break
         }
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension ItemDetailsViewController {
+    func heightForRow(withModel model: CommentViewModel) -> CGFloat {
+        if let height = cachedHeights[model.comment.id] {
+            return height
+        }
+
+        prototypeCommentCell.bind(viewModel: model)
+
+        let size = CGSize(width: tableView.bounds.width, height: CGFloat.greatestFiniteMagnitude)
+        let textHeight = ceil(prototypeCommentCell.commentText.attributedText.boundingRect(
+            with: size,
+            options: .usesLineFragmentOrigin,
+            context: nil).size.height)
+        let detailsHeight = ceil(prototypeCommentCell.commentDetails.attributedText.boundingRect(
+            with: size,
+            options: .usesLineFragmentOrigin,
+            context: nil).size.height)
+
+        let height = textHeight + detailsHeight + 8
+        cachedHeights[model.comment.id] = height
+        return height
     }
 }

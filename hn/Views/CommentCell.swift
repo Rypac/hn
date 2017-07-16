@@ -3,42 +3,51 @@ import UIKit
 final class CommentCell: UITableViewCell, BindableView {
     typealias ViewModel = CommentViewModel
 
-    let commentTextLabel = UILabel()
-    let commentDetailsLabel = UILabel()
+    let commentText = UITextView()
+    let commentDetails = UITextView()
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        commentTextLabel.numberOfLines = 0
-        commentTextLabel.adjustsFontForContentSizeCategory = true
-        commentDetailsLabel.numberOfLines = 1
-        commentDetailsLabel.adjustsFontForContentSizeCategory = true
 
-        contentView.addSubview(commentTextLabel)
-        contentView.addSubview(commentDetailsLabel)
+        commentText.translatesAutoresizingMaskIntoConstraints = true
+        commentText.adjustsFontForContentSizeCategory = true
+        commentText.contentInset = UIEdgeInsets(
+            horizontal: -commentText.textContainer.lineFragmentPadding,
+            vertical: 0)
+        commentText.textContainerInset = .zero
+        commentText.isEditable = false
+        commentText.isScrollEnabled = false
+        commentText.isSelectable = false
 
-        setupConstraints()
+        commentDetails.translatesAutoresizingMaskIntoConstraints = true
+        commentDetails.adjustsFontForContentSizeCategory = true
+        commentDetails.contentInset = UIEdgeInsets(
+            horizontal: -commentDetails.textContainer.lineFragmentPadding,
+            vertical: 0)
+        commentDetails.textContainerInset = .zero
+        commentDetails.isEditable = false
+        commentDetails.isScrollEnabled = false
+        commentDetails.isSelectable = false
+
+        contentView.addSubview(commentText)
+        contentView.addSubview(commentDetails)
     }
 
-    private func setupConstraints() {
-        commentDetailsLabel.translatesAutoresizingMaskIntoConstraints = false
-        commentTextLabel.translatesAutoresizingMaskIntoConstraints = false
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        let width = contentView.bounds.width
+        let size = CGSize(width: width, height: CGFloat.greatestFiniteMagnitude)
+        let textHeight = ceil(commentText.attributedText.boundingRect(
+            with: size,
+            options: .usesLineFragmentOrigin,
+            context: nil).size.height)
+        let detailsHeight = ceil(commentDetails.attributedText.boundingRect(
+            with: size,
+            options: .usesLineFragmentOrigin,
+            context: nil).size.height)
 
-        commentDetailsLabel.leadingAnchor.constraint(
-            equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
-        commentDetailsLabel.trailingAnchor.constraint(
-            equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
-        commentDetailsLabel.topAnchor.constraint(
-            equalTo: contentView.layoutMarginsGuide.topAnchor).isActive = true
-
-        commentTextLabel.leadingAnchor.constraint(
-            equalTo: contentView.layoutMarginsGuide.leadingAnchor).isActive = true
-        commentTextLabel.trailingAnchor.constraint(
-            equalTo: contentView.layoutMarginsGuide.trailingAnchor).isActive = true
-        commentTextLabel.topAnchor.constraint(
-            equalTo: commentDetailsLabel.bottomAnchor,
-            constant: 6).isActive = true
-        commentTextLabel.bottomAnchor.constraint(
-            equalTo: contentView.layoutMarginsGuide.bottomAnchor).isActive = true
+        commentDetails.frame = CGRect(x: 0, y: 0, width: width, height: detailsHeight)
+        commentText.frame = CGRect(x: 0, y: detailsHeight + 8, width: width, height: textHeight)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -46,7 +55,7 @@ final class CommentCell: UITableViewCell, BindableView {
     }
 
     func bind(viewModel: ViewModel) {
-        commentTextLabel.attributedText = viewModel.title
-        commentDetailsLabel.attributedText = viewModel.details
+        commentText.attributedText = viewModel.title
+        commentDetails.attributedText = viewModel.details
     }
 }
