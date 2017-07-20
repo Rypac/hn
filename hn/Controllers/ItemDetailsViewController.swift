@@ -1,5 +1,4 @@
 import AsyncDisplayKit
-import IGListKit
 import ReSwift
 import SafariServices
 import UIKit
@@ -16,12 +15,15 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
     }()
 
     var state: ItemDetailsViewModel
+    var dataSource: ItemDetailsDataSource
 
     init(state: ItemDetailsViewModel) {
         self.state = state
+        dataSource = ItemDetailsDataSource(state)
         super.init(node: ASTableNode())
         tableNode.delegate = self
-        tableNode.dataSource = self
+        tableNode.dataSource = dataSource
+        dataSource.delegate = self
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -61,7 +63,7 @@ final class ItemDetailsViewController: ASViewController<ASDisplayNode> {
 
 extension ItemDetailsViewController: StoreSubscriber {
     func newState(state newState: ItemDetailsViewModel) {
-        let oldComments = state.comments
+        dataSource.provider = newState
         state = newState
         title = newState.title
 
@@ -69,13 +71,7 @@ extension ItemDetailsViewController: StoreSubscriber {
             refreshControl.endRefreshing()
         }
 
-        let diff = ListDiffPaths(
-            fromSection: 1,
-            toSection: 1,
-            oldArray: oldComments,
-            newArray: state.comments,
-            option: .equality)
-        if diff.hasChanges {
+        if let diff = dataSource.diff, diff.hasChanges {
             tableNode.performBatchUpdates({
                 for indexPath in diff.updates {
                     if let node = tableNode.nodeForRow(at: indexPath) as? CommentCellNode {
@@ -93,38 +89,6 @@ extension ItemDetailsViewController: StoreSubscriber {
     }
 }
 
-extension ItemDetailsViewController: ASTableDataSource {
-    func numberOfSections(in tableNode: ASTableNode) -> Int {
-        return 2
-    }
-
-    func tableNode(_ tableNode: ASTableNode, numberOfRowsInSection section: Int) -> Int {
-        return section == ItemDetailsViewModel.Section.comments.rawValue
-            ? state.comments.count
-            : 1
-    }
-
-    func tableNode(_ tableNode: ASTableNode, nodeBlockForRowAt indexPath: IndexPath) -> ASCellNodeBlock {
-        if indexPath.as(ItemDetailsViewModel.Section.self) == .parent {
-            let parent = state.parent
-            return {
-                let node = PostHeaderCellNode(viewModel: parent)
-                node.selectionStyle = .none
-                return node
-            }
-        }
-
-        let comment = state.comments[indexPath.row]
-        return {
-            let node = CommentCellNode(viewModel: comment)
-            node.selectionStyle = .none
-            node.text.delegate = self
-            node.text.isUserInteractionEnabled = true
-            return node
-        }
-    }
-}
-
 extension ItemDetailsViewController: ASTableDelegate {
     func shouldBatchFetch(for tableNode: ASTableNode) -> Bool {
         return state.hasMoreComments
@@ -137,13 +101,13 @@ extension ItemDetailsViewController: ASTableDelegate {
     }
 
     func tableNode(_ tableNode: ASTableNode, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.as(ItemDetailsViewModel.Section.self) {
+        switch indexPath.as(ItemDetailsDataSource.Section.self) {
         case .parent?:
-            if let viewOriginalAction = routeTo(original: state.parent, from: self) {
+            if let viewOriginalAction = routeTo(original: dataSource.provider.parent, from: self) {
                 store.dispatch(viewOriginalAction)
             }
         case .comments?:
-            let comment = state.comments[indexPath.row].comment
+            let comment = dataSource.provider.comments[indexPath.row].comment
             let action = comment.actions.collapsed
                 ? CommentItemAction.expand
                 : CommentItemAction.collapse

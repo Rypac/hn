@@ -27,9 +27,11 @@
 		811F6E0D1F04ABD2000C5EE2 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 811F6E0C1F04ABD2000C5EE2 /* PromiseKit.framework */; };
 		812126771EC7088D00A4B61F /* FirebaseApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812126761EC7088D00A4B61F /* FirebaseApi.swift */; };
 		812C83651F00D42500DFC70E /* UIFont.swift in Sources */ = {isa = PBXBuildFile; fileRef = 812C83641F00D42500DFC70E /* UIFont.swift */; };
+		8131798D1F1C1409005C78CE /* ItemDetailsDataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8131798C1F1C1409005C78CE /* ItemDetailsDataSource.swift */; };
 		81367DB91F025396004AF6C6 /* AsyncDisplayKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */; };
 		81367DBC1F027B63004AF6C6 /* ItemDetailsActionSpec.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DBB1F027B63004AF6C6 /* ItemDetailsActionSpec.swift */; };
 		81367DBF1F028C11004AF6C6 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81367DBE1F028C11004AF6C6 /* Item.swift */; };
+		813D91171F1D6B4400C81558 /* DataSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 813D91161F1D6B4400C81558 /* DataSource.swift */; };
 		814AD7A71F10EB19003316CA /* UIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814AD7A61F10EB19003316CA /* UIColor.swift */; };
 		814DF7E01EFB3A9300C0A886 /* CommentCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */; };
 		814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8741EFE2389004CB013 /* ItemListViewModel.swift */; };
@@ -113,9 +115,11 @@
 		812126761EC7088D00A4B61F /* FirebaseApi.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FirebaseApi.swift; path = Services/FirebaseApi.swift; sourceTree = "<group>"; };
 		812126781EC70EE700A4B61F /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		812C83641F00D42500DFC70E /* UIFont.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIFont.swift; path = Extensions/UIFont.swift; sourceTree = "<group>"; };
+		8131798C1F1C1409005C78CE /* ItemDetailsDataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsDataSource.swift; path = Controllers/ItemDetailsDataSource.swift; sourceTree = "<group>"; };
 		81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AsyncDisplayKit.swift; path = Extensions/AsyncDisplayKit.swift; sourceTree = "<group>"; };
 		81367DBB1F027B63004AF6C6 /* ItemDetailsActionSpec.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsActionSpec.swift; path = Actions/ItemDetailsActionSpec.swift; sourceTree = "<group>"; };
 		81367DBE1F028C11004AF6C6 /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Item.swift; path = TestSetup/Item.swift; sourceTree = "<group>"; };
+		813D91161F1D6B4400C81558 /* DataSource.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DataSource.swift; path = Protocols/DataSource.swift; sourceTree = "<group>"; };
 		814AD7A61F10EB19003316CA /* UIColor.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = UIColor.swift; path = Extensions/UIColor.swift; sourceTree = "<group>"; };
 		814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentCellNode.swift; path = Views/CommentCellNode.swift; sourceTree = "<group>"; };
 		814EF8741EFE2389004CB013 /* ItemListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewModel.swift; path = ViewModels/ItemListViewModel.swift; sourceTree = "<group>"; };
@@ -201,6 +205,7 @@
 			children = (
 				8118DBAD1EF50DF100934BA4 /* ItemListViewController.swift */,
 				81E2A55F1EF7DC40004045FF /* ItemDetailsViewController.swift */,
+				8131798C1F1C1409005C78CE /* ItemDetailsDataSource.swift */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -288,6 +293,14 @@
 			name = TestSetup;
 			sourceTree = "<group>";
 		};
+		813D91151F1D6B2600C81558 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				813D91161F1D6B4400C81558 /* DataSource.swift */,
+			);
+			name = Protocols;
+			sourceTree = "<group>";
+		};
 		814EF8731EFE235E004CB013 /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -325,6 +338,7 @@
 				811683C31EF9345400680511 /* Extensions */,
 				81F1E3C21F13914F003190F8 /* Library */,
 				81E44CAA1F073DE9008BF854 /* Models */,
+				813D91151F1D6B2600C81558 /* Protocols */,
 				8100428D1EF8916F001E2B42 /* Reducers */,
 				8100428A1EF8915F001E2B42 /* Services */,
 				81FC4B991F110DDE00DFF070 /* UI */,
@@ -578,11 +592,13 @@
 				819AA3681F18C553002C05F9 /* CommentViewModel.swift in Sources */,
 				81F1E3C41F13916D003190F8 /* HtmlTokenizer.swift in Sources */,
 				815739991EFE897300EB5CF3 /* Alamofire.swift in Sources */,
+				8131798D1F1C1409005C78CE /* ItemDetailsDataSource.swift in Sources */,
 				817E92E41F17A2BD00593693 /* Optional.swift in Sources */,
 				814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */,
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,
 				81367DB91F025396004AF6C6 /* AsyncDisplayKit.swift in Sources */,
 				814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */,
+				813D91171F1D6B4400C81558 /* DataSource.swift in Sources */,
 				487A4A8E1A69D12DBF529664 /* AppReducer.swift in Sources */,
 				81F1E3C61F139183003190F8 /* Tokenizer.swift in Sources */,
 				947778A61F11A869002BA05E /* Image.swift in Sources */,

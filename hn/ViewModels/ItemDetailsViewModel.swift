@@ -1,11 +1,6 @@
 import Foundation
 
 final class ItemDetailsViewModel {
-    enum Section: Int {
-        case parent = 0
-        case comments = 1
-    }
-
     let title: String
     let parent: Post
     let fetching: FetchState?
@@ -27,6 +22,8 @@ final class ItemDetailsViewModel {
         requestComments = fetchComments(repo.fetchItem)(details.post.id)
     }
 }
+
+extension ItemDetailsViewModel: ItemDetailsDataProvider {}
 
 extension ItemDetailsViewModel: Equatable {
     static func == (_ lhs: ItemDetailsViewModel, _ rhs: ItemDetailsViewModel) -> Bool {
