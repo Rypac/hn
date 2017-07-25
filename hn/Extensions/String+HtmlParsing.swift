@@ -1,20 +1,5 @@
 import Foundation
 
-extension Formatting {
-    init?(from tag: HtmlTag) {
-        switch tag {
-        case .a: self = .url
-        case .b: self = .bold
-        case .i: self = .italic
-        case .u: self = .underline
-        case .p: self = .paragraph
-        case .pre: self = .preformatted
-        case .code: self = .code
-        case .br: self = .linebreak
-        }
-    }
-}
-
 extension String {
     func decodingHtmlEntities() -> String {
         var result = String()
