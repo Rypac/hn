@@ -73,10 +73,10 @@ struct HtmlTokenizer: Tokenizer {
                 isCloseTag = true
             case HtmlTagId.end:
                 pushTag()
-                guard let tag = tag.flatMap(HtmlTag.init(rawValue:)) else {
-                    return .error(.unknownTag)
-                }
-                return .success(isCloseTag ? .close(tag) : .open(tag, attributes))
+                return tag.flatMap(HtmlTag.init(rawValue:))
+                    .map { isCloseTag ? .close($0) : .open($0, attributes) }
+                    .map(TokenResult.success)
+                    .or(.error(.unknownTag))
             default:
                 text.unicodeScalars.append(char)
             }
@@ -92,10 +92,10 @@ struct HtmlTokenizer: Tokenizer {
                 entityName.unicodeScalars.append(ch)
                 char = nextCharacter()
             }
-            guard let entity = HtmlEntity.decode(entityName).map(HtmlToken.entity) else {
-                return .error(.invalidEntity)
-            }
-            return .success(entity)
+            return HtmlEntity.decode(entityName)
+                .map(HtmlToken.entity)
+                .map(TokenResult.success)
+                .or(.error(.invalidEntity))
         }
 
         let radix: Int
@@ -113,13 +113,11 @@ struct HtmlTokenizer: Tokenizer {
             char = nextCharacter()
         }
 
-        guard let entity = UInt32(number, radix: radix)
+        return UInt32(number, radix: radix)
             .flatMap(UnicodeScalar.init)
             .flatMap(HtmlToken.entity)
-        else {
-            return .error(.invalidEntity)
-        }
-        return .success(entity)
+            .map(TokenResult.success)
+            .or(.error(.invalidEntity))
     }
 }
 

@@ -17,9 +17,6 @@ extension Store {
     }
 
     func dispatch<T>(async action: hn.AsyncActionCreator<State, T>) -> Promise<T>? {
-        guard let action = action(state, self) else {
-            return .none
-        }
-        return dispatch(async: action)
+        return action(state, self).map(dispatch(async:))
     }
 }
