@@ -29,8 +29,8 @@ func appReducer(action: Action, state: AppState?) -> AppState {
             switch fetchState {
             case .request:
                 itemList.fetching = .items(.started)
-            case let .success(result: items):
-                itemList.posts += items.flatMap(Post.init(fromItem:))
+            case let .success(result: posts):
+                itemList.posts += posts
                 itemList.fetching = .items(.finished)
             case let .error(error: error):
                 print("Error fetching items: \(error)")

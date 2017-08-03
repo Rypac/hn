@@ -15,7 +15,7 @@ struct ItemListFetchAction: Action {
 
 enum ItemFetchState {
     case ids(AsyncRequestState<[Id]>)
-    case items(AsyncRequestState<[Item]>)
+    case items(AsyncRequestState<[Post]>)
 }
 
 enum ItemListNavigationAction: Action {
@@ -59,7 +59,9 @@ func fetchNextItemBatch(_ request: @escaping (Id) -> Promise<Item>) -> StoryList
         }.then {
             when(fulfilled: ids.map(request))
         }.then { items in
-            store.dispatch(ItemListFetchAction(type, .items(.success(result: items))))
+            items.flatMap(Post.init(fromItem:))
+        }.then { posts in
+            store.dispatch(ItemListFetchAction(type, .items(.success(result: posts))))
         }.recover { error in
             store.dispatch(ItemListFetchAction(type, .items(.error(error: error))))
         }
