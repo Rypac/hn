@@ -17,6 +17,7 @@ struct Post {
         var saved: Bool
         var hidden: Bool
     }
+
     let id: Id
     let type: Variant
     let content: Content<Details>

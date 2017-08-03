@@ -46,7 +46,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
 }
 
 func visibleTabs(_ tabs: [ItemType: ItemList]) -> [UIViewController] {
-    return tabs.enumerated().map { (index, tab) in
+    return tabs.enumerated().map { index, tab in
         let state = store.state!
         let controller = ItemListViewController(
             state: ItemListViewModel(type: tab.key, list: tab.value, repo: state.repository))

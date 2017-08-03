@@ -12,6 +12,7 @@ struct Comment {
         var saved: Bool
         var collapsed: Bool
     }
+
     let id: Id
     let content: Content<Details>
     let responses: [Id]
