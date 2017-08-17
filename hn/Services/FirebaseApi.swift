@@ -1,4 +1,3 @@
-import Alamofire
 import PromiseKit
 
 struct Firebase {
@@ -15,15 +14,19 @@ struct Firebase {
     }
 
     static func fetch(stories: ItemType) -> Promise<[Int]> {
-        return request(stories.endpoint)
+        return Webservice().load(resource: Resource(url: stories.endpoint.url))
     }
 
     static func fetch(item id: Int) -> Promise<Item> {
-        return request(Endpoint.item(id), withMapper: Item.init(firebaseResponse:))
+        return Webservice().load(resource: Resource(
+            url: Endpoint.item(id).url,
+            parseJSON: Item.init(firebaseResponse:)))
     }
 
     static func fetch(user username: String) -> Promise<User> {
-        return request(Endpoint.user(username), withMapper: User.init(firebaseResponse:))
+        return Webservice().load(resource: Resource(
+            url: Endpoint.user(username).url,
+            parseJSON: User.init(firebaseResponse:)))
     }
 }
 
@@ -41,7 +44,7 @@ extension Item.PostType {
 }
 
 extension Item {
-    init?(firebaseResponse json: [String: Any]) {
+    init?(firebaseResponse json: JSONDictionary) {
         guard
             let id = json["id"] as? Int,
             let type = (json["type"] as? String).flatMap(PostType.init(firebaseResponse:))
@@ -66,7 +69,7 @@ extension Item {
 }
 
 extension User {
-    init?(firebaseResponse json: [String: Any]) {
+    init?(firebaseResponse json: JSONDictionary) {
         guard
             let username = json["id"] as? String,
             let karma = json["karma"] as? Int,
@@ -83,12 +86,8 @@ extension User {
     }
 }
 
-extension Firebase.Endpoint: URLConvertible {
+extension Firebase.Endpoint {
     static let baseUrl = "https://hacker-news.firebaseio.com/v0"
-
-    func asURL() throws -> URL {
-        return try "\(Firebase.Endpoint.baseUrl)\(path)".asURL()
-    }
 
     var path: String {
         switch self {
@@ -102,6 +101,10 @@ extension Firebase.Endpoint: URLConvertible {
         case .item(let id): return "/item/\(id).json"
         case .user(let username): return "/user/\(username).json"
         }
+    }
+
+    var url: URL {
+        return URL(string: "\(Firebase.Endpoint.baseUrl)\(path)")!
     }
 }
 

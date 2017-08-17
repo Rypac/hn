@@ -1,4 +1,3 @@
-import Alamofire
 import PromiseKit
 
 struct Algolia {
@@ -8,11 +7,15 @@ struct Algolia {
     }
 
     static func fetch(item id: Int) -> Promise<Item> {
-        return request(Endpoint.item(id), withMapper: Item.init(algoliaResponse:))
+        return Webservice().load(resource: Resource(
+            url: Endpoint.item(id).url,
+            parseJSON: Item.init(algoliaResponse:)))
     }
 
     static func fetch(user username: String) -> Promise<User> {
-        return request(Endpoint.user(username), withMapper: User.init(algoliaResponse:))
+        return Webservice().load(resource: Resource(
+            url: Endpoint.user(username).url,
+            parseJSON: User.init(algoliaResponse:)))
     }
 }
 
@@ -30,7 +33,7 @@ extension Item.PostType {
 }
 
 extension Item {
-    init?(algoliaResponse json: [String: Any]) {
+    init?(algoliaResponse json: JSONDictionary) {
         guard
             let id = json["id"] as? Int,
             let type = (json["type"] as? String).flatMap(PostType.init(algoliaResponse:))
@@ -46,7 +49,7 @@ extension Item {
         time = json["created_at_i"] as? Int
         url = json["url"] as? String
         parent = json["parent"] as? Int
-        if let children = json["children"] as? [[String: Any]] {
+        if let children = json["children"] as? [JSONDictionary] {
             kids = children.flatMap(Item.init(algoliaResponse:)).map(Reference.value)
         } else {
             kids = []
@@ -59,7 +62,7 @@ extension Item {
 }
 
 extension User {
-    init?(algoliaResponse json: [String: Any]) {
+    init?(algoliaResponse json: JSONDictionary) {
         guard
             let username = json["username"] as? String,
             let karma = json["karma"] as? Int,
@@ -76,17 +79,17 @@ extension User {
     }
 }
 
-extension Algolia.Endpoint: URLConvertible {
+extension Algolia.Endpoint {
     static let baseUrl = "http://hn.algolia.com/api/v1"
-
-    func asURL() throws -> URL {
-        return try "\(Algolia.Endpoint.baseUrl)\(path)".asURL()
-    }
 
     var path: String {
         switch self {
         case .item(let id): return "/items/\(id)"
         case .user(let username): return "/users/\(username)"
         }
+    }
+
+    var url: URL {
+        return URL(string: "\(Algolia.Endpoint.baseUrl)\(path)")!
     }
 }

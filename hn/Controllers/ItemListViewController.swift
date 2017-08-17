@@ -30,7 +30,6 @@ final class ItemListViewController: ASViewController<ASDisplayNode>, UIGestureRe
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableNode.leadingScreensForBatching = 1
         tableNode.view.refreshControl = refreshControl
 
         let longPressGesture = UILongPressGestureRecognizer(

@@ -19,8 +19,6 @@
 		8118DBAC1EF504F800934BA4 /* ItemListAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAB1EF504F800934BA4 /* ItemListAction.swift */; };
 		8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAD1EF50DF100934BA4 /* ItemListViewController.swift */; };
 		8118DBB01EF5133600934BA4 /* LoadingCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8118DBAF1EF5133600934BA4 /* LoadingCellNode.swift */; };
-		811D4E141EFF2C3700B49F38 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 812126781EC70EE700A4B61F /* Alamofire.framework */; };
-		811D4E151EFF2C3700B49F38 /* AlamofireNetworkActivityIndicator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81E2A55C1EF7CC70004045FF /* AlamofireNetworkActivityIndicator.framework */; };
 		811D4E161EFF2C3700B49F38 /* AsyncDisplayKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81DA7A901EEC066B00118D04 /* AsyncDisplayKit.framework */; };
 		811D4E171EFF2C3700B49F38 /* ReSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8118DBA81EF5004200934BA4 /* ReSwift.framework */; };
 		811D4E191EFF3CFF00B49F38 /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 811D4E181EFF3CFF00B49F38 /* String.swift */; };
@@ -34,7 +32,6 @@
 		814DF7E01EFB3A9300C0A886 /* CommentCellNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */; };
 		814EF8751EFE2389004CB013 /* ItemListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8741EFE2389004CB013 /* ItemListViewModel.swift */; };
 		814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */; };
-		815739991EFE897300EB5CF3 /* Alamofire.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815739981EFE897300EB5CF3 /* Alamofire.swift */; };
 		815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 815B42771EC6ED8C00487C99 /* AppDelegate.swift */; };
 		815B427F1EC6ED8C00487C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 815B427E1EC6ED8C00487C99 /* Assets.xcassets */; };
 		8165DF0C1EFBF4980019E801 /* UIKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8165DF0B1EFBF4980019E801 /* UIKit.swift */; };
@@ -68,6 +65,7 @@
 		81FC4B9B1F110DF800DFF070 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81FC4B9A1F110DF800DFF070 /* Font.swift */; };
 		947778A61F11A869002BA05E /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 947778A51F11A869002BA05E /* Image.swift */; };
 		9481B23E1F088E2900765EDB /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9481B23D1F088E2900765EDB /* Item.swift */; };
+		9494DEBB1F450B9300430DB7 /* Webservice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9494DEBA1F450B9300430DB7 /* Webservice.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -120,7 +118,6 @@
 		814DF7DF1EFB3A9300C0A886 /* CommentCellNode.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CommentCellNode.swift; path = Views/CommentCellNode.swift; sourceTree = "<group>"; };
 		814EF8741EFE2389004CB013 /* ItemListViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemListViewModel.swift; path = ViewModels/ItemListViewModel.swift; sourceTree = "<group>"; };
 		814EF8761EFE34F9004CB013 /* ItemDetailsViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ItemDetailsViewModel.swift; path = ViewModels/ItemDetailsViewModel.swift; sourceTree = "<group>"; };
-		815739981EFE897300EB5CF3 /* Alamofire.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Alamofire.swift; path = Extensions/Alamofire.swift; sourceTree = "<group>"; };
 		815B42741EC6ED8C00487C99 /* hn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		815B42771EC6ED8C00487C99 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		815B427E1EC6ED8C00487C99 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -159,6 +156,7 @@
 		947778A51F11A869002BA05E /* Image.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Image.swift; path = UI/Image.swift; sourceTree = "<group>"; };
 		9481B23D1F088E2900765EDB /* Item.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Item.swift; path = Models/Item.swift; sourceTree = "<group>"; };
 		948BDCAF1F0877DC00D10013 /* Dwifft.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Dwifft.framework; path = Carthage/Build/iOS/Dwifft.framework; sourceTree = "<group>"; };
+		9494DEBA1F450B9300430DB7 /* Webservice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Webservice.swift; path = Services/Webservice.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -166,8 +164,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				811D4E141EFF2C3700B49F38 /* Alamofire.framework in Frameworks */,
-				811D4E151EFF2C3700B49F38 /* AlamofireNetworkActivityIndicator.framework in Frameworks */,
 				811D4E161EFF2C3700B49F38 /* AsyncDisplayKit.framework in Frameworks */,
 				81149CD31F10437500291F40 /* IGListKit.framework in Frameworks */,
 				811F6E0D1F04ABD2000C5EE2 /* PromiseKit.framework in Frameworks */,
@@ -192,6 +188,7 @@
 			children = (
 				812126761EC7088D00A4B61F /* FirebaseApi.swift */,
 				81E44CAD1F073FE2008BF854 /* AlgoliaApi.swift */,
+				9494DEBA1F450B9300430DB7 /* Webservice.swift */,
 			);
 			name = Services;
 			sourceTree = "<group>";
@@ -238,7 +235,6 @@
 		811683C31EF9345400680511 /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				815739981EFE897300EB5CF3 /* Alamofire.swift */,
 				81367DB81F025396004AF6C6 /* AsyncDisplayKit.swift */,
 				811683C41EF9346300680511 /* Date.swift */,
 				811850361F16407000CF31AE /* NSAttributedString.swift */,
@@ -516,8 +512,6 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/AlamofireNetworkActivityIndicator.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/AsyncDisplayKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/IGListKit.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/PromiseKit.framework",
@@ -525,8 +519,6 @@
 			);
 			name = "Run Script";
 			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Alamofire.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AlamofireNetworkActivityIndicator.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/AsyncDisplayKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/IGListKit.framework",
 				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/PromiseKit.framework",
@@ -565,6 +557,7 @@
 				812126771EC7088D00A4B61F /* FirebaseApi.swift in Sources */,
 				811850331F1638BF00CF31AE /* URL.swift in Sources */,
 				814AD7A71F10EB19003316CA /* UIColor.swift in Sources */,
+				9494DEBB1F450B9300430DB7 /* Webservice.swift in Sources */,
 				8178ACE01F12131E00811FD8 /* PromiseKit.swift in Sources */,
 				81F890851F1824C100C35DBE /* Reference.swift in Sources */,
 				8118DBAE1EF50DF100934BA4 /* ItemListViewController.swift in Sources */,
@@ -577,7 +570,6 @@
 				811683C21EF92F4600680511 /* ItemCellNode.swift in Sources */,
 				819AA3681F18C553002C05F9 /* CommentViewModel.swift in Sources */,
 				81F1E3C41F13916D003190F8 /* HtmlTokenizer.swift in Sources */,
-				815739991EFE897300EB5CF3 /* Alamofire.swift in Sources */,
 				817E92E41F17A2BD00593693 /* Optional.swift in Sources */,
 				814EF8771EFE34F9004CB013 /* ItemDetailsViewModel.swift in Sources */,
 				815B42781EC6ED8C00487C99 /* AppDelegate.swift in Sources */,

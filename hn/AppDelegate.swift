@@ -1,4 +1,3 @@
-import AlamofireNetworkActivityIndicator
 import AsyncDisplayKit
 import ReSwift
 import UIKit
@@ -27,8 +26,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
     ) -> Bool {
-        NetworkActivityIndicatorManager.shared.isEnabled = true
-
         let tabController = ASTabBarController()
         tabController.setViewControllers(visibleTabs(store.state.tabs), animated: false)
         tabController.selectedIndex = 2
