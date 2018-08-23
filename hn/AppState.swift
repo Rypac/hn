@@ -14,7 +14,7 @@ struct Repository {
 }
 
 struct ItemList {
-    var ids = [Int]()
+    var ids = [Id]()
     var posts = [Post]()
     var fetching: ContainerFetchState? = .none
 }
@@ -43,7 +43,7 @@ struct User {
     let username: String
     let karma: Int
     let created: Int
-    let id: Int?
+    let id: Id?
     let about: String?
     let delay: Int?
 }

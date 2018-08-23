@@ -4,8 +4,8 @@ import UIKit
 
 let defaultAppState = AppState(
     repository: Repository(
-        fetchItems: Firebase.fetch(stories:),
-        fetchItem: Firebase.fetch(item:)),
+        fetchItems: Firebase().stories,
+        fetchItem: Firebase().item(id:)),
     tabs: [
         .topStories: ItemList(),
         .newStories: ItemList(),
@@ -26,6 +26,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UINavigationControllerDel
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?
     ) -> Bool {
+        ASTextNode.setExperimentOptions(.allInstances)
+
         let tabController = ASTabBarController()
         tabController.setViewControllers(visibleTabs(store.state.tabs), animated: false)
         tabController.selectedIndex = 2

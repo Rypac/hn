@@ -9,21 +9,27 @@ struct Firebase {
         case askHN
         case jobs
         case updates
-        case item(Int)
+        case item(Id)
         case user(String)
     }
+}
 
-    static func fetch(stories: ItemType) -> Promise<[Int]> {
-        return Webservice().load(resource: Resource(url: stories.endpoint.url))
+extension Firebase: ResolveStories {
+    func stories(_ type: ItemType) -> Promise<[Id]> {
+        return Webservice().load(resource: Resource(url: type.endpoint.url))
     }
+}
 
-    static func fetch(item id: Int) -> Promise<Item> {
+extension Firebase: ResolveItem {
+    func item(id: Id) -> Promise<Item> {
         return Webservice().load(resource: Resource(
             url: Endpoint.item(id).url,
             parseJSON: Item.init(firebaseResponse:)))
     }
+}
 
-    static func fetch(user username: String) -> Promise<User> {
+extension Firebase: ResolveUser {
+    func user(username: String) -> Promise<User> {
         return Webservice().load(resource: Resource(
             url: Endpoint.user(username).url,
             parseJSON: User.init(firebaseResponse:)))

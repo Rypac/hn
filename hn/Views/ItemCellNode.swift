@@ -8,10 +8,10 @@ final class PostCellNode: ASCellNode, BindableView {
     let details = ASTextNode()
     let comments = ASTextNode()
 
-    private var model: Post
+    private var viewModel: Post
 
     init(viewModel: Post) {
-        model = viewModel
+        self.viewModel = viewModel
         super.init()
         automaticallyManagesSubnodes = true
         bind(viewModel: viewModel)
@@ -43,7 +43,7 @@ final class PostCellNode: ASCellNode, BindableView {
                 spacing: 20,
                 justifyContent: .start,
                 alignItems: .center,
-                children: model.type == .job ? [postContent] : [postContent, comments]))
+                children: viewModel.type == .job ? [postContent] : [postContent, comments]))
     }
 }
 

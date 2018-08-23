@@ -80,7 +80,6 @@ extension ItemDetailsViewController: StoreSubscriber {
                 for indexPath in diff.updates {
                     if let node = tableNode.nodeForRow(at: indexPath) as? CommentCellNode {
                         node.bind(viewModel: state.comments[indexPath.row])
-                        node.transitionLayout(withAnimation: true, shouldMeasureAsync: true)
                     }
                 }
                 tableNode.deleteRows(at: diff.deletes, with: .fade)

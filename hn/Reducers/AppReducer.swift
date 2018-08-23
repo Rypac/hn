@@ -45,10 +45,10 @@ func appReducer(action: Action, state: AppState?) -> AppState {
         switch action {
         case let .view(post):
             state.selectedItem = ItemDetails(post)
-            state.repository.fetchItem = Algolia.fetch(item:)
+            state.repository.fetchItem = Algolia().item(id:)
         case .dismiss:
             state.selectedItem = .none
-            state.repository.fetchItem = Firebase.fetch(item:)
+            state.repository.fetchItem = Firebase().item(id:)
         default:
             break
         }

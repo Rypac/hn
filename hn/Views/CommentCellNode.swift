@@ -6,16 +6,16 @@ final class CommentCellNode: ASCellNode, BindableView {
 
     let text = ASTextNode()
     let details = ASTextNode()
-    private var model: CommentViewModel {
+    private var viewModel: CommentViewModel {
         didSet {
-            if model.comment.actions.collapsed != oldValue.comment.actions.collapsed {
+            if viewModel.comment.actions.collapsed != oldValue.comment.actions.collapsed {
                 setNeedsLayout()
             }
         }
     }
 
     init(viewModel: CommentViewModel) {
-        model = viewModel
+        self.viewModel = viewModel
         super.init()
         automaticallyManagesSubnodes = true
         bind(viewModel: viewModel)
@@ -38,12 +38,12 @@ final class CommentCellNode: ASCellNode, BindableView {
                 NSForegroundColorAttributeName: UIColor.darkGray
             ])
 
-        model = viewModel
+        self.viewModel = viewModel
     }
 
     override func layoutSpecThatFits(_ constrainedSize: ASSizeRange) -> ASLayoutSpec {
-        let depth = min(CGFloat(model.comment.depth), 12)
-        let children = model.comment.actions.collapsed ? [details] : [details, text]
+        let depth = min(CGFloat(viewModel.comment.depth), 12)
+        let children = viewModel.comment.actions.collapsed ? [details] : [details, text]
         return ASInsetLayoutSpec(
             insets: UIEdgeInsets(
                 top: UIEdgeInsets.Default.vertical,

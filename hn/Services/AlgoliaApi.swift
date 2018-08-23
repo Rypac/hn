@@ -2,17 +2,21 @@ import PromiseKit
 
 struct Algolia {
     enum Endpoint {
-        case item(Int)
+        case item(Id)
         case user(String)
     }
+}
 
-    static func fetch(item id: Int) -> Promise<Item> {
+extension Algolia: ResolveItem {
+    func item(id: Id) -> Promise<Item> {
         return Webservice().load(resource: Resource(
             url: Endpoint.item(id).url,
             parseJSON: Item.init(algoliaResponse:)))
     }
+}
 
-    static func fetch(user username: String) -> Promise<User> {
+extension Algolia: ResolveUser {
+    func user(username: String) -> Promise<User> {
         return Webservice().load(resource: Resource(
             url: Endpoint.user(username).url,
             parseJSON: User.init(algoliaResponse:)))
