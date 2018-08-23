@@ -95,6 +95,8 @@ struct HtmlParser {
       append(newline)
     }
   }
+
+  private let newline: UnicodeScalar = "\n"
 }
 
 extension Formatting {
@@ -111,5 +113,3 @@ extension Formatting {
     }
   }
 }
-
-private let newline: UnicodeScalar = "\n"

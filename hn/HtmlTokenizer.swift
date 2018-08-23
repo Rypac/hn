@@ -128,7 +128,7 @@ private enum HtmlTagId {
   static let separator: UnicodeScalar = " "
 }
 
-private struct HtmlEntity {
+private enum HtmlEntity {
   static let start: UnicodeScalar = "&"
   static let end: UnicodeScalar = ";"
   static let number: UnicodeScalar = "#"

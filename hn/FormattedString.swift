@@ -1,4 +1,4 @@
-import UIKit
+import Foundation
 
 enum Formatting {
   case paragraph
@@ -29,7 +29,7 @@ struct FormattingOptions {
 }
 
 struct Attributes {
-  fileprivate let attributes: [String]
+  let attributes: [String]
 
   init(_ attributes: [String] = []) {
     self.attributes = attributes
@@ -42,46 +42,3 @@ struct Attributes {
       .decodingHtmlEntities()
   }
 }
-
-//let kFormattingAttributes = "FormattingAttributes"
-//
-//extension FormattedString {
-//  func attributedText(withFont font: UIFont) -> NSAttributedString {
-//    let formatted = NSMutableAttributedString(
-//      string: text,
-//      attributes: [NSFontAttributeName: font]
-//    )
-//
-//    for option in formatting {
-//      let nsRange = text.nsRange(from: option.range)
-//      switch option.type {
-//      case .bold:
-//        if let bold = font.boldVariant {
-//          formatted.addAttributes([NSFontAttributeName: bold], range: nsRange)
-//        }
-//      case .italic:
-//        if let italic = font.italicVariant {
-//          formatted.addAttributes([NSFontAttributeName: italic], range: nsRange)
-//        }
-//      case .underline:
-//        formatted.addAttributes(
-//          [NSUnderlineStyleAttributeName: NSUnderlineStyle.styleSingle.rawValue],
-//          range: nsRange
-//        )
-//      case .code:
-//        formatted.addAttributes([NSFontAttributeName: Font.menlo.body], range: nsRange)
-//      case .url:
-//        formatted.addAttributes(
-//          [
-//            kFormattingAttributes: option.attributes,
-//            NSForegroundColorAttributeName: UIColor.Apple.blue,
-//          ],
-//          range: nsRange
-//        )
-//      default:
-//        break
-//      }
-//    }
-//    return formatted
-//  }
-//}

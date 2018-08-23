@@ -21,7 +21,7 @@ extension UIColor {
 }
 
 extension UIColor {
-  struct Apple {
+  enum Apple {
     static let red = UIColor(byteRed: 255, green: 59, blue: 48)
     static let orange = UIColor(byteRed: 255, green: 95, blue: 0)
     static let yellow = UIColor(byteRed: 255, green: 204, blue: 0)
