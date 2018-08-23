@@ -2,10 +2,17 @@
 
 A simple Hacker News client for iOS.
 
-## Requirements
+## Dependencies
+
+### Required
 
 - Xcode
 - Carthage
+
+### Optional
+
+- SwiftLint
+- SwiftFormat
 
 ## Building
 
@@ -15,6 +22,8 @@ Fetch and build all dependencies:
 
 ## Developing
 
+### Dependencies
+
 To update all dependencies:
 
     carthage update
@@ -22,3 +31,17 @@ To update all dependencies:
 To update a single dependency:
 
     carthage update DEPENDENCY
+
+### Hygiene
+
+To lint the project:
+
+    swiftlint lint
+
+To autocorrect lint errors:
+
+    swiftlint autocorrect
+
+To format source files:
+
+    swiftformat .
