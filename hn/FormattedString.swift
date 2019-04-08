@@ -1,6 +1,6 @@
 import Foundation
 
-enum Formatting {
+public enum Formatting {
   case paragraph
   case url
   case italic
@@ -11,31 +11,31 @@ enum Formatting {
   case linebreak
 }
 
-struct FormattedString {
-  let text: String
-  let formatting: [FormattingOptions]
+public struct FormattedString {
+  public let text: String
+  public let formatting: [FormattingOptions]
 }
 
-struct FormattingOptions {
-  let type: Formatting
-  let attributes: Attributes
-  let range: Range<String.Index>
+public struct FormattingOptions {
+  public let type: Formatting
+  public let attributes: Attributes
+  public let range: Range<String.Index>
 
-  init(_ type: Formatting, range: Range<String.Index>, attributes: Attributes = Attributes()) {
+  public init(_ type: Formatting, range: Range<String.Index>, attributes: Attributes = Attributes([])) {
     self.type = type
     self.range = range
     self.attributes = attributes
   }
 }
 
-struct Attributes {
-  let attributes: [String]
+public struct Attributes {
+  public let attributes: [String]
 
-  init(_ attributes: [String] = []) {
+  public init(_ attributes: [String]) {
     self.attributes = attributes
   }
 
-  func find(_ attribute: String) -> String? {
+  public func find(_ attribute: String) -> String? {
     return attributes.lazy
       .compactMap { $0.slice(from: "\(attribute)=\"", to: "\"") }
       .first?

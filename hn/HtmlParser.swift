@@ -1,8 +1,8 @@
 // swiftlint:disable cyclomatic_complexity
 import Foundation
 
-struct HtmlParser {
-  static func parse(_ html: String) -> FormattedString? {
+public struct HtmlParser {
+  public static func parse(_ html: String) -> FormattedString? {
     var parser = HtmlParser(text: html)
     return parser.parse()
   }
@@ -40,7 +40,7 @@ struct HtmlParser {
         case let .entity(char), let .text(char):
           result.unicodeScalars.append(char)
         }
-      case let .error(error) where error != .unknownTag:
+      case let .failure(error) where error != .unknownTag:
         return .none
       default:
         break
@@ -99,8 +99,8 @@ struct HtmlParser {
   private let newline: UnicodeScalar = "\n"
 }
 
-extension Formatting {
-  init?(from tag: HtmlTag) {
+public extension Formatting {
+  init?(for tag: HtmlTag) {
     switch tag {
     case .a: self = .url
     case .b: self = .bold

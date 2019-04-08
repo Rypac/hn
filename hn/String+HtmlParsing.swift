@@ -1,6 +1,6 @@
 import Foundation
 
-extension String {
+public extension String {
   func decodingHtmlEntities() -> String {
     var result = String()
     result.reserveCapacity(utf8.count)
@@ -11,7 +11,7 @@ extension String {
       switch token {
       case let .success(.entity(char)), let .success(.text(char)):
         result.unicodeScalars.append(char)
-      case let .error(error) where error != .unknownTag:
+      case let .failure(error) where error != .unknownTag:
         return self
       default:
         break
