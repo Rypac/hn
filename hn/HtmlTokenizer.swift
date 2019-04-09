@@ -6,7 +6,7 @@ public enum HtmlTag: String {
 
 public typealias HtmlAttributes = [String]
 
-public enum HtmlToken: Token {
+public enum HtmlToken {
   case open(HtmlTag, HtmlAttributes)
   case close(HtmlTag)
   case entity(UnicodeScalar)
@@ -20,7 +20,7 @@ public enum HtmlTokenError: Error {
 }
 
 public struct HtmlTokenizer: Tokenizer {
-  typealias Value = HtmlToken
+  typealias Token = HtmlToken
   typealias Error = HtmlTokenError
 
   private var iterator: String.UnicodeScalarView.Iterator
@@ -30,7 +30,7 @@ public struct HtmlTokenizer: Tokenizer {
     iterator = text.unicodeScalars.makeIterator()
   }
 
-  public mutating func nextToken() -> Result<Value, Error>? {
+  public mutating func nextToken() -> Result<Token, Error>? {
     while let char = nextCharacter() {
       switch char {
       case HtmlTagId.start:
@@ -48,7 +48,7 @@ public struct HtmlTokenizer: Tokenizer {
     return iterator.next()
   }
 
-  private mutating func parseTag() -> Result<Value, Error> {
+  private mutating func parseTag() -> Result<Token, Error> {
     var tag: String? = .none
     var text = String()
     var attributes = HtmlAttributes()
@@ -84,7 +84,7 @@ public struct HtmlTokenizer: Tokenizer {
     return .failure(.invalidTag)
   }
 
-  private mutating func parseEntity() -> Result<Value, Error> {
+  private mutating func parseEntity() -> Result<Token, Error> {
     var char = nextCharacter()
     guard char == HtmlEntity.number else {
       var entityName = String()
