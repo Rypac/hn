@@ -33,7 +33,7 @@ public struct HtmlTokenizer: Tokenizer {
   public mutating func nextToken() -> Result<Token, Error>? {
     while let char = nextCharacter() {
       switch char {
-      case HtmlTagId.start:
+      case HtmlTag.start:
         return parseTag()
       case HtmlEntity.start:
         return parseEntity()
@@ -64,14 +64,14 @@ public struct HtmlTokenizer: Tokenizer {
 
     while let char = nextCharacter() {
       switch char {
-      case HtmlTagId.separator:
+      case HtmlTag.separator:
         if !text.isEmpty {
           pushTag()
           text = ""
         }
-      case HtmlTagId.close where tag == .none:
+      case HtmlTag.close where tag == .none:
         isCloseTag = true
-      case HtmlTagId.end:
+      case HtmlTag.end:
         pushTag()
         return tag.flatMap(HtmlTag.init(rawValue:))
           .map { isCloseTag ? .close($0) : .open($0, attributes) }
@@ -121,7 +121,7 @@ public struct HtmlTokenizer: Tokenizer {
   }
 }
 
-private enum HtmlTagId {
+private extension HtmlTag {
   static let start: UnicodeScalar = "<"
   static let end: UnicodeScalar = ">"
   static let close: UnicodeScalar = "/"
