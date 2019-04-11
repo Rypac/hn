@@ -1,7 +1,7 @@
 import UIKit
 
 extension UIFont {
-  convenience init?(name: String, textStyle: UIFontTextStyle) {
+  convenience init?(name: String, textStyle: UIFont.TextStyle) {
     self.init(name: name, size: UIFont.preferredFont(forTextStyle: textStyle).pointSize)
   }
 
@@ -17,7 +17,7 @@ extension UIFont {
     return variantWith(trait: .traitMonoSpace)
   }
 
-  func variantWith(trait: UIFontDescriptorSymbolicTraits) -> UIFont? {
+  func variantWith(trait: UIFontDescriptor.SymbolicTraits) -> UIFont? {
     guard let trait = fontDescriptor.withSymbolicTraits(trait) else {
       return .none
     }

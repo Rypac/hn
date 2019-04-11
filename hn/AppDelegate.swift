@@ -1,4 +1,3 @@
-// swiftlint:disable discouraged_optional_collection
 import UIKit
 
 @UIApplicationMain
@@ -7,7 +6,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
   func application(
     _: UIApplication,
-    didFinishLaunchingWithOptions _: [UIApplicationLaunchOptionsKey: Any]?
+    didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
     return true
   }

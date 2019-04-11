@@ -20,8 +20,8 @@ public enum HtmlTokenError: Error {
 }
 
 public struct HtmlTokenizer: Tokenizer {
-  typealias Token = HtmlToken
-  typealias Error = HtmlTokenError
+  public typealias Token = HtmlToken
+  public typealias Error = HtmlTokenError
 
   private var iterator: String.UnicodeScalarView.Iterator
   private var pushedBackScalar: UnicodeScalar?
@@ -73,10 +73,10 @@ public struct HtmlTokenizer: Tokenizer {
         isCloseTag = true
       case HtmlTag.end:
         pushTag()
-        return tag.flatMap(HtmlTag.init(rawValue:))
-          .map { isCloseTag ? .close($0) : .open($0, attributes) }
-          .map(Result.success)
-          .or(.failure(.unknownTag))
+        guard let htmlTag = tag.flatMap(HtmlTag.init(rawValue:)) else {
+          return .failure(.unknownTag)
+        }
+        return .success(isCloseTag ? .close(htmlTag) : .open(htmlTag, attributes))
       default:
         text.unicodeScalars.append(char)
       }
@@ -92,10 +92,10 @@ public struct HtmlTokenizer: Tokenizer {
         entityName.unicodeScalars.append(ch)
         char = nextCharacter()
       }
-      return HtmlEntity.decode(entityName)
-        .map(HtmlToken.entity)
-        .map(Result.success)
-        .or(.failure(.invalidEntity))
+      guard let entity = HtmlEntity.decode(entityName) else {
+        return .failure(.invalidEntity)
+      }
+      return .success(.entity(entity))
     }
 
     let radix: Int
@@ -113,11 +113,10 @@ public struct HtmlTokenizer: Tokenizer {
       char = nextCharacter()
     }
 
-    return UInt32(number, radix: radix)
-      .flatMap(UnicodeScalar.init)
-      .flatMap(HtmlToken.entity)
-      .map(Result.success)
-      .or(.failure(.invalidEntity))
+    guard let entity = UInt32(number, radix: radix).flatMap(UnicodeScalar.init) else {
+      return .failure(.invalidEntity)
+    }
+    return .success(.entity(entity))
   }
 }
 

@@ -1,5 +1,7 @@
 disabled_rules:
+  - force_cast
   - identifier_name
+  - nesting
   - type_name
 opt_in_rules:
   - anyobject_protocol
@@ -11,8 +13,6 @@ opt_in_rules:
   - contains_over_first_not_nil
   - convenience_type
   - discouraged_object_literal
-  - discouraged_optional_boolean
-  - discouraged_optional_collection
   - empty_count
   - empty_string
   - empty_xctest_method
@@ -34,8 +34,6 @@ opt_in_rules:
   - multiline_arguments
   - multiline_function_chains
   - nimble_operator
-  - no_extension_access_modifier
-  - no_grouping_extension
   - number_separator
   - object_literal
   - operator_usage_whitespace

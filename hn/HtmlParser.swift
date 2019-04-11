@@ -65,7 +65,7 @@ public struct HtmlParser {
   }
 
   private mutating func pop(_ tag: HtmlTag) {
-    if let (index, attributes) = tags[tag]?.popLast(), let type = Formatting(from: tag) {
+    if let (index, attributes) = tags[tag]?.popLast(), let type = Formatting(for: tag) {
       points.append(
         FormattingOptions(
           type,
