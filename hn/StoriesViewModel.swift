@@ -14,11 +14,11 @@ struct StoriesViewModel {
     let score: Int
   }
 
-  let storyRepostiory: StoryRepository
+  let storyRepostiory: Repository
 
   private let stories: Observable<LoadingState<[Item]>>
 
-  init(storyRepostiory: StoryRepository = StoryRepository()) {
+  init(storyRepostiory: Repository = Repository()) {
     self.storyRepostiory = storyRepostiory
     self.stories = storyRepostiory.fetchTopStories()
       .asObservable()

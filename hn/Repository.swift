@@ -1,7 +1,7 @@
 import Foundation
 import RxSwift
 
-class StoryRepository {
+class Repository {
 	private let firebaseService: FirebaseService
 	private let algoliaService: AlgoliaService
 
@@ -13,9 +13,8 @@ class StoryRepository {
   func fetchTopStories() -> Single<[Item]> {
 		return firebaseService.topStories()
 			.flatMap { [algoliaService] (items: [Int]) -> Single<[Item]> in
-				let firstTenStories = items.prefix(2).map(algoliaService.item(id:))
+				let firstTenStories = items.prefix(20).map(algoliaService.item(id:))
         return Observable.from(firstTenStories).merge().toArray().asSingle()
-          .map { stories in (0..<20).flatMap { _ in stories } }
 			}
   }
 }

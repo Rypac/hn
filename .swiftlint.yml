@@ -20,7 +20,6 @@ opt_in_rules:
   - fallthrough
   - fatal_error_message
   - file_header
-  - file_name
   - first_where
   - function_default_parameter_at_end
   - implicit_return

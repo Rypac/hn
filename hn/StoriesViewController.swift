@@ -1,19 +1,17 @@
-import RxCocoa
 import RxDataSources
 import RxSwift
 import UIKit
 
-class StoriesViewController: UIViewController {
-  private let viewModel = StoriesViewModel()
-  private let disposeBag = DisposeBag()
-
+final class StoriesViewController: UIViewController {
   @IBOutlet private var collectionView: UICollectionView!
   @IBOutlet private var flowLayout: UICollectionViewFlowLayout!
   @IBOutlet private var activityIndicator: UIActivityIndicatorView!
 
+  private let viewModel = StoriesViewModel()
+  private let disposeBag = DisposeBag()
   private let dataSource = RxCollectionViewSectionedReloadDataSource<StoriesViewModel.StorySection>(
     configureCell: { _, collectionView, indexPath, item in
-      let cell: StoryCell = collectionView.dequeueReusableCell(for: indexPath)
+      let cell = collectionView.dequeueReusableCell(ofType: StoryCell.self, for: indexPath)
       cell.bind(story: item)
       return cell
     }

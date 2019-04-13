@@ -20,15 +20,14 @@
 		946D32F4225CB45D00D00FC6 /* Algolia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F3225CB45D00D00FC6 /* Algolia.swift */; };
 		946D32F6225CB5B700D00FC6 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F5225CB5B700D00FC6 /* Firebase.swift */; };
 		946D32F8225CB89B00D00FC6 /* APIClient+Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F7225CB89B00D00FC6 /* APIClient+Reactive.swift */; };
-		946D32FE225CBBA300D00FC6 /* StoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32FD225CBBA300D00FC6 /* StoryRepository.swift */; };
+		946D32FE225CBBA300D00FC6 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32FD225CBBA300D00FC6 /* Repository.swift */; };
 		946D3300225CBCC500D00FC6 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32FF225CBCC500D00FC6 /* FirebaseService.swift */; };
 		946D3303225CBDCA00D00FC6 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3302225CBDCA00D00FC6 /* Item.swift */; };
 		946D3305225CC47200D00FC6 /* StoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3304225CC47200D00FC6 /* StoriesViewModel.swift */; };
 		946D3307225CCB3F00D00FC6 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3306225CCB3F00D00FC6 /* JSONDecoder.swift */; };
 		946D3309225CCBE800D00FC6 /* AlgoliaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3308225CCBE800D00FC6 /* AlgoliaService.swift */; };
-		946D330C225F59F900D00FC6 /* NameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D330A225F59F800D00FC6 /* NameCell.swift */; };
-		946D330D225F59F900D00FC6 /* FlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D330B225F59F800D00FC6 /* FlowLayout.swift */; };
-		946D330F225F5D6D00D00FC6 /* CellReusable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D330E225F5D6D00D00FC6 /* CellReusable.swift */; };
+		946D330D225F59F900D00FC6 /* FullWidthFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D330B225F59F800D00FC6 /* FullWidthFlowLayout.swift */; };
+		946D330F225F5D6D00D00FC6 /* ReusableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D330E225F5D6D00D00FC6 /* ReusableCell.swift */; };
 		948F3C54212EBF50000A47A0 /* Tokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948F3C51212EBF50000A47A0 /* Tokenizer.swift */; };
 		948F3C55212EBF50000A47A0 /* HtmlParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948F3C52212EBF50000A47A0 /* HtmlParser.swift */; };
 		948F3C56212EBF50000A47A0 /* HtmlTokenizer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948F3C53212EBF50000A47A0 /* HtmlTokenizer.swift */; };
@@ -76,15 +75,14 @@
 		946D32F3225CB45D00D00FC6 /* Algolia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Algolia.swift; sourceTree = "<group>"; };
 		946D32F5225CB5B700D00FC6 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		946D32F7225CB89B00D00FC6 /* APIClient+Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIClient+Reactive.swift"; sourceTree = "<group>"; };
-		946D32FD225CBBA300D00FC6 /* StoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryRepository.swift; sourceTree = "<group>"; };
+		946D32FD225CBBA300D00FC6 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		946D32FF225CBCC500D00FC6 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		946D3302225CBDCA00D00FC6 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 		946D3304225CC47200D00FC6 /* StoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewModel.swift; sourceTree = "<group>"; };
 		946D3306225CCB3F00D00FC6 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		946D3308225CCBE800D00FC6 /* AlgoliaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgoliaService.swift; sourceTree = "<group>"; };
-		946D330A225F59F800D00FC6 /* NameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCell.swift; sourceTree = "<group>"; };
-		946D330B225F59F800D00FC6 /* FlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlowLayout.swift; sourceTree = "<group>"; };
-		946D330E225F5D6D00D00FC6 /* CellReusable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CellReusable.swift; sourceTree = "<group>"; };
+		946D330B225F59F800D00FC6 /* FullWidthFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FullWidthFlowLayout.swift; sourceTree = "<group>"; };
+		946D330E225F5D6D00D00FC6 /* ReusableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReusableCell.swift; sourceTree = "<group>"; };
 		948F3C51212EBF50000A47A0 /* Tokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tokenizer.swift; sourceTree = "<group>"; };
 		948F3C52212EBF50000A47A0 /* HtmlParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HtmlParser.swift; sourceTree = "<group>"; };
 		948F3C53212EBF50000A47A0 /* HtmlTokenizer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HtmlTokenizer.swift; sourceTree = "<group>"; };
@@ -182,7 +180,6 @@
 				946D32FC225CBB8C00D00FC6 /* Repository */,
 				946D32ED225CAAF400D00FC6 /* UI */,
 				94247AF6212EBE2400D2D69A /* AppDelegate.swift */,
-				946D330A225F59F800D00FC6 /* NameCell.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -231,10 +228,10 @@
 		943D462C2261A2FB000C8210 /* Stories */ = {
 			isa = PBXGroup;
 			children = (
-				946D330B225F59F800D00FC6 /* FlowLayout.swift */,
-				943D462D2261A306000C8210 /* StoryCell.swift */,
+				946D330B225F59F800D00FC6 /* FullWidthFlowLayout.swift */,
 				94247AF8212EBE2400D2D69A /* StoriesViewController.swift */,
 				946D3304225CC47200D00FC6 /* StoriesViewModel.swift */,
+				943D462D2261A306000C8210 /* StoryCell.swift */,
 			);
 			name = Stories;
 			sourceTree = "<group>";
@@ -252,7 +249,7 @@
 			isa = PBXGroup;
 			children = (
 				946D32EE225CAFBC00D00FC6 /* Font.swift */,
-				946D330E225F5D6D00D00FC6 /* CellReusable.swift */,
+				946D330E225F5D6D00D00FC6 /* ReusableCell.swift */,
 			);
 			name = UI;
 			sourceTree = "<group>";
@@ -281,7 +278,7 @@
 		946D32FC225CBB8C00D00FC6 /* Repository */ = {
 			isa = PBXGroup;
 			children = (
-				946D32FD225CBBA300D00FC6 /* StoryRepository.swift */,
+				946D32FD225CBBA300D00FC6 /* Repository.swift */,
 			);
 			name = Repository;
 			sourceTree = "<group>";
@@ -300,12 +297,12 @@
 			children = (
 				946D3306225CCB3F00D00FC6 /* JSONDecoder.swift */,
 				948F3C5C212EC0A2000A47A0 /* NSAttributedString+Operators.swift */,
+				943D46292261462F000C8210 /* Rx+CompactMap.swift */,
 				948F3C5A212EC0A2000A47A0 /* String+HtmlParsing.swift */,
 				948F3C59212EC0A2000A47A0 /* String+Range.swift */,
 				948F3C5B212EC0A2000A47A0 /* UIColor.swift */,
 				948F3C5D212EC0A2000A47A0 /* UIFont+Variant.swift */,
 				948F3C5F212EC0A2000A47A0 /* URL+Host.swift */,
-				943D46292261462F000C8210 /* Rx+CompactMap.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -476,9 +473,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				943D462A2261462F000C8210 /* Rx+CompactMap.swift in Sources */,
-				946D330F225F5D6D00D00FC6 /* CellReusable.swift in Sources */,
+				946D330F225F5D6D00D00FC6 /* ReusableCell.swift in Sources */,
 				94247AF9212EBE2400D2D69A /* StoriesViewController.swift in Sources */,
-				946D330D225F59F900D00FC6 /* FlowLayout.swift in Sources */,
+				946D330D225F59F900D00FC6 /* FullWidthFlowLayout.swift in Sources */,
 				946D3309225CCBE800D00FC6 /* AlgoliaService.swift in Sources */,
 				948F3C58212EC001000A47A0 /* FormattedString.swift in Sources */,
 				946D3303225CBDCA00D00FC6 /* Item.swift in Sources */,
@@ -496,9 +493,8 @@
 				946D32F6225CB5B700D00FC6 /* Firebase.swift in Sources */,
 				946D3305225CC47200D00FC6 /* StoriesViewModel.swift in Sources */,
 				948F3C64212EC0A3000A47A0 /* UIFont+Variant.swift in Sources */,
-				946D32FE225CBBA300D00FC6 /* StoryRepository.swift in Sources */,
+				946D32FE225CBBA300D00FC6 /* Repository.swift in Sources */,
 				946D3307225CCB3F00D00FC6 /* JSONDecoder.swift in Sources */,
-				946D330C225F59F900D00FC6 /* NameCell.swift in Sources */,
 				948F3C54212EBF50000A47A0 /* Tokenizer.swift in Sources */,
 				948F3C63212EC0A3000A47A0 /* NSAttributedString+Operators.swift in Sources */,
 				946D32F8225CB89B00D00FC6 /* APIClient+Reactive.swift in Sources */,

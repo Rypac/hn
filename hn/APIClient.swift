@@ -11,19 +11,14 @@ enum HTTPMethod: String {
   case connect = "CONNECT"
 }
 
-struct HTTPHeader {
-  let field: String
-  let value: String
-}
-
 struct APIResponse<Body> {
   let statusCode: Int
   let body: Body
 }
 
 enum APIError: Error {
-  case invalidURL
   case requestFailed
+  case unknown(Error)
 }
 
 class APIClient {
@@ -35,16 +30,12 @@ class APIClient {
     self.session = URLSession(configuration: .default)
   }
 
-  @discardableResult
-  func get(_ url: URL, _ completion: @escaping Completion) -> URLSessionTask {
-    var urlRequest = URLRequest(url: url)
-    urlRequest.httpMethod = HTTPMethod.get.rawValue
-    return perform(urlRequest, completion)
-  }
-
-  @discardableResult
   func perform(_ request: URLRequest, _ completion: @escaping Completion) -> URLSessionTask {
-    let task = session.dataTask(with: request) { (data, response, error) in
+    let task = session.dataTask(with: request) { data, response, error in
+      if let error = error {
+        completion(.failure(.unknown(error)))
+        return
+      }
       guard let httpResponse = response as? HTTPURLResponse else {
         completion(.failure(.requestFailed))
         return
@@ -53,5 +44,14 @@ class APIClient {
     }
     task.resume()
     return task
+  }
+}
+
+extension APIClient {
+  @discardableResult
+  func get(_ url: URL, _ completion: @escaping Completion) -> URLSessionTask {
+    var urlRequest = URLRequest(url: url)
+    urlRequest.httpMethod = HTTPMethod.get.rawValue
+    return perform(urlRequest, completion)
   }
 }

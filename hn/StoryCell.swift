@@ -1,22 +1,65 @@
 import UIKit
 
 final class StoryCell: UICollectionViewCell {
-  @IBOutlet private var stackView: UIStackView!
-  @IBOutlet private var titleLabel: UILabel!
-  @IBOutlet private var scoreLabel: UILabel!
-  @IBOutlet private var authorLabel: UILabel!
+  private lazy var verticalStackView: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .vertical
+    stackView.spacing = 8
+    return stackView
+  }()
+
+  private lazy var titleLabel: UILabel = {
+    let label = UILabel()
+    label.adjustsFontForContentSizeCategory = true
+    label.font = UIFont.preferredFont(forTextStyle: .body)
+    label.numberOfLines = 0
+    return label
+  }()
+
+  private lazy var horizontalStackView: UIStackView = {
+    let stackView = UIStackView()
+    stackView.axis = .horizontal
+    stackView.spacing = 8
+    return stackView
+  }()
+
+  private lazy var authorLabel: UILabel = {
+    let label = UILabel()
+    label.adjustsFontForContentSizeCategory = true
+    label.font = UIFont.preferredFont(forTextStyle: .caption1)
+    label.textColor = .darkGray
+    label.numberOfLines = 1
+    label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
+    return label
+  }()
+
+  private lazy var scoreLabel: UILabel = {
+    let label = UILabel()
+    label.adjustsFontForContentSizeCategory = true
+    label.font = UIFont.preferredFont(forTextStyle: .caption1)
+    label.textColor = .orange
+    label.numberOfLines = 1
+    return label
+  }()
 
   override func awakeFromNib() {
     super.awakeFromNib()
-    commonInit()
-  }
 
-  override func prepareForInterfaceBuilder() {
-    super.prepareForInterfaceBuilder()
-    commonInit()
-  }
+    contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+    contentView.addSubview(verticalStackView)
 
-  private func commonInit() {
+    verticalStackView.translatesAutoresizingMaskIntoConstraints = false
+    NSLayoutConstraint.activate([
+      verticalStackView.topAnchor.constraint(equalTo: contentView.layoutMarginsGuide.topAnchor),
+      verticalStackView.bottomAnchor.constraint(equalTo: contentView.layoutMarginsGuide.bottomAnchor),
+      verticalStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor),
+      verticalStackView.trailingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.trailingAnchor)
+    ])
+
+    verticalStackView.addArrangedSubview(titleLabel)
+    verticalStackView.addArrangedSubview(horizontalStackView)
+    horizontalStackView.addArrangedSubview(authorLabel)
+    horizontalStackView.addArrangedSubview(scoreLabel)
   }
 
   override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
@@ -25,7 +68,7 @@ final class StoryCell: UICollectionViewCell {
   }
 }
 
-extension StoryCell: CellReusable {
+extension StoryCell: ReusableCell {
   static var reuseIdentifier: String {
     return "StoryCell"
   }

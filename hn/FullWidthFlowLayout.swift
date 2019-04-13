@@ -1,6 +1,6 @@
 import UIKit
 
-final class FlowLayout: UICollectionViewFlowLayout {
+final class FullWidthFlowLayout: UICollectionViewFlowLayout {
   override init() {
     super.init()
     commonInit()
@@ -12,9 +12,6 @@ final class FlowLayout: UICollectionViewFlowLayout {
   }
 
   private func commonInit() {
-    minimumInteritemSpacing = 10
-    minimumLineSpacing = 10
-    sectionInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
     estimatedItemSize = UICollectionViewFlowLayout.automaticSize
   }
 
@@ -26,19 +23,20 @@ final class FlowLayout: UICollectionViewFlowLayout {
       return nil
     }
 
-    layoutAttributes.bounds.size.width = collectionView.safeAreaLayoutGuide.layoutFrame.width - sectionInset.left - sectionInset.right
+    let horizontalInset = sectionInset.left + sectionInset.right
+    layoutAttributes.bounds.size.width = collectionView.safeAreaLayoutGuide.layoutFrame.width - horizontalInset
     return layoutAttributes
   }
 
   override func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
-    guard let superLayoutAttributes = super.layoutAttributesForElements(in: rect) else {
+    guard let layoutAttributes = super.layoutAttributesForElements(in: rect) else {
       return nil
     }
     guard scrollDirection == .vertical else {
-      return superLayoutAttributes
+      return layoutAttributes
     }
 
-    return superLayoutAttributes.compactMap { layoutAttribute in
+    return layoutAttributes.compactMap { layoutAttribute in
       layoutAttribute.representedElementCategory == .cell
         ? layoutAttributesForItem(at: layoutAttribute.indexPath)
         : layoutAttribute
