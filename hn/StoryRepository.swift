@@ -1,21 +1,21 @@
 import Foundation
-import ReactiveKit
+import RxSwift
 
 class StoryRepository {
-  let topStories: LoadingProperty<[Item], APIError>
+	private let firebaseService: FirebaseService
+	private let algoliaService: AlgoliaService
 
-  init(storyService: FirebaseService = FirebaseService(), algoliaService: AlgoliaService = AlgoliaService()) {
-    topStories = LoadingProperty {
-      storyService.topStories()
-        .flatMapLatest { (items: [Int]) -> Signal<[Item], APIError> in
-          let firstTenStories = items.prefix(20).map(algoliaService.item(id:))
-          return Signal(combiningLatest: firstTenStories, combine: { $0 })
-        }
-        .toLoadingSignal()
-    }
+  init(firebaseService: FirebaseService = FirebaseService(), algoliaService: AlgoliaService = AlgoliaService()) {
+    self.firebaseService = firebaseService
+		self.algoliaService = algoliaService
   }
 
-  func fetchTopStories() -> LoadingSignal<[Item], APIError> {
-    return topStories.reload()
+  func fetchTopStories() -> Single<[Item]> {
+		return firebaseService.topStories()
+			.flatMap { [algoliaService] (items: [Int]) -> Single<[Item]> in
+				let firstTenStories = items.prefix(2).map(algoliaService.item(id:))
+        return Observable.from(firstTenStories).merge().toArray().asSingle()
+          .map { stories in (0..<20).flatMap { _ in stories } }
+			}
   }
 }

@@ -8,19 +8,22 @@
 
 /* Begin PBXBuildFile section */
 		94247AF7212EBE2400D2D69A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94247AF6212EBE2400D2D69A /* AppDelegate.swift */; };
-		94247AF9212EBE2400D2D69A /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94247AF8212EBE2400D2D69A /* ViewController.swift */; };
+		94247AF9212EBE2400D2D69A /* StoriesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94247AF8212EBE2400D2D69A /* StoriesViewController.swift */; };
 		94247AFC212EBE2400D2D69A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94247AFA212EBE2400D2D69A /* Main.storyboard */; };
 		94247AFE212EBE2500D2D69A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 94247AFD212EBE2500D2D69A /* Assets.xcassets */; };
 		94247B01212EBE2500D2D69A /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 94247AFF212EBE2500D2D69A /* LaunchScreen.storyboard */; };
+		943D4624226080EA000C8210 /* LoadingState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D4623226080EA000C8210 /* LoadingState.swift */; };
+		943D462622608381000C8210 /* APIServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D462522608381000C8210 /* APIServiceError.swift */; };
+		943D462A2261462F000C8210 /* Rx+CompactMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D46292261462F000C8210 /* Rx+CompactMap.swift */; };
+		943D462E2261A306000C8210 /* StoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D462D2261A306000C8210 /* StoryCell.swift */; };
 		946D32EF225CAFBC00D00FC6 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32EE225CAFBC00D00FC6 /* Font.swift */; };
-		946D32F2225CB0AA00D00FC6 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F1225CB0AA00D00FC6 /* APIClient.swift */; };
 		946D32F4225CB45D00D00FC6 /* Algolia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F3225CB45D00D00FC6 /* Algolia.swift */; };
 		946D32F6225CB5B700D00FC6 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F5225CB5B700D00FC6 /* Firebase.swift */; };
 		946D32F8225CB89B00D00FC6 /* APIClient+Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F7225CB89B00D00FC6 /* APIClient+Reactive.swift */; };
 		946D32FE225CBBA300D00FC6 /* StoryRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32FD225CBBA300D00FC6 /* StoryRepository.swift */; };
 		946D3300225CBCC500D00FC6 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32FF225CBCC500D00FC6 /* FirebaseService.swift */; };
 		946D3303225CBDCA00D00FC6 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3302225CBDCA00D00FC6 /* Item.swift */; };
-		946D3305225CC47200D00FC6 /* ViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3304225CC47200D00FC6 /* ViewModel.swift */; };
+		946D3305225CC47200D00FC6 /* StoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3304225CC47200D00FC6 /* StoriesViewModel.swift */; };
 		946D3307225CCB3F00D00FC6 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3306225CCB3F00D00FC6 /* JSONDecoder.swift */; };
 		946D3309225CCBE800D00FC6 /* AlgoliaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3308225CCBE800D00FC6 /* AlgoliaService.swift */; };
 		946D330C225F59F900D00FC6 /* NameCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D330A225F59F800D00FC6 /* NameCell.swift */; };
@@ -38,9 +41,11 @@
 		948F3C66212EC0A3000A47A0 /* URL+Host.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948F3C5F212EC0A2000A47A0 /* URL+Host.swift */; };
 		948F3C6B212EC61F000A47A0 /* String+HtmlParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948F3C69212EC61F000A47A0 /* String+HtmlParsingTests.swift */; };
 		948F3C6C212EC61F000A47A0 /* URL+HostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948F3C6A212EC61F000A47A0 /* URL+HostTests.swift */; };
-		948F3C71212EC9EE000A47A0 /* ReactiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 948F3C6E212EC9EE000A47A0 /* ReactiveKit.framework */; };
-		948F3C72212EC9EE000A47A0 /* Differ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 948F3C6F212EC9EE000A47A0 /* Differ.framework */; };
-		948F3C73212EC9EE000A47A0 /* Bond.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 948F3C70212EC9EE000A47A0 /* Bond.framework */; };
+		B33FEFCD2260663F00B97F45 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B33FEFCC2260663F00B97F45 /* RxSwift.framework */; };
+		B33FEFCF2260665000B97F45 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B33FEFCE2260665000B97F45 /* RxCocoa.framework */; };
+		B33FEFD12260668D00B97F45 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FEFD02260668D00B97F45 /* APIClient.swift */; };
+		B33FEFD92260689D00B97F45 /* RxDataSources.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B33FEFD72260689D00B97F45 /* RxDataSources.framework */; };
+		B33FEFDA2260689D00B97F45 /* Differentiator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B33FEFD82260689D00B97F45 /* Differentiator.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -56,22 +61,25 @@
 /* Begin PBXFileReference section */
 		94247AF3212EBE2400D2D69A /* hn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = hn.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94247AF6212EBE2400D2D69A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		94247AF8212EBE2400D2D69A /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		94247AF8212EBE2400D2D69A /* StoriesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewController.swift; sourceTree = "<group>"; };
 		94247AFB212EBE2400D2D69A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		94247AFD212EBE2500D2D69A /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		94247B00212EBE2500D2D69A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		94247B02212EBE2500D2D69A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		94247B07212EBE2500D2D69A /* hnTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = hnTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		94247B0D212EBE2500D2D69A /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		943D4623226080EA000C8210 /* LoadingState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingState.swift; sourceTree = "<group>"; };
+		943D462522608381000C8210 /* APIServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceError.swift; sourceTree = "<group>"; };
+		943D46292261462F000C8210 /* Rx+CompactMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+CompactMap.swift"; sourceTree = "<group>"; };
+		943D462D2261A306000C8210 /* StoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCell.swift; sourceTree = "<group>"; };
 		946D32EE225CAFBC00D00FC6 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
-		946D32F1225CB0AA00D00FC6 /* APIClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = APIClient.swift; path = ../../../../Downloads/APIClient.swift; sourceTree = "<group>"; };
 		946D32F3225CB45D00D00FC6 /* Algolia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Algolia.swift; sourceTree = "<group>"; };
 		946D32F5225CB5B700D00FC6 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		946D32F7225CB89B00D00FC6 /* APIClient+Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIClient+Reactive.swift"; sourceTree = "<group>"; };
 		946D32FD225CBBA300D00FC6 /* StoryRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryRepository.swift; sourceTree = "<group>"; };
 		946D32FF225CBCC500D00FC6 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		946D3302225CBDCA00D00FC6 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
-		946D3304225CC47200D00FC6 /* ViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModel.swift; sourceTree = "<group>"; };
+		946D3304225CC47200D00FC6 /* StoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewModel.swift; sourceTree = "<group>"; };
 		946D3306225CCB3F00D00FC6 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		946D3308225CCBE800D00FC6 /* AlgoliaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgoliaService.swift; sourceTree = "<group>"; };
 		946D330A225F59F800D00FC6 /* NameCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NameCell.swift; sourceTree = "<group>"; };
@@ -92,6 +100,11 @@
 		948F3C6E212EC9EE000A47A0 /* ReactiveKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveKit.framework; path = Carthage/Build/iOS/ReactiveKit.framework; sourceTree = "<group>"; };
 		948F3C6F212EC9EE000A47A0 /* Differ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Differ.framework; path = Carthage/Build/iOS/Differ.framework; sourceTree = "<group>"; };
 		948F3C70212EC9EE000A47A0 /* Bond.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bond.framework; path = Carthage/Build/iOS/Bond.framework; sourceTree = "<group>"; };
+		B33FEFCC2260663F00B97F45 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
+		B33FEFCE2260665000B97F45 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
+		B33FEFD02260668D00B97F45 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
+		B33FEFD72260689D00B97F45 /* RxDataSources.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxDataSources.framework; path = Carthage/Build/iOS/RxDataSources.framework; sourceTree = "<group>"; };
+		B33FEFD82260689D00B97F45 /* Differentiator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Differentiator.framework; path = Carthage/Build/iOS/Differentiator.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,9 +112,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				948F3C71212EC9EE000A47A0 /* ReactiveKit.framework in Frameworks */,
-				948F3C72212EC9EE000A47A0 /* Differ.framework in Frameworks */,
-				948F3C73212EC9EE000A47A0 /* Bond.framework in Frameworks */,
+				B33FEFDA2260689D00B97F45 /* Differentiator.framework in Frameworks */,
+				B33FEFCF2260665000B97F45 /* RxCocoa.framework in Frameworks */,
+				B33FEFD92260689D00B97F45 /* RxDataSources.framework in Frameworks */,
+				B33FEFCD2260663F00B97F45 /* RxSwift.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -158,6 +172,7 @@
 		94247B16212EBE2F00D2D69A /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				943D462B2261A2F5000C8210 /* App */,
 				946D32EC225CAA0200D00FC6 /* Tokenizer */,
 				948F3C68212EC2F0000A47A0 /* Parser */,
 				948F3C67212EC0AC000A47A0 /* Extensions */,
@@ -167,9 +182,6 @@
 				946D32FC225CBB8C00D00FC6 /* Repository */,
 				946D32ED225CAAF400D00FC6 /* UI */,
 				94247AF6212EBE2400D2D69A /* AppDelegate.swift */,
-				94247AF8212EBE2400D2D69A /* ViewController.swift */,
-				946D3304225CC47200D00FC6 /* ViewModel.swift */,
-				946D330B225F59F800D00FC6 /* FlowLayout.swift */,
 				946D330A225F59F800D00FC6 /* NameCell.swift */,
 			);
 			name = Sources;
@@ -208,6 +220,25 @@
 			name = Configuration;
 			sourceTree = "<group>";
 		};
+		943D462B2261A2F5000C8210 /* App */ = {
+			isa = PBXGroup;
+			children = (
+				943D462C2261A2FB000C8210 /* Stories */,
+			);
+			name = App;
+			sourceTree = "<group>";
+		};
+		943D462C2261A2FB000C8210 /* Stories */ = {
+			isa = PBXGroup;
+			children = (
+				946D330B225F59F800D00FC6 /* FlowLayout.swift */,
+				943D462D2261A306000C8210 /* StoryCell.swift */,
+				94247AF8212EBE2400D2D69A /* StoriesViewController.swift */,
+				946D3304225CC47200D00FC6 /* StoriesViewModel.swift */,
+			);
+			name = Stories;
+			sourceTree = "<group>";
+		};
 		946D32EC225CAA0200D00FC6 /* Tokenizer */ = {
 			isa = PBXGroup;
 			children = (
@@ -229,7 +260,7 @@
 		946D32F0225CB09D00D00FC6 /* Networking */ = {
 			isa = PBXGroup;
 			children = (
-				946D32F1225CB0AA00D00FC6 /* APIClient.swift */,
+				B33FEFD02260668D00B97F45 /* APIClient.swift */,
 				946D32F7225CB89B00D00FC6 /* APIClient+Reactive.swift */,
 				946D32F3225CB45D00D00FC6 /* Algolia.swift */,
 				946D32F5225CB5B700D00FC6 /* Firebase.swift */,
@@ -240,6 +271,7 @@
 		946D32F9225CB98800D00FC6 /* Services */ = {
 			isa = PBXGroup;
 			children = (
+				943D462522608381000C8210 /* APIServiceError.swift */,
 				946D32FF225CBCC500D00FC6 /* FirebaseService.swift */,
 				946D3308225CCBE800D00FC6 /* AlgoliaService.swift */,
 			);
@@ -258,6 +290,7 @@
 			isa = PBXGroup;
 			children = (
 				946D3302225CBDCA00D00FC6 /* Item.swift */,
+				943D4623226080EA000C8210 /* LoadingState.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -272,6 +305,7 @@
 				948F3C5B212EC0A2000A47A0 /* UIColor.swift */,
 				948F3C5D212EC0A2000A47A0 /* UIFont+Variant.swift */,
 				948F3C5F212EC0A2000A47A0 /* URL+Host.swift */,
+				943D46292261462F000C8210 /* Rx+CompactMap.swift */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
@@ -288,6 +322,10 @@
 		948F3C6D212EC9EE000A47A0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B33FEFD82260689D00B97F45 /* Differentiator.framework */,
+				B33FEFD72260689D00B97F45 /* RxDataSources.framework */,
+				B33FEFCE2260665000B97F45 /* RxCocoa.framework */,
+				B33FEFCC2260663F00B97F45 /* RxSwift.framework */,
 				948F3C70212EC9EE000A47A0 /* Bond.framework */,
 				948F3C6F212EC9EE000A47A0 /* Differ.framework */,
 				948F3C6E212EC9EE000A47A0 /* ReactiveKit.framework */,
@@ -414,15 +452,17 @@
 			files = (
 			);
 			inputPaths = (
-				"$(SRCROOT)/Carthage/Build/iOS/Bond.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/Differ.framework",
-				"$(SRCROOT)/Carthage/Build/iOS/ReactiveKit.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Differentiator.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxCocoa.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxDataSources.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RxSwift.framework",
 			);
 			name = Carthage;
 			outputPaths = (
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Bond.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Differ.framework",
-				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/ReactiveKit.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/Differentiator.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxCocoa.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxDataSources.framework",
+				"$(BUILT_PRODUCTS_DIR)/$(FRAMEWORKS_FOLDER_PATH)/RxSwift.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -435,23 +475,26 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				943D462A2261462F000C8210 /* Rx+CompactMap.swift in Sources */,
 				946D330F225F5D6D00D00FC6 /* CellReusable.swift in Sources */,
-				94247AF9212EBE2400D2D69A /* ViewController.swift in Sources */,
-				946D32F2225CB0AA00D00FC6 /* APIClient.swift in Sources */,
+				94247AF9212EBE2400D2D69A /* StoriesViewController.swift in Sources */,
 				946D330D225F59F900D00FC6 /* FlowLayout.swift in Sources */,
 				946D3309225CCBE800D00FC6 /* AlgoliaService.swift in Sources */,
 				948F3C58212EC001000A47A0 /* FormattedString.swift in Sources */,
 				946D3303225CBDCA00D00FC6 /* Item.swift in Sources */,
+				943D4624226080EA000C8210 /* LoadingState.swift in Sources */,
 				946D3300225CBCC500D00FC6 /* FirebaseService.swift in Sources */,
 				948F3C55212EBF50000A47A0 /* HtmlParser.swift in Sources */,
+				943D462622608381000C8210 /* APIServiceError.swift in Sources */,
 				948F3C56212EBF50000A47A0 /* HtmlTokenizer.swift in Sources */,
+				B33FEFD12260668D00B97F45 /* APIClient.swift in Sources */,
 				948F3C62212EC0A3000A47A0 /* UIColor.swift in Sources */,
 				948F3C66212EC0A3000A47A0 /* URL+Host.swift in Sources */,
 				948F3C60212EC0A2000A47A0 /* String+Range.swift in Sources */,
 				946D32F4225CB45D00D00FC6 /* Algolia.swift in Sources */,
 				946D32EF225CAFBC00D00FC6 /* Font.swift in Sources */,
 				946D32F6225CB5B700D00FC6 /* Firebase.swift in Sources */,
-				946D3305225CC47200D00FC6 /* ViewModel.swift in Sources */,
+				946D3305225CC47200D00FC6 /* StoriesViewModel.swift in Sources */,
 				948F3C64212EC0A3000A47A0 /* UIFont+Variant.swift in Sources */,
 				946D32FE225CBBA300D00FC6 /* StoryRepository.swift in Sources */,
 				946D3307225CCB3F00D00FC6 /* JSONDecoder.swift in Sources */,
@@ -461,6 +504,7 @@
 				946D32F8225CB89B00D00FC6 /* APIClient+Reactive.swift in Sources */,
 				948F3C61212EC0A2000A47A0 /* String+HtmlParsing.swift in Sources */,
 				94247AF7212EBE2400D2D69A /* AppDelegate.swift in Sources */,
+				943D462E2261A306000C8210 /* StoryCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

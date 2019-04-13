@@ -5,7 +5,7 @@ protocol CellReusable {
 }
 
 extension UICollectionView {
-  func dequeueReusableCell<T>(ofType type: T.Type, for indexPath: IndexPath) -> T where T: UICollectionViewCell & CellReusable {
+  func dequeueReusableCell<T>(ofType type: T.Type = T.self, for indexPath: IndexPath) -> T where T: UICollectionViewCell & CellReusable {
     return dequeueReusableCell(withReuseIdentifier: T.reuseIdentifier, for: indexPath) as! T
   }
 }

@@ -46,7 +46,7 @@ extension NameCell: CellReusable {
 }
 
 extension NameCell {
-  func bind(story: ViewModel.Story) {
+  func bind(story: StoriesViewModel.Story) {
     titleLabel.text = story.title
   }
 }

@@ -46,9 +46,6 @@ final class FlowLayout: UICollectionViewFlowLayout {
   }
 
   override func shouldInvalidateLayout(forBoundsChange newBounds: CGRect) -> Bool {
-    guard let view = collectionView else {
-      return false
-    }
-    return view.bounds.width != newBounds.width
+    return true
   }
 }

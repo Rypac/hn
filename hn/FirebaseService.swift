@@ -1,5 +1,5 @@
 import Foundation
-import ReactiveKit
+import RxSwift
 
 class FirebaseService {
   private let apiClient: APIClient
@@ -9,16 +9,16 @@ class FirebaseService {
     self.apiClient = apiClient
   }
 
-  func topStories() -> Signal<[Int], APIError> {
-    return apiClient.get(Firebase.topStories.url).map { [decoder] response in
-      guard (200..<299).contains(response.statusCode), let data = response.body else {
-        return []
-      }
-      do {
+  func topStories() -> Single<[Int]> {
+    return apiClient.get(Firebase.topStories.url)
+      .map { [decoder] response in
+        guard (200..<299).contains(response.statusCode) else {
+          throw APIServiceError.invalidStatusCode
+        }
+        guard let data = response.body else {
+          throw APIServiceError.invalidPayload
+        }
         return try decoder.decode(data)
-      } catch {
-        return []
       }
-    }
   }
 }

@@ -1,3 +1,2 @@
-github "DeclarativeHub/Bond" "7.4.1"
-github "DeclarativeHub/ReactiveKit" "v3.10.0"
-github "tonyarnold/Differ" "1.4.1"
+github "ReactiveX/RxSwift" "4.5.0"
+github "RxSwiftCommunity/RxDataSources" "3.1.0"

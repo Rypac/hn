@@ -1,20 +1,19 @@
 import Foundation
-import ReactiveKit
+import RxSwift
 
 extension APIClient {
-  func get(_ url: URL) -> Signal<APIResponse<Data?>, APIError> {
-    return Signal { [weak self] observer in
+  func get(_ url: URL) -> Single<APIResponse<Data?>> {
+    return Single.create { [weak self] observer in
       let task = self?.get(url) { result in
         switch result {
         case .success(let response):
-          observer.next(response)
-          observer.completed()
+          observer(.success(response))
         case .failure(let error):
-          observer.failed(error)
+          observer(.error(error))
         }
       }
 
-      return BlockDisposable {
+      return Disposables.create {
         task?.cancel()
       }
     }
