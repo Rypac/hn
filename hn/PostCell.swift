@@ -1,6 +1,6 @@
 import UIKit
 
-final class StoryCell: UICollectionViewCell {
+final class PostCell: UICollectionViewCell {
   private lazy var verticalStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
@@ -11,8 +11,25 @@ final class StoryCell: UICollectionViewCell {
   private lazy var titleLabel: UILabel = {
     let label = UILabel()
     label.adjustsFontForContentSizeCategory = true
+    label.font = UIFont.preferredFont(forTextStyle: .headline)
+    label.numberOfLines = 0
+    return label
+  }()
+
+  private lazy var textLabel: UILabel = {
+    let label = UILabel()
+    label.adjustsFontForContentSizeCategory = true
     label.font = UIFont.preferredFont(forTextStyle: .body)
     label.numberOfLines = 0
+    return label
+  }()
+
+  private lazy var urlLabel: UILabel = {
+    let label = UILabel()
+    label.adjustsFontForContentSizeCategory = true
+    label.font = UIFont.preferredFont(forTextStyle: .subheadline)
+    label.numberOfLines = 1
+    label.textColor = UIColor.Apple.blue
     return label
   }()
 
@@ -39,16 +56,6 @@ final class StoryCell: UICollectionViewCell {
     label.font = UIFont.preferredFont(forTextStyle: .caption1)
     label.textColor = .orange
     label.numberOfLines = 1
-    label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
-    return label
-  }()
-
-  private lazy var commentsLabel: UILabel = {
-    let label = UILabel()
-    label.adjustsFontForContentSizeCategory = true
-    label.font = UIFont.preferredFont(forTextStyle: .caption1)
-    label.textColor = .darkGray
-    label.numberOfLines = 1
     return label
   }()
 
@@ -67,10 +74,11 @@ final class StoryCell: UICollectionViewCell {
     ])
 
     verticalStackView.addArrangedSubview(titleLabel)
+    verticalStackView.addArrangedSubview(textLabel)
+    verticalStackView.addArrangedSubview(urlLabel)
     verticalStackView.addArrangedSubview(horizontalStackView)
     horizontalStackView.addArrangedSubview(authorLabel)
     horizontalStackView.addArrangedSubview(scoreLabel)
-    horizontalStackView.addArrangedSubview(commentsLabel)
   }
 
   override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
@@ -79,17 +87,20 @@ final class StoryCell: UICollectionViewCell {
   }
 }
 
-extension StoryCell: ReusableCell {
+extension PostCell: ReusableCell {
   static var reuseIdentifier: String {
-    return "StoryCell"
+    return "PostCell"
   }
 }
 
-extension StoryCell {
-  func bind(story: StoriesViewModel.Story) {
-    titleLabel.text = story.title
-    authorLabel.text = story.user
-    scoreLabel.text = "\(story.score) points"
-    commentsLabel.text = "\(story.comments) comments"
+extension PostCell {
+  func bind(post: CommentsViewModel.Post) {
+    titleLabel.text = post.title
+    authorLabel.text = post.user
+    scoreLabel.text = "\(post.score) points"
+    urlLabel.text = post.url
+    urlLabel.isHidden = post.url.isEmpty
+    textLabel.text = post.text
+    textLabel.isHidden = post.text.isEmpty
   }
 }

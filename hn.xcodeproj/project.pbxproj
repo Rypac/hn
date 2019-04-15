@@ -16,13 +16,17 @@
 		943D462622608381000C8210 /* APIServiceError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D462522608381000C8210 /* APIServiceError.swift */; };
 		943D462A2261462F000C8210 /* Rx+CompactMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D46292261462F000C8210 /* Rx+CompactMap.swift */; };
 		943D462E2261A306000C8210 /* StoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 943D462D2261A306000C8210 /* StoryCell.swift */; };
+		945ACE712262E2E8005DA0FA /* CommentsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945ACE702262E2E8005DA0FA /* CommentsViewController.swift */; };
+		945ACE732262E2F1005DA0FA /* CommentsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945ACE722262E2F1005DA0FA /* CommentsViewModel.swift */; };
+		945ACE752262EB12005DA0FA /* PostCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945ACE742262EB12005DA0FA /* PostCell.swift */; };
+		945ACE772262EB45005DA0FA /* CommentCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 945ACE762262EB45005DA0FA /* CommentCell.swift */; };
 		946D32EF225CAFBC00D00FC6 /* Font.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32EE225CAFBC00D00FC6 /* Font.swift */; };
 		946D32F4225CB45D00D00FC6 /* Algolia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F3225CB45D00D00FC6 /* Algolia.swift */; };
 		946D32F6225CB5B700D00FC6 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F5225CB5B700D00FC6 /* Firebase.swift */; };
 		946D32F8225CB89B00D00FC6 /* APIClient+Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F7225CB89B00D00FC6 /* APIClient+Reactive.swift */; };
 		946D32FE225CBBA300D00FC6 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32FD225CBBA300D00FC6 /* Repository.swift */; };
 		946D3300225CBCC500D00FC6 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32FF225CBCC500D00FC6 /* FirebaseService.swift */; };
-		946D3303225CBDCA00D00FC6 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3302225CBDCA00D00FC6 /* Item.swift */; };
+		946D3303225CBDCA00D00FC6 /* FirebaseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3302225CBDCA00D00FC6 /* FirebaseItem.swift */; };
 		946D3305225CC47200D00FC6 /* StoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3304225CC47200D00FC6 /* StoriesViewModel.swift */; };
 		946D3307225CCB3F00D00FC6 /* JSONDecoder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3306225CCB3F00D00FC6 /* JSONDecoder.swift */; };
 		946D3309225CCBE800D00FC6 /* AlgoliaService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3308225CCBE800D00FC6 /* AlgoliaService.swift */; };
@@ -40,6 +44,7 @@
 		948F3C66212EC0A3000A47A0 /* URL+Host.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948F3C5F212EC0A2000A47A0 /* URL+Host.swift */; };
 		948F3C6B212EC61F000A47A0 /* String+HtmlParsingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948F3C69212EC61F000A47A0 /* String+HtmlParsingTests.swift */; };
 		948F3C6C212EC61F000A47A0 /* URL+HostTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 948F3C6A212EC61F000A47A0 /* URL+HostTests.swift */; };
+		94CF054E226497350064D7E6 /* AlgoliaItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 94CF054D226497350064D7E6 /* AlgoliaItem.swift */; };
 		B33FEFCD2260663F00B97F45 /* RxSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B33FEFCC2260663F00B97F45 /* RxSwift.framework */; };
 		B33FEFCF2260665000B97F45 /* RxCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B33FEFCE2260665000B97F45 /* RxCocoa.framework */; };
 		B33FEFD12260668D00B97F45 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FEFD02260668D00B97F45 /* APIClient.swift */; };
@@ -71,13 +76,17 @@
 		943D462522608381000C8210 /* APIServiceError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServiceError.swift; sourceTree = "<group>"; };
 		943D46292261462F000C8210 /* Rx+CompactMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Rx+CompactMap.swift"; sourceTree = "<group>"; };
 		943D462D2261A306000C8210 /* StoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryCell.swift; sourceTree = "<group>"; };
+		945ACE702262E2E8005DA0FA /* CommentsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewController.swift; sourceTree = "<group>"; };
+		945ACE722262E2F1005DA0FA /* CommentsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentsViewModel.swift; sourceTree = "<group>"; };
+		945ACE742262EB12005DA0FA /* PostCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostCell.swift; sourceTree = "<group>"; };
+		945ACE762262EB45005DA0FA /* CommentCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentCell.swift; sourceTree = "<group>"; };
 		946D32EE225CAFBC00D00FC6 /* Font.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Font.swift; sourceTree = "<group>"; };
 		946D32F3225CB45D00D00FC6 /* Algolia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Algolia.swift; sourceTree = "<group>"; };
 		946D32F5225CB5B700D00FC6 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		946D32F7225CB89B00D00FC6 /* APIClient+Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIClient+Reactive.swift"; sourceTree = "<group>"; };
 		946D32FD225CBBA300D00FC6 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		946D32FF225CBCC500D00FC6 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
-		946D3302225CBDCA00D00FC6 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		946D3302225CBDCA00D00FC6 /* FirebaseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseItem.swift; sourceTree = "<group>"; };
 		946D3304225CC47200D00FC6 /* StoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewModel.swift; sourceTree = "<group>"; };
 		946D3306225CCB3F00D00FC6 /* JSONDecoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSONDecoder.swift; sourceTree = "<group>"; };
 		946D3308225CCBE800D00FC6 /* AlgoliaService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgoliaService.swift; sourceTree = "<group>"; };
@@ -98,6 +107,7 @@
 		948F3C6E212EC9EE000A47A0 /* ReactiveKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveKit.framework; path = Carthage/Build/iOS/ReactiveKit.framework; sourceTree = "<group>"; };
 		948F3C6F212EC9EE000A47A0 /* Differ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Differ.framework; path = Carthage/Build/iOS/Differ.framework; sourceTree = "<group>"; };
 		948F3C70212EC9EE000A47A0 /* Bond.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bond.framework; path = Carthage/Build/iOS/Bond.framework; sourceTree = "<group>"; };
+		94CF054D226497350064D7E6 /* AlgoliaItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlgoliaItem.swift; sourceTree = "<group>"; };
 		B33FEFCC2260663F00B97F45 /* RxSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxSwift.framework; path = Carthage/Build/iOS/RxSwift.framework; sourceTree = "<group>"; };
 		B33FEFCE2260665000B97F45 /* RxCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxCocoa.framework; path = Carthage/Build/iOS/RxCocoa.framework; sourceTree = "<group>"; };
 		B33FEFD02260668D00B97F45 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
@@ -220,6 +230,7 @@
 		943D462B2261A2F5000C8210 /* App */ = {
 			isa = PBXGroup;
 			children = (
+				945ACE6F2262E2C6005DA0FA /* Comments */,
 				943D462C2261A2FB000C8210 /* Stories */,
 			);
 			name = App;
@@ -228,12 +239,22 @@
 		943D462C2261A2FB000C8210 /* Stories */ = {
 			isa = PBXGroup;
 			children = (
-				946D330B225F59F800D00FC6 /* FullWidthFlowLayout.swift */,
 				94247AF8212EBE2400D2D69A /* StoriesViewController.swift */,
 				946D3304225CC47200D00FC6 /* StoriesViewModel.swift */,
 				943D462D2261A306000C8210 /* StoryCell.swift */,
 			);
 			name = Stories;
+			sourceTree = "<group>";
+		};
+		945ACE6F2262E2C6005DA0FA /* Comments */ = {
+			isa = PBXGroup;
+			children = (
+				945ACE702262E2E8005DA0FA /* CommentsViewController.swift */,
+				945ACE722262E2F1005DA0FA /* CommentsViewModel.swift */,
+				945ACE742262EB12005DA0FA /* PostCell.swift */,
+				945ACE762262EB45005DA0FA /* CommentCell.swift */,
+			);
+			name = Comments;
 			sourceTree = "<group>";
 		};
 		946D32EC225CAA0200D00FC6 /* Tokenizer */ = {
@@ -248,6 +269,7 @@
 		946D32ED225CAAF400D00FC6 /* UI */ = {
 			isa = PBXGroup;
 			children = (
+				946D330B225F59F800D00FC6 /* FullWidthFlowLayout.swift */,
 				946D32EE225CAFBC00D00FC6 /* Font.swift */,
 				946D330E225F5D6D00D00FC6 /* ReusableCell.swift */,
 			);
@@ -286,8 +308,9 @@
 		946D3301225CBDC100D00FC6 /* Models */ = {
 			isa = PBXGroup;
 			children = (
-				946D3302225CBDCA00D00FC6 /* Item.swift */,
+				946D3302225CBDCA00D00FC6 /* FirebaseItem.swift */,
 				943D4623226080EA000C8210 /* LoadingState.swift */,
+				94CF054D226497350064D7E6 /* AlgoliaItem.swift */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -475,16 +498,21 @@
 				943D462A2261462F000C8210 /* Rx+CompactMap.swift in Sources */,
 				946D330F225F5D6D00D00FC6 /* ReusableCell.swift in Sources */,
 				94247AF9212EBE2400D2D69A /* StoriesViewController.swift in Sources */,
+				945ACE732262E2F1005DA0FA /* CommentsViewModel.swift in Sources */,
+				94CF054E226497350064D7E6 /* AlgoliaItem.swift in Sources */,
 				946D330D225F59F900D00FC6 /* FullWidthFlowLayout.swift in Sources */,
 				946D3309225CCBE800D00FC6 /* AlgoliaService.swift in Sources */,
 				948F3C58212EC001000A47A0 /* FormattedString.swift in Sources */,
-				946D3303225CBDCA00D00FC6 /* Item.swift in Sources */,
+				946D3303225CBDCA00D00FC6 /* FirebaseItem.swift in Sources */,
 				943D4624226080EA000C8210 /* LoadingState.swift in Sources */,
+				945ACE712262E2E8005DA0FA /* CommentsViewController.swift in Sources */,
 				946D3300225CBCC500D00FC6 /* FirebaseService.swift in Sources */,
 				948F3C55212EBF50000A47A0 /* HtmlParser.swift in Sources */,
 				943D462622608381000C8210 /* APIServiceError.swift in Sources */,
 				948F3C56212EBF50000A47A0 /* HtmlTokenizer.swift in Sources */,
+				945ACE772262EB45005DA0FA /* CommentCell.swift in Sources */,
 				B33FEFD12260668D00B97F45 /* APIClient.swift in Sources */,
+				945ACE752262EB12005DA0FA /* PostCell.swift in Sources */,
 				948F3C62212EC0A3000A47A0 /* UIColor.swift in Sources */,
 				948F3C66212EC0A3000A47A0 /* URL+Host.swift in Sources */,
 				948F3C60212EC0A2000A47A0 /* String+Range.swift in Sources */,

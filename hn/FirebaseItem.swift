@@ -1,6 +1,8 @@
 import Foundation
 
-struct Item: Decodable {
+struct FirebaseItem: Decodable {
+  typealias Id = Int
+
   enum PostType: String, Decodable {
     case story
     case comment
@@ -17,7 +19,7 @@ struct Item: Decodable {
     }
   }
 
-  let id: Int
+  let id: Id
   let type: PostType
   let title: String?
   let text: String?
@@ -28,7 +30,7 @@ struct Item: Decodable {
   let parent: Int?
   let descendants: Int?
   let parts: [Int]?
-  let kids: [Int]?
+  let kids: [Id]?
   let dead: Bool?
   let deleted: Bool?
 
@@ -43,7 +45,7 @@ struct Item: Decodable {
     url: String?,
     parent: Int?,
     descendants: Int?,
-    kids: [Int]?,
+    kids: [Id]?,
     parts: [Int]?,
     dead: Bool,
     deleted: Bool
@@ -69,9 +71,9 @@ struct Item: Decodable {
     case type = "type"
     case title = "title"
     case text = "text"
-    case score = "points"
-    case author = "author"
-    case time = "created_at_i"
+    case score = "score"
+    case author = "by"
+    case time = "time"
     case url = "url"
     case parent = "parent"
     case descendants = "descendants"

@@ -22,6 +22,7 @@ final class StoriesViewController: UIViewController {
 
     configureDisplay()
     configurePresentation()
+    configureInteraction()
   }
 
   private func configureDisplay() {
@@ -30,11 +31,28 @@ final class StoriesViewController: UIViewController {
   }
 
   private func configurePresentation() {
-    disposeBag.insert(
-      viewModel.topStories
-        .drive(collectionView.rx.items(dataSource: dataSource)),
-      viewModel.loading
-        .drive(activityIndicator.rx.isAnimating)
-    )
+    viewModel.topStories
+      .drive(collectionView.rx.items(dataSource: dataSource))
+      .disposed(by: disposeBag)
+    viewModel.loading
+      .drive(activityIndicator.rx.isAnimating)
+      .disposed(by: disposeBag)
+    viewModel.nextViewModel
+      .drive(onNext: { [unowned self] viewModel in
+        self.performSegue(withIdentifier: "showComments", sender: viewModel)
+      })
+      .disposed(by: disposeBag)
+  }
+
+  private func configureInteraction() {
+    collectionView.rx.itemSelected
+      .bind(to: viewModel.selectedStory)
+      .disposed(by: disposeBag)
+  }
+
+  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+    if let viewController = segue.destination as? CommentsViewController, let viewModel = sender as? CommentsViewModel {
+      viewController.viewModel = viewModel
+    }
   }
 }

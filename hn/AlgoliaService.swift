@@ -2,6 +2,8 @@ import Foundation
 import RxSwift
 
 class AlgoliaService {
+  typealias Item = AlgoliaItem
+
   private let apiClient: APIClient
   private let decoder = JSONDecoder()
 
