@@ -2,7 +2,7 @@ import RxDataSources
 import RxSwift
 import UIKit
 
-final class CommentsViewController: UITableViewController {
+final class CommentsViewController: UITableViewController, ViewModelAssignable {
 
   var viewModel: CommentsViewModel!
 
@@ -52,5 +52,11 @@ final class CommentsViewController: UITableViewController {
     refresher.rx.controlEvent(.valueChanged)
       .bind(to: viewModel.refresh)
       .disposed(by: disposeBag)
+  }
+}
+
+extension CommentsViewController: StoryboardInstantiable {
+  static var storyboardIdentifier: String {
+    return "Comments"
   }
 }

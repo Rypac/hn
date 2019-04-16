@@ -17,6 +17,7 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="um1-yB-pbb">
                         <rect key="frame" x="0.0" y="44" width="414" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <color key="tintColor" red="1" green="0.52886352589999996" blue="0.30354094570000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
@@ -30,7 +31,7 @@
         <!--Stories View Controller-->
         <scene sceneID="OH0-hH-dFT">
             <objects>
-                <tableViewController id="FUQ-5G-duL" customClass="StoriesViewController" customModule="hn" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Stories" id="FUQ-5G-duL" customClass="StoriesViewController" customModule="hn" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="qPc-6I-4pg">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -52,9 +53,6 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="dsr-6N-SU3"/>
-                    <connections>
-                        <segue destination="ABj-LN-p6F" kind="show" identifier="showComments" id="4iD-uT-dPW"/>
-                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Um4-P4-EDv" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -63,7 +61,7 @@
         <!--Comments View Controller-->
         <scene sceneID="J1a-J0-YTI">
             <objects>
-                <tableViewController id="ABj-LN-p6F" customClass="CommentsViewController" customModule="hn" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="Comments" id="ABj-LN-p6F" customClass="CommentsViewController" customModule="hn" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="5SL-ht-BTE">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

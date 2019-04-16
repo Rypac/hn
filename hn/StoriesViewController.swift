@@ -2,7 +2,7 @@ import RxDataSources
 import RxSwift
 import UIKit
 
-final class StoriesViewController: UITableViewController {
+final class StoriesViewController: UITableViewController, ViewModelAssignable {
 
   var viewModel: StoriesViewModel!
 
@@ -48,7 +48,7 @@ final class StoriesViewController: UITableViewController {
       .disposed(by: disposeBag)
     viewModel.nextViewModel
       .drive(onNext: { [unowned self] viewModel in
-        self.performSegue(withIdentifier: "showComments", sender: viewModel)
+        self.show(CommentsViewController.make(viewModel: viewModel), sender: nil)
       })
       .disposed(by: disposeBag)
   }
@@ -66,5 +66,11 @@ final class StoriesViewController: UITableViewController {
     if let viewController = segue.destination as? CommentsViewController, let viewModel = sender as? CommentsViewModel {
       viewController.viewModel = viewModel
     }
+  }
+}
+
+extension StoriesViewController: StoryboardInstantiable {
+  static var storyboardIdentifier: String {
+    return "Stories"
   }
 }
