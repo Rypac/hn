@@ -1,6 +1,6 @@
 import UIKit
 
-final class StoryCell: UICollectionViewCell {
+final class StoryCell: UITableViewCell {
   private lazy var verticalStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
@@ -55,7 +55,6 @@ final class StoryCell: UICollectionViewCell {
   override func awakeFromNib() {
     super.awakeFromNib()
 
-    contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     contentView.addSubview(verticalStackView)
 
     verticalStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -71,11 +70,6 @@ final class StoryCell: UICollectionViewCell {
     horizontalStackView.addArrangedSubview(authorLabel)
     horizontalStackView.addArrangedSubview(scoreLabel)
     horizontalStackView.addArrangedSubview(commentsLabel)
-  }
-
-  override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-    layoutAttributes.bounds.size = systemLayoutSizeFitting(UIView.layoutFittingCompressedSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
-    return layoutAttributes
   }
 }
 

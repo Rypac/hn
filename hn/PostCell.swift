@@ -1,6 +1,6 @@
 import UIKit
 
-final class PostCell: UICollectionViewCell {
+final class PostCell: UITableViewCell {
   private lazy var verticalStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
@@ -16,7 +16,7 @@ final class PostCell: UICollectionViewCell {
     return label
   }()
 
-  private lazy var textLabel: UILabel = {
+  private lazy var detailsTextLabel: UILabel = {
     let label = UILabel()
     label.adjustsFontForContentSizeCategory = true
     label.font = UIFont.preferredFont(forTextStyle: .body)
@@ -74,16 +74,11 @@ final class PostCell: UICollectionViewCell {
     ])
 
     verticalStackView.addArrangedSubview(titleLabel)
-    verticalStackView.addArrangedSubview(textLabel)
+    verticalStackView.addArrangedSubview(detailsTextLabel)
     verticalStackView.addArrangedSubview(urlLabel)
     verticalStackView.addArrangedSubview(horizontalStackView)
     horizontalStackView.addArrangedSubview(authorLabel)
     horizontalStackView.addArrangedSubview(scoreLabel)
-  }
-
-  override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-    layoutAttributes.bounds.size = systemLayoutSizeFitting(UIView.layoutFittingCompressedSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
-    return layoutAttributes
   }
 }
 
@@ -100,7 +95,7 @@ extension PostCell {
     scoreLabel.text = "\(post.score) points"
     urlLabel.text = post.url
     urlLabel.isHidden = post.url.isEmpty
-    textLabel.text = post.text
-    textLabel.isHidden = post.text.isEmpty
+    detailsTextLabel.text = post.text
+    detailsTextLabel.isHidden = post.text.isEmpty
   }
 }

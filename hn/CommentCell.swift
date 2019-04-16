@@ -1,6 +1,6 @@
 import UIKit
 
-final class CommentCell: UICollectionViewCell {
+final class CommentCell: UITableViewCell {
   private lazy var verticalStackView: UIStackView = {
     let stackView = UIStackView()
     stackView.axis = .vertical
@@ -22,7 +22,6 @@ final class CommentCell: UICollectionViewCell {
     label.font = UIFont.preferredFont(forTextStyle: .caption1)
     label.textColor = .darkGray
     label.numberOfLines = 1
-    label.setContentHuggingPriority(.defaultHigh, for: .horizontal)
     return label
   }()
 
@@ -30,10 +29,15 @@ final class CommentCell: UICollectionViewCell {
     verticalStackView.leadingAnchor.constraint(equalTo: contentView.layoutMarginsGuide.leadingAnchor)
   }()
 
+  override var indentationLevel: Int {
+    didSet {
+      leadingConstraint.constant = indentationWidth * CGFloat(indentationLevel)
+    }
+  }
+
   override func awakeFromNib() {
     super.awakeFromNib()
 
-    contentView.autoresizingMask = [.flexibleWidth, .flexibleHeight]
     contentView.addSubview(verticalStackView)
 
     verticalStackView.translatesAutoresizingMaskIntoConstraints = false
@@ -47,11 +51,6 @@ final class CommentCell: UICollectionViewCell {
     verticalStackView.addArrangedSubview(authorLabel)
     verticalStackView.addArrangedSubview(titleLabel)
   }
-
-  override func preferredLayoutAttributesFitting(_ layoutAttributes: UICollectionViewLayoutAttributes) -> UICollectionViewLayoutAttributes {
-    layoutAttributes.bounds.size = systemLayoutSizeFitting(UIView.layoutFittingCompressedSize, withHorizontalFittingPriority: .required, verticalFittingPriority: .defaultLow)
-    return layoutAttributes
-  }
 }
 
 extension CommentCell: ReusableCell {
@@ -64,6 +63,6 @@ extension CommentCell {
   func bind(comment: CommentsViewModel.Comment) {
     titleLabel.text = comment.text
     authorLabel.text = comment.user
-    leadingConstraint.constant = 8 * CGFloat(comment.depth)
+    indentationLevel = comment.depth
   }
 }

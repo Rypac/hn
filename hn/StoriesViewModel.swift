@@ -29,6 +29,10 @@ struct StoriesViewModel {
       .share(replay: 1)
   }
 
+  var title: Driver<String> {
+    return .just("Top Stories")
+  }
+
   var nextViewModel: Driver<CommentsViewModel> {
     return selectedStory
       .withLatestFrom(stories) { index, stories -> FirebaseItem? in

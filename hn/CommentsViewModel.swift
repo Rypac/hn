@@ -39,6 +39,10 @@ struct CommentsViewModel {
       .share(replay: 1)
   }
 
+  var title: Driver<String> {
+    return .just("Comments")
+  }
+
   var comments: Driver<[CommentSection]> {
     return itemAndComments
       .value()
