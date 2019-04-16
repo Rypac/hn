@@ -7,7 +7,7 @@ final class CommentsViewController: UITableViewController {
   var viewModel: CommentsViewModel!
 
   private let disposeBag = DisposeBag()
-  private let dataSource = RxTableViewSectionedReloadDataSource<CommentsViewModel.CommentSection>(
+  private let dataSource = RxTableViewSectionedAnimatedDataSource<CommentsViewModel.SectionModel>(
     configureCell: { _, tableView, indexPath, item in
       switch item {
       case let .post(post):

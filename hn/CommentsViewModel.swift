@@ -4,10 +4,6 @@ import RxDataSources
 import RxSwift
 
 struct CommentsViewModel {
-  struct CommentSection {
-    var items: [Cell]
-  }
-
   enum Cell {
     case post(Post)
     case comment(Comment)
@@ -28,6 +24,8 @@ struct CommentsViewModel {
     let depth: Int
   }
 
+  typealias SectionModel = AnimatableSectionModel<Int, Cell>
+
   private let post: Post
   private let itemAndComments: Observable<LoadingState<AlgoliaItem>>
 
@@ -43,24 +41,43 @@ struct CommentsViewModel {
     return .just("Comments")
   }
 
-  var comments: Driver<[CommentSection]> {
+  var comments: Driver<[SectionModel]> {
     return itemAndComments
       .value()
       .map { item in
         let (post, comments) = item.extractPostAndComments()
-        return [CommentSection(items: [.post(post)] + comments.map(Cell.comment))]
+        return [
+          SectionModel(model: 0, items: [.post(post)]),
+          SectionModel(model: 1, items: comments.map(Cell.comment))
+        ]
       }
-      .startWith([CommentSection(items: [.post(post)])])
+      .startWith([
+        SectionModel(model: 0, items: [.post(post)])
+      ])
       .asDriver(onErrorDriveWith: .empty())
   }
 }
 
-extension CommentsViewModel.CommentSection: SectionModelType {
-  typealias Item = CommentsViewModel.Cell
+extension CommentsViewModel.Cell: IdentifiableType, Equatable {
+  typealias Identity = Int
 
-  init(original: CommentsViewModel.CommentSection, items: [Item]) {
-    self = original
-    self.items = items
+  var identity: Int {
+    switch self {
+    case .comment: return 0
+    case .post: return 1
+    }
+  }
+}
+
+extension CommentsViewModel.Post: IdentifiableType, Equatable {
+  var identity: Int {
+    return id
+  }
+}
+
+extension CommentsViewModel.Comment: IdentifiableType, Equatable {
+  var identity: Int {
+    return id
   }
 }
 

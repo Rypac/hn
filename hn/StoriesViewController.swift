@@ -4,10 +4,10 @@ import UIKit
 
 final class StoriesViewController: UITableViewController {
 
-  let viewModel = StoriesViewModel()
+  var viewModel: StoriesViewModel!
 
   private let disposeBag = DisposeBag()
-  private let dataSource = RxTableViewSectionedReloadDataSource<StoriesViewModel.StorySection>(
+  private let dataSource = RxTableViewSectionedAnimatedDataSource<StoriesViewModel.SectionModel>(
     configureCell: { _, tableView, indexPath, item in
       let cell = tableView.dequeueReusableCell(ofType: StoryCell.self, for: indexPath)
       cell.bind(story: item)

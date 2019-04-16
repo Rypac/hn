@@ -8,6 +8,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     _: UIApplication,
     didFinishLaunchingWithOptions _: [UIApplication.LaunchOptionsKey: Any]?
   ) -> Bool {
+    let navigationController = window?.rootViewController as! UINavigationController
+    let viewController = navigationController.visibleViewController as! StoriesViewController
+    viewController.viewModel = StoriesViewModel(repository: Repository())
+
     return true
   }
 }

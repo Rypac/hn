@@ -4,11 +4,7 @@ import RxDataSources
 import RxSwift
 
 struct StoriesViewModel {
-  struct StorySection {
-    var items: [Story]
-  }
-
-  struct Story {
+  struct Story: Equatable {
     let id: Int
     let title: String
     let user: String
@@ -16,14 +12,16 @@ struct StoriesViewModel {
     let comments: Int
   }
 
+  typealias SectionModel = AnimatableSectionModel<Int, Story>
+
   let selectedStory = PublishRelay<IndexPath>()
 
-  private let storyRepostiory: Repository
+  private let repository: Repository
   private let stories: Observable<LoadingState<[FirebaseItem]>>
 
-  init(storyRepostiory: Repository = Repository()) {
-    self.storyRepostiory = storyRepostiory
-    self.stories = storyRepostiory.fetchTopStories()
+  init(repository: Repository) {
+    self.repository = repository
+    self.stories = repository.fetchTopStories()
       .asObservable()
       .toLoadingState()
       .share(replay: 1)
@@ -41,21 +39,23 @@ struct StoriesViewModel {
         }
         return values[index.row]
       }
-      .flatMapLatest { [storyRepostiory] item -> Observable<CommentsViewModel> in
+      .flatMapLatest { [repository] item -> Observable<CommentsViewModel> in
         guard let item = item else {
           return .empty()
         }
-        return .just(CommentsViewModel(item: item, repository: storyRepostiory))
+        return .just(CommentsViewModel(item: item, repository: repository))
       }
       .asDriver(onErrorDriveWith: .empty())
   }
 
-  var topStories: Driver<[StorySection]> {
+  var topStories: Driver<[SectionModel]> {
     return stories.value()
       .map { items in
         items.map(Story.init)
       }
-      .map { [StorySection(items: $0)] }
+      .map { stories in
+        [SectionModel(model: 0, items: stories)]
+      }
       .asDriver(onErrorJustReturn: [])
   }
 
@@ -90,11 +90,10 @@ private extension CommentsViewModel {
   }
 }
 
-extension StoriesViewModel.StorySection: SectionModelType {
-  typealias Item = StoriesViewModel.Story
+extension StoriesViewModel.Story: IdentifiableType {
+  typealias Identity = Int
 
-  init(original: StoriesViewModel.StorySection, items: [StoriesViewModel.Story]) {
-    self = original
-    self.items = items
+  var identity: Int {
+    return id
   }
 }
