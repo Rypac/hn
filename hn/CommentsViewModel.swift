@@ -26,14 +26,20 @@ struct CommentsViewModel {
 
   typealias SectionModel = AnimatableSectionModel<Int, Cell>
 
+  let refresh = PublishRelay<Void>()
+
   private let post: Post
   private let itemAndComments: Observable<LoadingState<AlgoliaItem>>
 
   init(post: Post, repository: Repository) {
     self.post = post
-    self.itemAndComments = repository.fetchItem(id: post.id)
-      .asObservable()
-      .toLoadingState()
+    self.itemAndComments = refresh
+      .startWith(())
+      .flatMapLatest {
+        repository.fetchItem(id: post.id)
+          .asObservable()
+          .toLoadingState()
+      }
       .share(replay: 1)
   }
 
@@ -55,6 +61,11 @@ struct CommentsViewModel {
         SectionModel(model: 0, items: [.post(post)])
       ])
       .asDriver(onErrorDriveWith: .empty())
+  }
+
+  var loading: Driver<Bool> {
+    return itemAndComments.isLoading()
+      .asDriver(onErrorJustReturn: false)
   }
 }
 

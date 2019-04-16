@@ -4,7 +4,7 @@ import RxDataSources
 import RxSwift
 
 struct StoriesViewModel {
-  struct Story: Equatable {
+  struct Story {
     let id: Int
     let title: String
     let user: String
@@ -14,6 +14,7 @@ struct StoriesViewModel {
 
   typealias SectionModel = AnimatableSectionModel<Int, Story>
 
+  let refresh = PublishRelay<Void>()
   let selectedStory = PublishRelay<IndexPath>()
 
   private let repository: Repository
@@ -21,9 +22,13 @@ struct StoriesViewModel {
 
   init(repository: Repository) {
     self.repository = repository
-    self.stories = repository.fetchTopStories()
-      .asObservable()
-      .toLoadingState()
+    self.stories = refresh
+      .startWith(())
+      .flatMapLatest {
+        repository.fetchTopStories()
+          .asObservable()
+          .toLoadingState()
+      }
       .share(replay: 1)
   }
 
@@ -90,7 +95,7 @@ private extension CommentsViewModel {
   }
 }
 
-extension StoriesViewModel.Story: IdentifiableType {
+extension StoriesViewModel.Story: IdentifiableType, Equatable {
   typealias Identity = Int
 
   var identity: Int {
