@@ -1,6 +1,5 @@
 import UIKit
 
-@UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
 
@@ -10,7 +9,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   ) -> Bool {
     let navigationController = window?.rootViewController as! UINavigationController
     let viewController = navigationController.visibleViewController as! StoriesViewController
-    viewController.viewModel = StoriesViewModel(repository: Repository())
+    viewController.viewModel = StoriesViewModel(services: Services())
 
     return true
   }

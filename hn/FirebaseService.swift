@@ -1,7 +1,7 @@
 import Foundation
 import RxSwift
 
-class FirebaseService {
+final class FirebaseService {
   typealias Item = FirebaseItem
 
   private let apiClient: APIClient

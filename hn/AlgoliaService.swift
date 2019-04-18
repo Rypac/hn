@@ -1,7 +1,7 @@
 import Foundation
 import RxSwift
 
-class AlgoliaService {
+final class AlgoliaService {
   typealias Item = AlgoliaItem
 
   private let apiClient: APIClient

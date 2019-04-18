@@ -31,12 +31,12 @@ struct CommentsViewModel {
   private let post: Post
   private let itemAndComments: Observable<LoadingState<AlgoliaItem>>
 
-  init(post: Post, repository: Repository) {
+  init(post: Post, services: Services) {
     self.post = post
     self.itemAndComments = refresh
       .startWith(())
       .flatMapLatest {
-        repository.fetchItem(id: post.id)
+        services.algolia.item(id: post.id)
           .asObservable()
           .toLoadingState()
       }

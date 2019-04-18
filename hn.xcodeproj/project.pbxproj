@@ -26,7 +26,6 @@
 		946D32F4225CB45D00D00FC6 /* Algolia.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F3225CB45D00D00FC6 /* Algolia.swift */; };
 		946D32F6225CB5B700D00FC6 /* Firebase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F5225CB5B700D00FC6 /* Firebase.swift */; };
 		946D32F8225CB89B00D00FC6 /* APIClient+Reactive.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32F7225CB89B00D00FC6 /* APIClient+Reactive.swift */; };
-		946D32FE225CBBA300D00FC6 /* Repository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32FD225CBBA300D00FC6 /* Repository.swift */; };
 		946D3300225CBCC500D00FC6 /* FirebaseService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D32FF225CBCC500D00FC6 /* FirebaseService.swift */; };
 		946D3303225CBDCA00D00FC6 /* FirebaseItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3302225CBDCA00D00FC6 /* FirebaseItem.swift */; };
 		946D3305225CC47200D00FC6 /* StoriesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 946D3304225CC47200D00FC6 /* StoriesViewModel.swift */; };
@@ -52,6 +51,8 @@
 		B33FEFD12260668D00B97F45 /* APIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = B33FEFD02260668D00B97F45 /* APIClient.swift */; };
 		B33FEFD92260689D00B97F45 /* RxDataSources.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B33FEFD72260689D00B97F45 /* RxDataSources.framework */; };
 		B33FEFDA2260689D00B97F45 /* Differentiator.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B33FEFD82260689D00B97F45 /* Differentiator.framework */; };
+		B36C87E0226811C800B6CCC0 /* main.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36C87DF226811C800B6CCC0 /* main.swift */; };
+		B36C87E22268156800B6CCC0 /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = B36C87E12268156800B6CCC0 /* Services.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -88,7 +89,6 @@
 		946D32F3225CB45D00D00FC6 /* Algolia.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Algolia.swift; sourceTree = "<group>"; };
 		946D32F5225CB5B700D00FC6 /* Firebase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Firebase.swift; sourceTree = "<group>"; };
 		946D32F7225CB89B00D00FC6 /* APIClient+Reactive.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "APIClient+Reactive.swift"; sourceTree = "<group>"; };
-		946D32FD225CBBA300D00FC6 /* Repository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Repository.swift; sourceTree = "<group>"; };
 		946D32FF225CBCC500D00FC6 /* FirebaseService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseService.swift; sourceTree = "<group>"; };
 		946D3302225CBDCA00D00FC6 /* FirebaseItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseItem.swift; sourceTree = "<group>"; };
 		946D3304225CC47200D00FC6 /* StoriesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoriesViewModel.swift; sourceTree = "<group>"; };
@@ -117,6 +117,8 @@
 		B33FEFD02260668D00B97F45 /* APIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIClient.swift; sourceTree = "<group>"; };
 		B33FEFD72260689D00B97F45 /* RxDataSources.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RxDataSources.framework; path = Carthage/Build/iOS/RxDataSources.framework; sourceTree = "<group>"; };
 		B33FEFD82260689D00B97F45 /* Differentiator.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Differentiator.framework; path = Carthage/Build/iOS/Differentiator.framework; sourceTree = "<group>"; };
+		B36C87DF226811C800B6CCC0 /* main.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = main.swift; sourceTree = "<group>"; };
+		B36C87E12268156800B6CCC0 /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,9 +193,9 @@
 				946D32F0225CB09D00D00FC6 /* Networking */,
 				946D3301225CBDC100D00FC6 /* Models */,
 				946D32F9225CB98800D00FC6 /* Services */,
-				946D32FC225CBB8C00D00FC6 /* Repository */,
 				946D32ED225CAAF400D00FC6 /* UI */,
 				94247AF6212EBE2400D2D69A /* AppDelegate.swift */,
+				B36C87DF226811C800B6CCC0 /* main.swift */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -299,16 +301,9 @@
 				943D462522608381000C8210 /* APIServiceError.swift */,
 				946D32FF225CBCC500D00FC6 /* FirebaseService.swift */,
 				946D3308225CCBE800D00FC6 /* AlgoliaService.swift */,
+				B36C87E12268156800B6CCC0 /* Services.swift */,
 			);
 			name = Services;
-			sourceTree = "<group>";
-		};
-		946D32FC225CBB8C00D00FC6 /* Repository */ = {
-			isa = PBXGroup;
-			children = (
-				946D32FD225CBBA300D00FC6 /* Repository.swift */,
-			);
-			name = Repository;
 			sourceTree = "<group>";
 		};
 		946D3301225CBDC100D00FC6 /* Models */ = {
@@ -507,12 +502,14 @@
 				94247AF9212EBE2400D2D69A /* StoriesViewController.swift in Sources */,
 				945ACE732262E2F1005DA0FA /* CommentsViewModel.swift in Sources */,
 				94CF054E226497350064D7E6 /* AlgoliaItem.swift in Sources */,
+				B36C87E0226811C800B6CCC0 /* main.swift in Sources */,
 				946D330D225F59F900D00FC6 /* FullWidthFlowLayout.swift in Sources */,
 				946D3309225CCBE800D00FC6 /* AlgoliaService.swift in Sources */,
 				948F3C58212EC001000A47A0 /* FormattedString.swift in Sources */,
 				946D3303225CBDCA00D00FC6 /* FirebaseItem.swift in Sources */,
 				943D4624226080EA000C8210 /* LoadingState.swift in Sources */,
 				945ACE712262E2E8005DA0FA /* CommentsViewController.swift in Sources */,
+				B36C87E22268156800B6CCC0 /* Services.swift in Sources */,
 				946D3300225CBCC500D00FC6 /* FirebaseService.swift in Sources */,
 				948F3C55212EBF50000A47A0 /* HtmlParser.swift in Sources */,
 				943D462622608381000C8210 /* APIServiceError.swift in Sources */,
@@ -528,7 +525,6 @@
 				946D32F6225CB5B700D00FC6 /* Firebase.swift in Sources */,
 				946D3305225CC47200D00FC6 /* StoriesViewModel.swift in Sources */,
 				948F3C64212EC0A3000A47A0 /* UIFont+Variant.swift in Sources */,
-				946D32FE225CBBA300D00FC6 /* Repository.swift in Sources */,
 				946D3307225CCB3F00D00FC6 /* JSONDecoder.swift in Sources */,
 				948F3C54212EBF50000A47A0 /* Tokenizer.swift in Sources */,
 				948F3C63212EC0A3000A47A0 /* NSAttributedString+Operators.swift in Sources */,

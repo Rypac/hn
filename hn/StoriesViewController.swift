@@ -60,6 +60,9 @@ final class StoriesViewController: UITableViewController, ViewModelAssignable {
     tableView.rx.itemSelected
       .bind(to: viewModel.selectedStory)
       .disposed(by: disposeBag)
+    tableView.rx.prefetchRows
+      .bind(to: viewModel.fetchNextStories)
+      .disposed(by: disposeBag)
   }
 
   override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
