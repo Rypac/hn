@@ -4,6 +4,16 @@ import RxDataSources
 import RxSwift
 
 struct StoriesViewModel {
+  enum Section: Int {
+    case stories
+    case nextPage
+  }
+
+  enum Row {
+    case story(Story)
+    case nextPage
+  }
+
   struct Story {
     let id: Int
     let title: String
@@ -12,59 +22,86 @@ struct StoriesViewModel {
     let comments: Int
   }
 
-  typealias SectionModel = AnimatableSectionModel<Int, Story>
-  private typealias BatchedItems = (remaining: [Int], next: [Int])
+  typealias SectionModel = AnimatableSectionModel<Section, Row>
+  private typealias Batch<T> = (remaining: [T], next: [T])
 
   let refresh = PublishRelay<Void>()
   let selectedStory = PublishRelay<IndexPath>()
   let fetchNextStories = PublishRelay<[IndexPath]>()
 
   private let services: Services
+  private let items: Observable<[Int]>
   private let stories: Observable<LoadingState<[FirebaseItem]>>
+  private let hasMore: Observable<Bool>
 
   init(services: Services) {
     self.services = services
 
-    let stories = services.firebase.topStories()
-      .asObservable()
-      .flatMap { [fetchNextStories] items -> Observable<[FirebaseItem]> in
-        fetchNextStories
-          .compactMap { $0.last?.row }
-          .startWith(0)
-          .batch(items, into: 15)
-          .observeOn(ConcurrentDispatchQueueScheduler(qos: .default))
-          .flatMapLatest { batchedItems -> Single<[FirebaseItem]> in
-            Observable.from(batchedItems.map(services.firebase.item(id:)))
-              .merge()
-              .toArray()
-              .map { stories in stories
-                .filter { $0.isAlive }
-                .sorted(relativeTo: items, selector: { $0.id })
-              }
-              .asSingle()
-          }
-          .scan([], accumulator: +)
-      }
+    let batch = 25
 
-    self.stories = refresh
+    self.items = refresh
       .startWith(())
       .flatMapLatest {
-        stories.toLoadingState()
+        services.firebase.topStories()
+          .map { Array($0.prefix(78)) }
       }
       .share(replay: 1)
-  }
 
+    let nextPage = fetchNextStories
+      .filter { $0.contains(where: { $0.section == Section.nextPage.rawValue }) }
+      .map { _ in }
+      .startWith(())
+
+    let pagedItems = items
+      .flatMapLatest { items -> Observable<Batch<Int>> in
+        nextPage
+          .scan((remaining: items, next: [])) { state, _ in
+            let (remaining, _) = state
+            let size = remaining.count > batch ? batch : remaining.count
+            guard size > 0 else {
+              return ([], [])
+            }
+            return (
+              remaining: Array(remaining.dropFirst(size)),
+              next: Array(remaining.prefix(size))
+            )
+          }
+      }
+
+    self.hasMore = pagedItems
+      .map { !$0.remaining.isEmpty }
+
+    self.stories = pagedItems
+      .filter { !$0.next.isEmpty }
+      .map { $0.next }
+      .flatMapLatest { [services] ids in
+        Observable.from(ids.map(services.firebase.item(id:)))
+          .merge()
+          .toArray()
+          .map { items in
+            items
+              .filter { $0.isAlive }
+              .sorted(relativeTo: ids, selector: { $0.id })
+          }
+      }
+      .scan([], accumulator: +)
+      .toLoadingState()
+      .share(replay: 1)
+  }
+}
+
+extension StoriesViewModel {
   var title: Driver<String> {
     return .just("Top Stories")
   }
 
   var nextViewModel: Driver<CommentsViewModel> {
     return selectedStory
-      .withLatestFrom(stories) { index, stories -> FirebaseItem? in
-        guard let values = stories.value else {
+      .withLatestFrom(stories.value()) { index, stories -> FirebaseItem? in
+        guard index.section == Section.stories.rawValue else {
           return nil
         }
-        return values[index.row]
+        return stories[index.row]
       }
       .flatMapLatest { [services] item -> Observable<CommentsViewModel> in
         guard let item = item else {
@@ -77,17 +114,18 @@ struct StoriesViewModel {
 
   var topStories: Driver<[SectionModel]> {
     return stories.value()
-      .map { items in
-        items.map(Story.init)
-      }
-      .map { stories in
-        [SectionModel(model: 0, items: stories)]
+      .withLatestFrom(hasMore) { ($0, $1) }
+      .map { items, hasMore in
+        let stories = SectionModel(model: .stories, items: items.map { .story(Story(item: $0)) })
+        let loading = hasMore ? SectionModel(model: .nextPage, items: [.nextPage]) : nil
+        return [stories, loading].compactMap { $0 }
       }
       .asDriver(onErrorJustReturn: [])
   }
 
   var loading: Driver<Bool> {
     return stories.isLoading()
+      .distinctUntilChanged()
       .asDriver(onErrorJustReturn: false)
   }
 }
@@ -126,9 +164,22 @@ private extension CommentsViewModel {
   }
 }
 
-extension StoriesViewModel.Story: IdentifiableType, Equatable {
-  typealias Identity = Int
+extension StoriesViewModel.Section: IdentifiableType, Equatable {
+  var identity: Int {
+    return rawValue
+  }
+}
 
+extension StoriesViewModel.Row: IdentifiableType, Equatable {
+  var identity: Int {
+    switch self {
+    case let .story(story): return story.identity
+    case .nextPage: return 0
+    }
+  }
+}
+
+extension StoriesViewModel.Story: IdentifiableType, Equatable {
   var identity: Int {
     return id
   }
@@ -142,27 +193,5 @@ private extension Sequence {
       }
       return false
     }
-  }
-}
-
-private extension Observable where Element == Int {
-  func batch<T>(_ items: [T], into batch: Int) -> Observable<[T]> {
-    return self
-      .scan((remaining: items, next: [], previous: 0)) { aggregate, index in
-        let (remaining, _, previous) = aggregate
-        let next = index + 1
-        guard next >= previous, next < items.count else {
-          return (remaining, [], previous)
-        }
-
-        let size = remaining.count > batch ? batch : remaining.count
-        return (
-          Array(remaining.suffix(from: size)),
-          Array(remaining.prefix(size)),
-          index + size
-        )
-      }
-      .filter { !$0.next.isEmpty }
-      .map { $0.next }
   }
 }

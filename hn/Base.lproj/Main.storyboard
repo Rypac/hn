@@ -46,6 +46,27 @@
                                 </tableViewCellContentView>
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </tableViewCell>
+                            <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LoadingCell" id="0Og-IK-G6U" customClass="LoadingCell" customModule="hn" customModuleProvider="target">
+                                <rect key="frame" x="0.0" y="72" width="414" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0Og-IK-G6U" id="qAV-Ew-oiN">
+                                    <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                    <subviews>
+                                        <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="wXM-qU-hC8">
+                                            <rect key="frame" x="197" y="11" width="20" height="20"/>
+                                        </activityIndicatorView>
+                                    </subviews>
+                                    <constraints>
+                                        <constraint firstItem="wXM-qU-hC8" firstAttribute="centerX" secondItem="qAV-Ew-oiN" secondAttribute="centerX" id="HcI-oc-2Yq"/>
+                                        <constraint firstItem="wXM-qU-hC8" firstAttribute="top" secondItem="qAV-Ew-oiN" secondAttribute="top" constant="11" id="Md4-1a-zz7"/>
+                                        <constraint firstAttribute="bottom" secondItem="wXM-qU-hC8" secondAttribute="bottom" constant="12.5" id="wYD-gc-7dS"/>
+                                    </constraints>
+                                </tableViewCellContentView>
+                                <connections>
+                                    <outlet property="activityIndicator" destination="wXM-qU-hC8" id="Ykx-qC-OjM"/>
+                                </connections>
+                            </tableViewCell>
                         </prototypes>
                         <connections>
                             <outlet property="dataSource" destination="FUQ-5G-duL" id="fEJ-FQ-Eoj"/>

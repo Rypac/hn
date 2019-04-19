@@ -8,11 +8,18 @@ final class StoriesViewController: UITableViewController, ViewModelAssignable {
 
   private lazy var refresher = UIRefreshControl()
   private let disposeBag = DisposeBag()
-  private let dataSource = RxTableViewSectionedAnimatedDataSource<StoriesViewModel.SectionModel>(
+  private let dataSource = RxTableViewSectionedReloadDataSource<StoriesViewModel.SectionModel>(
     configureCell: { _, tableView, indexPath, item in
-      let cell = tableView.dequeueReusableCell(ofType: StoryCell.self, for: indexPath)
-      cell.bind(story: item)
-      return cell
+      switch item {
+      case let .story(story):
+        let cell = tableView.dequeueReusableCell(ofType: StoryCell.self, for: indexPath)
+        cell.bind(story: story)
+        return cell
+      case .nextPage:
+        let cell = tableView.dequeueReusableCell(ofType: LoadingCell.self, for: indexPath)
+        cell.load()
+        return cell
+      }
     }
   )
 
