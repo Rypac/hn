@@ -39,13 +39,14 @@ struct StoriesViewModel {
 
     let batch = 25
 
-    self.items = refresh
+    let refreshTrigger = refresh
       .startWith(())
+
+    self.items = refreshTrigger
       .flatMapLatest {
         services.firebase.topStories()
-          .map { Array($0.prefix(78)) }
       }
-      .share(replay: 1)
+      .share()
 
     let nextPage = fetchNextStories
       .filter { $0.contains(where: { $0.section == Section.nextPage.rawValue }) }
@@ -67,26 +68,30 @@ struct StoriesViewModel {
             )
           }
       }
+      .share()
 
     self.hasMore = pagedItems
       .map { !$0.remaining.isEmpty }
 
-    self.stories = pagedItems
-      .filter { !$0.next.isEmpty }
-      .map { $0.next }
-      .flatMapLatest { [services] ids in
-        Observable.from(ids.map(services.firebase.item(id:)))
-          .merge()
-          .toArray()
-          .map { items in
-            items
-              .filter { $0.isAlive }
-              .sorted(relativeTo: ids, selector: { $0.id })
+    self.stories = refreshTrigger
+      .flatMapLatest {
+        pagedItems
+          .filter { !$0.next.isEmpty }
+          .map { $0.next }
+          .flatMapLatest { [services] ids -> Observable<[FirebaseItem]> in
+            Observable.from(ids.map(services.firebase.item(id:)))
+              .merge()
+              .toArray()
+              .map { items in
+                items
+                  .filter { $0.isAlive }
+                  .sorted(relativeTo: ids, selector: { $0.id })
+              }
           }
+          .scan([], accumulator: +)
+          .toLoadingState()
       }
-      .scan([], accumulator: +)
-      .toLoadingState()
-      .share(replay: 1)
+      .share()
   }
 }
 
@@ -125,7 +130,6 @@ extension StoriesViewModel {
 
   var loading: Driver<Bool> {
     return stories.isLoading()
-      .distinctUntilChanged()
       .asDriver(onErrorJustReturn: false)
   }
 }
