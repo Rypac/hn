@@ -107,11 +107,11 @@ extension StoriesViewModel {
         }
         return stories[index.row]
       }
-      .flatMapLatest { [services] item -> Observable<CommentsViewModel> in
+      .compactMap { [services] item -> CommentsViewModel? in
         guard let item = item else {
-          return .empty()
+          return nil
         }
-        return .just(CommentsViewModel(item: item, services: services))
+        return CommentsViewModel(item: item, services: services)
       }
       .asDriver(onErrorDriveWith: .empty())
   }
