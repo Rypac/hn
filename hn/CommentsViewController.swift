@@ -61,7 +61,7 @@ final class CommentsViewController: UIViewController, ViewModelAssignable {
       .disposed(by: disposeBag)
     viewModel.url
       .drive(onNext: { [unowned self] url in
-        self.present(SFSafariViewController(url: url), animated: true)
+        self.present(SFSafariViewController.make(url: url), animated: true)
       })
       .disposed(by: disposeBag)
   }
@@ -79,5 +79,14 @@ final class CommentsViewController: UIViewController, ViewModelAssignable {
 extension CommentsViewController: StoryboardInstantiable {
   static var storyboardIdentifier: String {
     return "Comments"
+  }
+}
+
+private extension SFSafariViewController {
+  static func make(url: URL) -> UIViewController {
+    let viewController = SFSafariViewController(url: url)
+    viewController.configuration.barCollapsingEnabled = true
+    viewController.preferredControlTintColor = .orange
+    return viewController
   }
 }
