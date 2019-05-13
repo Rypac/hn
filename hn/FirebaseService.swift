@@ -7,7 +7,7 @@ final class FirebaseService {
   private let apiClient: APIClient
   private let decoder = JSONDecoder()
 
-  init(apiClient: APIClient = APIClient()) {
+  init(apiClient: APIClient) {
     self.apiClient = apiClient
   }
 

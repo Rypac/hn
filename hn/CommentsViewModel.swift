@@ -114,7 +114,7 @@ private extension CommentsViewModel.Post {
     title = item.title ?? ""
     url = item.url ?? ""
     text = item.text?.strippingHtmlElements().text ?? ""
-    user = item.author ?? ""
+    user = item.author ?? "deleted"
     score = item.points ?? 0
   }
 }
