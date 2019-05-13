@@ -40,7 +40,7 @@ struct CommentsViewModel {
           .asObservable()
           .toLoadingState()
       }
-      .share(replay: 1)
+      .share()
   }
 
   var title: Driver<String> {

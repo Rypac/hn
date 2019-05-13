@@ -8,7 +8,7 @@ final class StoriesViewController: UITableViewController, ViewModelAssignable {
 
   private lazy var refresher = UIRefreshControl()
   private let disposeBag = DisposeBag()
-  private let dataSource = RxTableViewSectionedReloadDataSource<StoriesViewModel.SectionModel>(
+  private let dataSource = RxTableViewSectionedAnimatedDataSource<StoriesViewModel.SectionModel>(
     configureCell: { _, tableView, indexPath, item in
       switch item {
       case let .story(story):
@@ -41,6 +41,7 @@ final class StoriesViewController: UITableViewController, ViewModelAssignable {
 
   private func configureDisplay() {
     refreshControl = refresher
+    dataSource.animationConfiguration = AnimationConfiguration(insertAnimation: .bottom)
   }
 
   private func configurePresentation() {
@@ -70,12 +71,6 @@ final class StoriesViewController: UITableViewController, ViewModelAssignable {
     tableView.rx.prefetchRows
       .bind(to: viewModel.fetchNextStories)
       .disposed(by: disposeBag)
-  }
-
-  override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-    if let viewController = segue.destination as? CommentsViewController, let viewModel = sender as? CommentsViewModel {
-      viewController.viewModel = viewModel
-    }
   }
 }
 

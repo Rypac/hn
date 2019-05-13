@@ -17,7 +17,7 @@ extension LoadingState {
 }
 
 extension ObservableType {
-  func toLoadingState() -> Observable<LoadingState<E>> {
+  func toLoadingState() -> Observable<LoadingState<Element>> {
     return map(LoadingState.loaded)
       .catchError { .just(.failed($0)) }
       .startWith(.loading)
@@ -25,11 +25,11 @@ extension ObservableType {
 }
 
 extension ObservableType {
-  func value<E>() -> Observable<E> where Self.E == LoadingState<E> {
+  func value<Element>() -> Observable<Element> where Self.Element == LoadingState<Element> {
     return compactMap { $0.value }
   }
 
-  func mapValue<E, R>(_ transform: @escaping (E) -> R) -> Observable<LoadingState<R>> where Self.E == LoadingState<E> {
+  func mapValue<Element, Result>(_ transform: @escaping (Element) -> Result) -> Observable<LoadingState<Result>> where Self.Element == LoadingState<Element> {
     return map { loadingState in
       switch loadingState {
       case let .loaded(value): return .loaded(transform(value))
@@ -39,7 +39,7 @@ extension ObservableType {
     }
   }
 
-  func isLoading<E>() -> Observable<Bool> where Self.E == LoadingState<E> {
+  func isLoading<Element>() -> Observable<Bool> where Self.Element == LoadingState<Element> {
     return map { loadingState in
       guard case .loading = loadingState else {
         return false

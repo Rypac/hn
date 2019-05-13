@@ -37,8 +37,6 @@ struct StoriesViewModel {
   init(services: Services) {
     self.services = services
 
-    let batch = 25
-
     let refreshTrigger = refresh
       .startWith(())
 
@@ -57,6 +55,7 @@ struct StoriesViewModel {
       .flatMapLatest { items -> Observable<Batch<Int>> in
         nextPage
           .scan((remaining: items, next: [])) { state, _ in
+            let batch = 25
             let (remaining, _) = state
             let size = remaining.count > batch ? batch : remaining.count
             guard size > 0 else {
@@ -78,7 +77,7 @@ struct StoriesViewModel {
         pagedItems
           .filter { !$0.next.isEmpty }
           .map { $0.next }
-          .flatMapLatest { [services] ids -> Observable<[FirebaseItem]> in
+          .flatMapLatest { [services] ids -> Single<[FirebaseItem]> in
             Observable.from(ids.map(services.firebase.item(id:)))
               .merge()
               .toArray()
@@ -119,8 +118,7 @@ extension StoriesViewModel {
 
   var topStories: Driver<[SectionModel]> {
     return stories.value()
-      .withLatestFrom(hasMore) { ($0, $1) }
-      .map { items, hasMore in
+      .withLatestFrom(hasMore) { items, hasMore in
         let stories = SectionModel(model: .stories, items: items.map { .story(Story(item: $0)) })
         let loading = hasMore ? SectionModel(model: .nextPage, items: [.nextPage]) : nil
         return [stories, loading].compactMap { $0 }

@@ -3,7 +3,7 @@ import RxSwift
 
 extension APIClient {
   func get(_ url: URL) -> Single<APIResponse<Data?>> {
-    return Single.create { [weak self] observer in
+    return .create { [weak self] observer in
       let task = self?.get(url) { result in
         switch result {
         case .success(let response):
