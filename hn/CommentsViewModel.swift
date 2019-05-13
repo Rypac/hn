@@ -27,6 +27,7 @@ struct CommentsViewModel {
   typealias SectionModel = AnimatableSectionModel<Int, Cell>
 
   let refresh = PublishRelay<Void>()
+  let viewStory = PublishRelay<Void>()
 
   private let post: Post
   private let itemAndComments: Observable<LoadingState<AlgoliaItem>>
@@ -66,6 +67,15 @@ struct CommentsViewModel {
   var loading: Driver<Bool> {
     return itemAndComments.isLoading()
       .asDriver(onErrorJustReturn: false)
+  }
+
+  var url: Driver<URL> {
+    return viewStory.withLatestFrom(itemAndComments)
+      .value()
+      .compactMap { item in
+        URL(string: Post(item: item).url)
+      }
+      .asDriver(onErrorDriveWith: .empty())
   }
 }
 

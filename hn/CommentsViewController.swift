@@ -1,5 +1,6 @@
 import RxDataSources
 import RxSwift
+import SafariServices
 import UIKit
 
 final class CommentsViewController: UIViewController, ViewModelAssignable {
@@ -43,6 +44,8 @@ final class CommentsViewController: UIViewController, ViewModelAssignable {
 
   private func configureDisplay() {
     tableView.refreshControl = refresher
+
+    navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: nil, action: nil)
   }
 
   private func configurePresentation() {
@@ -56,11 +59,19 @@ final class CommentsViewController: UIViewController, ViewModelAssignable {
     viewModel.comments
       .drive(tableView.rx.items(dataSource: dataSource))
       .disposed(by: disposeBag)
+    viewModel.url
+      .drive(onNext: { [unowned self] url in
+        self.present(SFSafariViewController(url: url), animated: true)
+      })
+      .disposed(by: disposeBag)
   }
 
   private func configureInteraction() {
     refresher.rx.controlEvent(.valueChanged)
       .bind(to: viewModel.refresh)
+      .disposed(by: disposeBag)
+    navigationItem.rightBarButtonItem?.rx.tap
+      .bind(to: viewModel.viewStory)
       .disposed(by: disposeBag)
   }
 }
