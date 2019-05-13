@@ -2,11 +2,13 @@ import RxDataSources
 import RxSwift
 import UIKit
 
-final class CommentsViewController: UITableViewController, ViewModelAssignable {
+final class CommentsViewController: UIViewController, ViewModelAssignable {
 
   var viewModel: CommentsViewModel!
 
+  @IBOutlet private var tableView: UITableView!
   private lazy var refresher = UIRefreshControl()
+
   private let disposeBag = DisposeBag()
   private let dataSource = RxTableViewSectionedAnimatedDataSource<CommentsViewModel.SectionModel>(
     configureCell: { _, tableView, indexPath, item in
@@ -31,8 +33,16 @@ final class CommentsViewController: UITableViewController, ViewModelAssignable {
     configureInteraction()
   }
 
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+
+    if let selectedIndexPath = tableView.indexPathForSelectedRow {
+      tableView.deselectRow(at: selectedIndexPath, animated: true)
+    }
+  }
+
   private func configureDisplay() {
-    refreshControl = refresher
+    tableView.refreshControl = refresher
   }
 
   private func configurePresentation() {

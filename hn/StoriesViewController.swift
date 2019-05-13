@@ -2,11 +2,13 @@ import RxDataSources
 import RxSwift
 import UIKit
 
-final class StoriesViewController: UITableViewController, ViewModelAssignable {
+final class StoriesViewController: UIViewController, ViewModelAssignable {
 
   var viewModel: StoriesViewModel!
 
+  @IBOutlet private var tableView: UITableView!
   private lazy var refresher = UIRefreshControl()
+
   private let disposeBag = DisposeBag()
   private let dataSource = RxTableViewSectionedAnimatedDataSource<StoriesViewModel.SectionModel>(
     configureCell: { _, tableView, indexPath, item in
@@ -39,8 +41,16 @@ final class StoriesViewController: UITableViewController, ViewModelAssignable {
     }
   }
 
+  override func viewWillAppear(_ animated: Bool) {
+    super.viewWillAppear(animated)
+
+    if let selectedIndexPath = tableView.indexPathForSelectedRow {
+      tableView.deselectRow(at: selectedIndexPath, animated: true)
+    }
+  }
+
   private func configureDisplay() {
-    refreshControl = refresher
+    tableView.refreshControl = refresher
     dataSource.animationConfiguration = AnimationConfiguration(insertAnimation: .bottom)
   }
 
