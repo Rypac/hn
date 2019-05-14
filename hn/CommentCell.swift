@@ -62,6 +62,7 @@ extension CommentCell: ReusableCell {
 extension CommentCell {
   func bind(comment: CommentsViewModel.Comment) {
     titleLabel.text = comment.text
+    titleLabel.isHidden = comment.text.isEmpty
     authorLabel.text = comment.user
     indentationLevel = comment.depth
   }

@@ -9,12 +9,12 @@ struct StoriesViewModel {
     case nextPage
   }
 
-  enum Row {
+  enum Row: Equatable {
     case story(Story)
     case nextPage
   }
 
-  struct Story {
+  struct Story: Equatable {
     let id: Int
     let title: String
     let user: String
@@ -166,24 +166,18 @@ private extension CommentsViewModel {
   }
 }
 
-extension StoriesViewModel.Section: IdentifiableType, Equatable {
+extension StoriesViewModel.Section: IdentifiableType {
   var identity: Int {
     return rawValue
   }
 }
 
-extension StoriesViewModel.Row: IdentifiableType, Equatable {
+extension StoriesViewModel.Row: IdentifiableType {
   var identity: Int {
     switch self {
-    case let .story(story): return story.identity
+    case let .story(story): return story.id
     case .nextPage: return 0
     }
-  }
-}
-
-extension StoriesViewModel.Story: IdentifiableType, Equatable {
-  var identity: Int {
-    return id
   }
 }
 

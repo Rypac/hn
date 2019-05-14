@@ -4,11 +4,18 @@ import RxDataSources
 import RxSwift
 
 struct CommentsViewModel {
-  enum Cell {
+  enum Section: Int {
+    case post
+    case comments
+    case loading
+  }
+  enum Row {
     case post(Post)
     case comment(Comment)
+    case loading
   }
-  struct Post {
+
+  struct Post: Equatable {
     let id: Int
     let title: String
     let url: String
@@ -16,7 +23,7 @@ struct CommentsViewModel {
     let user: String
     let score: Int
   }
-  struct Comment {
+  struct Comment: Equatable {
     let id: Int
     let text: String
     let user: String
@@ -24,7 +31,7 @@ struct CommentsViewModel {
     let depth: Int
   }
 
-  typealias SectionModel = AnimatableSectionModel<Int, Cell>
+  typealias SectionModel = AnimatableSectionModel<Section, Row>
 
   let refresh = PublishRelay<Void>()
   let viewStory = PublishRelay<Void>()
@@ -54,12 +61,13 @@ struct CommentsViewModel {
       .map { item in
         let (post, comments) = item.extractPostAndComments()
         return [
-          SectionModel(model: 0, items: [.post(post)]),
-          SectionModel(model: 1, items: comments.map(Cell.comment))
+          SectionModel(model: .post, items: [.post(post)]),
+          SectionModel(model: .comments, items: comments.map(Row.comment))
         ]
       }
       .startWith([
-        SectionModel(model: 0, items: [.post(post)])
+        SectionModel(model: .post, items: [.post(post)]),
+        SectionModel(model: .loading, items: [.loading])
       ])
       .asDriver(onErrorDriveWith: .empty())
   }
@@ -79,26 +87,19 @@ struct CommentsViewModel {
   }
 }
 
-extension CommentsViewModel.Cell: IdentifiableType, Equatable {
-  typealias Identity = Int
+extension CommentsViewModel.Section: IdentifiableType {
+  var identity: Int {
+    return rawValue
+  }
+}
 
+extension CommentsViewModel.Row: IdentifiableType, Equatable {
   var identity: Int {
     switch self {
-    case .comment: return 0
-    case .post: return 1
+    case let .comment(comment): return comment.id
+    case let .post(post): return post.id
+    case .loading: return 0
     }
-  }
-}
-
-extension CommentsViewModel.Post: IdentifiableType, Equatable {
-  var identity: Int {
-    return id
-  }
-}
-
-extension CommentsViewModel.Comment: IdentifiableType, Equatable {
-  var identity: Int {
-    return id
   }
 }
 
@@ -124,7 +125,7 @@ private extension CommentsViewModel.Post {
     title = item.title ?? ""
     url = item.url ?? ""
     text = item.text?.strippingHtmlElements().text ?? ""
-    user = item.author ?? "deleted"
+    user = item.author ?? ""
     score = item.points ?? 0
   }
 }
@@ -133,7 +134,7 @@ private extension CommentsViewModel.Comment {
   init(item: AlgoliaItem, depth: Int) {
     id = item.id
     text = item.text?.strippingHtmlElements().text ?? ""
-    user = item.author ?? ""
+    user = item.author ?? "deleted"
     score = item.points ?? 0
     self.depth = depth
   }

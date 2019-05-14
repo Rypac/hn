@@ -22,6 +22,10 @@ final class CommentsViewController: UIViewController, ViewModelAssignable {
         let cell = tableView.dequeueReusableCell(ofType: CommentCell.self, for: indexPath)
         cell.bind(comment: comment)
         return cell
+      case .loading:
+        let cell = tableView.dequeueReusableCell(ofType: LoadingCell.self, for: indexPath)
+        cell.load()
+        return cell
       }
     }
   )

@@ -122,6 +122,27 @@
                                         </tableViewCellContentView>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                     </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="LoadingCell" id="gQe-n4-gjv" customClass="LoadingCell" customModule="hn" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="116" width="414" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="gQe-n4-gjv" id="Gkk-J2-aSn">
+                                            <rect key="frame" x="0.0" y="0.0" width="414" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="faF-7R-daU">
+                                                    <rect key="frame" x="197" y="11" width="20" height="20"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                            <constraints>
+                                                <constraint firstItem="faF-7R-daU" firstAttribute="centerX" secondItem="Gkk-J2-aSn" secondAttribute="centerX" id="eIq-sb-9bW"/>
+                                                <constraint firstAttribute="bottom" secondItem="faF-7R-daU" secondAttribute="bottom" constant="12.5" id="gCZ-Ja-gte"/>
+                                                <constraint firstItem="faF-7R-daU" firstAttribute="top" secondItem="Gkk-J2-aSn" secondAttribute="top" constant="11" id="nI3-IB-AyO"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <connections>
+                                            <outlet property="activityIndicator" destination="faF-7R-daU" id="jez-3u-FnM"/>
+                                        </connections>
+                                    </tableViewCell>
                                 </prototypes>
                             </tableView>
                         </subviews>
