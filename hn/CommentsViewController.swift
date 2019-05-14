@@ -48,6 +48,7 @@ final class CommentsViewController: UIViewController, ViewModelAssignable {
 
   private func configureDisplay() {
     tableView.refreshControl = refresher
+    tableView.tableFooterView = UIView(frame: .zero)
 
     navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: nil, action: nil)
   }

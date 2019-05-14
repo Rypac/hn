@@ -17,7 +17,7 @@ final class StoriesViewController: UIViewController, ViewModelAssignable {
         let cell = tableView.dequeueReusableCell(ofType: StoryCell.self, for: indexPath)
         cell.bind(story: story)
         return cell
-      case .nextPage:
+      case .loading:
         let cell = tableView.dequeueReusableCell(ofType: LoadingCell.self, for: indexPath)
         cell.load()
         return cell
@@ -51,6 +51,7 @@ final class StoriesViewController: UIViewController, ViewModelAssignable {
 
   private func configureDisplay() {
     tableView.refreshControl = refresher
+    tableView.tableFooterView = UIView(frame: .zero)
     dataSource.animationConfiguration = AnimationConfiguration(insertAnimation: .bottom)
   }
 

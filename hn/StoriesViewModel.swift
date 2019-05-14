@@ -6,12 +6,12 @@ import RxSwift
 struct StoriesViewModel {
   enum Section: Int {
     case stories
-    case nextPage
+    case loading
   }
 
   enum Row: Equatable {
     case story(Story)
-    case nextPage
+    case loading
   }
 
   struct Story: Equatable {
@@ -47,7 +47,7 @@ struct StoriesViewModel {
       .share()
 
     let nextPage = fetchNextStories
-      .filter { $0.contains(where: { $0.section == Section.nextPage.rawValue }) }
+      .filter { $0.contains(where: { $0.section == Section.loading.rawValue }) }
       .map { _ in }
       .startWith(())
 
@@ -120,7 +120,7 @@ extension StoriesViewModel {
     return stories.value()
       .withLatestFrom(hasMore) { items, hasMore in
         let stories = SectionModel(model: .stories, items: items.map { .story(Story(item: $0)) })
-        let loading = hasMore ? SectionModel(model: .nextPage, items: [.nextPage]) : nil
+        let loading = hasMore ? SectionModel(model: .loading, items: [.loading]) : nil
         return [stories, loading].compactMap { $0 }
       }
       .asDriver(onErrorJustReturn: [])
@@ -176,7 +176,7 @@ extension StoriesViewModel.Row: IdentifiableType {
   var identity: Int {
     switch self {
     case let .story(story): return story.id
-    case .nextPage: return 0
+    case .loading: return 0
     }
   }
 }
